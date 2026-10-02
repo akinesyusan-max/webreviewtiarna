@@ -1,0 +1,2703 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+<title>My Cute Shop ♡</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Itim&family=Mitr:wght@300;400;500;600;700&display=swap');
+
+:root{
+  --bg:#fff8fb;
+  --card:#ffffff;
+  --soft:#fff1f6;
+  --primary:#d99ab5;
+  --primary-light:#f6dce8;
+  --text:#81767b;
+  --dark:#655b60;
+  --border:#eadfe4;
+  --star:#f0b83d;
+  --plus:#69c9a0;
+  --minus:#cfc8cb;
+  --shadow:0 8px 25px rgba(90,60,70,.08);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  padding:18px 12px 40px;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Mitr',sans-serif;
+}
+
+button,
+input,
+textarea,
+select{
+  font-family:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+/* =========================
+   MAIN PAGE
+========================= */
+
+.page{
+  width:min(100%,420px);
+  margin:auto;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+
+/* =========================
+   SHOP HEADER
+========================= */
+
+.shop-header{
+  text-align:center;
+  padding:24px 18px 17px;
+}
+
+.shop-name{
+  margin:0;
+  color:var(--primary);
+  font-size:30px;
+  line-height:1.2;
+  font-weight:700;
+}
+
+.shop-description{
+  margin:7px 0 0;
+  font-size:14px;
+  color:var(--text);
+}
+
+/* =========================
+   BANNER
+========================= */
+
+.banner-wrap{
+  padding:0 12px 16px;
+}
+
+.banner{
+  width:100%;
+  height:170px;
+  border-radius:24px;
+  overflow:hidden;
+  background:var(--soft);
+  border:1px solid var(--border);
+}
+
+.banner img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+
+.banner-placeholder{
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  color:#d7bdc7;
+  font-size:25px;
+  font-weight:600;
+}
+
+/* =========================
+   SOCIAL BUTTONS
+========================= */
+
+.social-area{
+  padding:0 16px;
+}
+
+.social-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.social-button{
+  min-height:52px;
+  border:1px solid var(--border);
+  border-radius:28px;
+  background:#fff;
+  color:var(--text);
+  font-size:14px;
+  font-weight:600;
+  transition:.2s;
+}
+
+.social-button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 5px 15px rgba(80,60,70,.08);
+}
+
+.social-button span{
+  margin-right:6px;
+}
+
+.social-button.line span{
+  color:#57c69a;
+}
+
+.social-button.ig span{
+  color:#cfc7ca;
+}
+
+.social-button.fb span{
+  color:#cfc7ca;
+}
+
+.social-button:last-child{
+  grid-column:1 / 2;
+}
+
+/* =========================
+   CUSTOMER VOICES
+========================= */
+
+.review-heading{
+  text-align:center;
+  padding:40px 15px 22px;
+}
+
+.review-heading small{
+  display:block;
+  letter-spacing:5px;
+  font-size:12px;
+  color:#d2c7cc;
+  font-weight:700;
+}
+
+.review-heading h2{
+  margin:5px 0 0;
+  font-size:28px;
+  color:#968c91;
+}
+
+/* =========================
+   VOTES
+========================= */
+
+.vote-area{
+  padding:0 16px;
+}
+
+.vote-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.vote-button{
+  min-height:76px;
+  border:1px solid var(--border);
+  border-radius:25px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 13px;
+  color:var(--text);
+  text-align:left;
+  transition:.2s;
+}
+
+.vote-button:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow);
+}
+
+.vote-circle{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:20px;
+}
+
+.plus .vote-circle{
+  background:#e3f5ed;
+  color:var(--plus);
+}
+
+.minus .vote-circle{
+  background:#f0edef;
+  color:#aaa2a6;
+}
+
+.vote-info strong{
+  display:block;
+  font-size:15px;
+  color:#9c9297;
+}
+
+.vote-info small{
+  display:block;
+  font-size:12px;
+  margin-top:2px;
+}
+
+/* =========================
+   RATING SUMMARY
+========================= */
+
+.rating-summary{
+  margin:24px 16px 15px;
+  padding:18px;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.rating-number{
+  font-size:43px;
+  font-weight:700;
+  line-height:1;
+  color:var(--dark);
+}
+
+.rating-right{
+  text-align:right;
+}
+
+.stars{
+  color:var(--star);
+  letter-spacing:1px;
+  font-size:19px;
+}
+
+.total-reviews{
+  font-size:12px;
+  color:#a69ca1;
+  margin-top:3px;
+}
+
+/* =========================
+   WRITE REVIEW
+========================= */
+
+.write-review{
+  margin:0 16px 18px;
+  padding:18px;
+  background:var(--soft);
+  border:1px solid var(--border);
+  border-radius:24px;
+}
+
+.write-review h3{
+  margin:0 0 12px;
+  color:var(--dark);
+  font-size:17px;
+}
+
+.star-select{
+  display:flex;
+  gap:4px;
+  margin-bottom:12px;
+}
+
+.star-select button{
+  border:0;
+  background:none;
+  padding:0;
+  color:#d7d1d3;
+  font-size:27px;
+}
+
+.star-select button.active{
+  color:var(--star);
+}
+
+.input{
+  width:100%;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:16px;
+  padding:11px 13px;
+  outline:none;
+  color:var(--dark);
+  margin-bottom:9px;
+}
+
+textarea.input{
+  min-height:95px;
+  resize:vertical;
+}
+
+.submit-review{
+  width:100%;
+  border:0;
+  border-radius:18px;
+  padding:12px;
+  background:var(--primary);
+  color:white;
+  font-weight:600;
+}
+
+/* =========================
+   REVIEWS
+========================= */
+
+.reviews{
+  padding:0 16px 28px;
+}
+
+.review-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:17px;
+  margin-bottom:12px;
+  box-shadow:0 4px 15px rgba(70,50,60,.04);
+}
+
+.review-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:var(--soft);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--primary);
+  font-weight:700;
+}
+
+.review-name{
+  font-weight:600;
+  color:var(--dark);
+}
+
+.review-date{
+  font-size:11px;
+  color:#b0a7ab;
+}
+
+.review-stars{
+  margin:10px 0 7px;
+  color:var(--star);
+  letter-spacing:1px;
+}
+
+.review-text{
+  margin:0;
+  font-size:14px;
+  line-height:1.7;
+  color:#8f858a;
+  white-space:pre-wrap;
+}
+
+/* =========================
+   ADMIN BUTTON
+========================= */
+
+.admin-floating{
+  position:fixed;
+  right:18px;
+  bottom:22px;
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:#fff;
+  box-shadow:0 8px 25px rgba(50,30,40,.12);
+  font-size:23px;
+  z-index:20;
+}
+
+/* =========================
+   MODALS
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(50,35,40,.35);
+  backdrop-filter:blur(5px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:100;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(100%,430px);
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:28px;
+  padding:22px;
+  box-shadow:0 20px 60px rgba(40,20,30,.2);
+}
+
+.modal-title{
+  margin:0 0 17px;
+  color:var(--dark);
+}
+
+.modal-close{
+  width:100%;
+  margin-top:9px;
+  border:0;
+  background:#f0edef;
+  color:#82787d;
+  border-radius:16px;
+  padding:11px;
+}
+
+/* =========================
+   MINUS POPUP
+========================= */
+
+.minus-popup{
+  text-align:center;
+}
+
+.minus-popup-icon{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:#f1edef;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 13px;
+  color:#aaa1a5;
+  font-size:25px;
+}
+
+.minus-popup h3{
+  margin:0 0 7px;
+  color:var(--dark);
+}
+
+.minus-popup p{
+  font-size:13px;
+  line-height:1.7;
+  margin:0 0 17px;
+}
+
+.popup-link{
+  display:block;
+  text-decoration:none;
+  background:#bfc6cd;
+  color:white;
+  border-radius:17px;
+  padding:12px;
+  font-weight:600;
+}
+
+/* =========================
+   ADMIN
+========================= */
+
+.admin-modal .modal-box{
+  width:min(100%,470px);
+}
+
+.admin-tabs{
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  margin-bottom:17px;
+}
+
+.admin-tab{
+  white-space:nowrap;
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--text);
+  border-radius:18px;
+  padding:9px 13px;
+}
+
+.admin-tab.active{
+  background:var(--primary);
+  color:white;
+}
+
+.admin-section{
+  display:none;
+}
+
+.admin-section.active{
+  display:block;
+}
+
+.form-label{
+  display:block;
+  font-size:12px;
+  margin:10px 0 5px;
+  color:#82787d;
+}
+
+.admin-save{
+  width:100%;
+  border:0;
+  border-radius:18px;
+  padding:12px;
+  background:var(--primary);
+  color:white;
+  font-weight:600;
+  margin-top:8px;
+}
+
+.color-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.color-item{
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:10px;
+}
+
+.color-item label{
+  display:block;
+  font-size:11px;
+  margin-bottom:5px;
+}
+
+.color-item input[type="color"]{
+  width:100%;
+  height:35px;
+  border:0;
+  background:none;
+}
+
+/* =========================
+   ADMIN REVIEWS
+========================= */
+
+.admin-review{
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:12px;
+  margin-bottom:10px;
+}
+
+.admin-review-head{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.admin-review-actions{
+  display:flex;
+  gap:5px;
+  margin-top:9px;
+}
+
+.small-btn{
+  border:0;
+  border-radius:12px;
+  padding:7px 10px;
+  font-size:11px;
+}
+
+.edit-btn{
+  background:#f8e6ee;
+  color:#a7788e;
+}
+
+.delete-btn{
+  background:#f0edef;
+  color:#887e83;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%) translateY(20px);
+  background:#655b60;
+  color:white;
+  padding:10px 17px;
+  border-radius:18px;
+  font-size:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:300;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:360px){
+  body{
+    padding-left:8px;
+    padding-right:8px;
+  }
+
+  .shop-name{
+    font-size:26px;
+  }
+
+  .banner{
+    height:150px;
+  }
+
+  .vote-button{
+    padding:8px;
+  }
+
+  .vote-circle{
+    width:43px;
+    height:43px;
+  }
+
+  .rating-number{
+    font-size:37px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     MAIN WEBSITE
+========================= -->
+
+<main class="page">
+
+  <!-- ชื่อร้านอยู่ด้านบนแบนเนอร์ -->
+  <header class="shop-header">
+    <h1 id="shopName" class="shop-name">
+      My Cute Shop ♡
+    </h1>
+
+    <p id="shopDescription" class="shop-description">
+      ขอบคุณที่มารีวิวร้านของเรา ♡
+    </p>
+  </header>
+
+  <!-- แบนเนอร์ -->
+  <section class="banner-wrap">
+    <div class="banner">
+
+      <img id="bannerImage"
+           src=""
+           alt="Shop Banner"
+           style="display:none;">
+
+      <div id="bannerPlaceholder"
+           class="banner-placeholder">
+        ♡ SHOP BANNER ♡
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Social -->
+  <section class="social-area">
+
+    <div class="social-grid">
+
+      <button
+        class="social-button line"
+        onclick="openSocial('line')">
+        <span>●</span>
+        LINE OFFICIAL
+      </button>
+
+      <button
+        class="social-button ig"
+        onclick="openSocial('instagram')">
+        <span>●</span>
+        INSTAGRAM
+      </button>
+
+      <button
+        class="social-button fb"
+        onclick="openSocial('facebook')">
+        <span>●</span>
+        FACEBOOK
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- หัวข้อ -->
+  <section class="review-heading">
+
+    <small>CUSTOMER VOICES</small>
+
+    <h2 id="reviewTitle">
+      พื้นที่รีวิวของลูกค้า
+    </h2>
+
+  </section>
+
+  <!-- Vote -->
+  <section class="vote-area">
+
+    <div class="vote-grid">
+
+      <button
+        class="vote-button plus"
+        onclick="addPlusVote()">
+
+        <div class="vote-circle">
+          +1
+        </div>
+
+        <div class="vote-info">
+          <strong>Plus one</strong>
+          <small>
+            <span id="plusVotes">359</span> โหวต
+          </small>
+        </div>
+
+      </button>
+
+      <button
+        class="vote-button minus"
+        onclick="openMinusPopup()">
+
+        <div class="vote-circle">
+          −1
+        </div>
+
+        <div class="vote-info">
+          <strong>Minus one</strong>
+          <small>
+            <span id="minusVotes">0</span> โหวต
+          </small>
+        </div>
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- Rating -->
+  <section class="rating-summary">
+
+    <div>
+      <div
+        id="averageRating"
+        class="rating-number">
+        0.0
+      </div>
+    </div>
+
+    <div class="rating-right">
+
+      <div
+        id="averageStars"
+        class="stars">
+        ☆☆☆☆☆
+      </div>
+
+      <div class="total-reviews">
+        ทั้งหมด
+        <span id="totalReviews">0</span>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- เขียนรีวิว -->
+  <section class="write-review">
+
+    <h3>เขียนรีวิวของคุณ ♡</h3>
+
+    <div
+      id="customerStars"
+      class="star-select">
+
+      <button onclick="selectCustomerStar(1)">★</button>
+      <button onclick="selectCustomerStar(2)">★</button>
+      <button onclick="selectCustomerStar(3)">★</button>
+      <button onclick="selectCustomerStar(4)">★</button>
+      <button onclick="selectCustomerStar(5)">★</button>
+
+    </div>
+
+    <input
+      id="customerName"
+      class="input"
+      type="text"
+      maxlength="40"
+      placeholder="ชื่อของคุณ">
+
+    <textarea
+      id="customerReview"
+      class="input"
+      maxlength="500"
+      placeholder="เขียนรีวิวของคุณ..."></textarea>
+
+    <button
+      class="submit-review"
+      onclick="submitCustomerReview()">
+      ส่งรีวิว ♡
+    </button>
+
+  </section>
+
+  <!-- Reviews -->
+  <section
+    id="reviews"
+    class="reviews">
+  </section>
+
+</main>
+
+<!-- ปุ่ม Admin -->
+<button
+  class="admin-floating"
+  onclick="openAdminLogin()"
+  title="Admin">
+  ⚙️
+</button>
+
+<!-- =========================
+     MINUS POPUP
+========================= -->
+
+<div
+  id="minusModal"
+  class="modal">
+
+  <div class="modal-box minus-popup">
+
+    <div class="minus-popup-icon">
+      −1
+    </div>
+
+    <h3 id="minusTitle">
+      ต้องการแจ้งปัญหาหรือไม่?
+    </h3>
+
+    <p id="minusText">
+      หากพบปัญหากับร้าน สามารถกดปุ่มด้านล่างเพื่อเปิดลิงก์สำหรับแจ้งปัญหาให้แอดมิน
+    </p>
+
+    <a
+      id="minusLink"
+      class="popup-link"
+      href="#"
+      target="_blank"
+      rel="noopener">
+      เปิดลิงก์
+    </a>
+
+    <button
+      class="modal-close"
+      onclick="closeModal('minusModal')">
+      ปิด
+    </button>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     ADMIN LOGIN
+========================= -->
+
+<div
+  id="loginModal"
+  class="modal">
+
+  <div class="modal-box">
+
+    <h2 class="modal-title">
+      🔐 เข้าสู่ระบบแอดมิน
+    </h2>
+
+    <input
+      id="adminPassword"
+      class="input"
+      type="password"
+      placeholder="รหัสผ่านแอดมิน">
+
+    <button
+      class="admin-save"
+      onclick="loginAdmin()">
+      เข้าสู่ระบบ
+    </button>
+
+    <button
+      class="modal-close"
+      onclick="closeModal('loginModal')">
+      ยกเลิก
+    </button>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     ADMIN PANEL
+========================= -->
+
+<div
+  id="adminModal"
+  class="modal admin-modal">
+
+  <div class="modal-box">
+
+    <h2 class="modal-title">
+      ⚙️ ตั้งค่าเว็บไซต์
+    </h2>
+
+    <div class="admin-tabs">
+
+      <button
+        class="admin-tab active"
+        onclick="showAdminTab('shop',this)">
+        ร้าน
+      </button>
+
+      <button
+        class="admin-tab"
+        onclick="showAdminTab('links',this)">
+        ลิงก์
+      </button>
+
+      <button
+        class="admin-tab"
+        onclick="showAdminTab('colors',this)">
+        สี
+      </button>
+
+      <button
+        class="admin-tab"
+        onclick="showAdminTab('reviewsAdmin',this)">
+        รีวิว
+      </button>
+
+    </div>
+
+    <!-- ================= SHOP ================= -->
+
+    <section
+      id="admin-shop"
+      class="admin-section active">
+
+      <label class="form-label">
+        ชื่อร้าน
+      </label>
+
+      <input
+        id="adminShopName"
+        class="input"
+        type="text">
+
+      <label class="form-label">
+        คำอธิบายร้าน
+      </label>
+
+      <input
+        id="adminShopDescription"
+        class="input"
+        type="text">
+
+      <label class="form-label">
+        หัวข้อส่วนรีวิว
+      </label>
+
+      <input
+        id="adminReviewTitle"
+        class="input"
+        type="text">
+
+      <label class="form-label">
+        รูปแบนเนอร์
+      </label>
+
+      <input
+        id="adminBanner"
+        class="input"
+        type="text"
+        placeholder="URL รูปภาพ">
+
+      <label class="form-label">
+        จำนวน +1 เริ่มต้น
+      </label>
+
+      <input
+        id="adminPlus"
+        class="input"
+        type="number">
+
+      <label class="form-label">
+        จำนวน -1
+      </label>
+
+      <input
+        id="adminMinus"
+        class="input"
+        type="number">
+
+      <button
+        class="admin-save"
+        onclick="saveShopSettings()">
+        บันทึกข้อมูลร้าน
+      </button>
+
+    </section>
+
+    <!-- ================= LINKS ================= -->
+
+    <section
+      id="admin-links"
+      class="admin-section">
+
+      <label class="form-label">
+        LINE Official
+      </label>
+
+      <input
+        id="adminLine"
+        class="input"
+        placeholder="https://line.me/...">
+
+      <label class="form-label">
+        Instagram
+      </label>
+
+      <input
+        id="adminInstagram"
+        class="input"
+        placeholder="https://instagram.com/...">
+
+      <label class="form-label">
+        Facebook
+      </label>
+
+      <input
+        id="adminFacebook"
+        class="input"
+        placeholder="https://facebook.com/...">
+
+      <label class="form-label">
+        ลิงก์เมื่อกด -1
+      </label>
+
+      <input
+        id="adminMinusLink"
+        class="input"
+        placeholder="https://...">
+
+      <label class="form-label">
+        หัวข้อ Popup -1
+      </label>
+
+      <input
+        id="adminMinusTitle"
+        class="input">
+
+      <label class="form-label">
+        ข้อความ Popup -1
+      </label>
+
+      <textarea
+        id="adminMinusText"
+        class="input"></textarea>
+
+      <label class="form-label">
+        ข้อความบนปุ่ม
+      </label>
+
+      <input
+        id="adminMinusButton"
+        class="input">
+
+      <button
+        class="admin-save"
+        onclick="saveLinkSettings()">
+        บันทึกลิงก์
+      </button>
+
+    </section>
+
+    <!-- ================= COLORS ================= -->
+
+    <section
+      id="admin-colors"
+      class="admin-section">
+
+      <div class="color-grid">
+
+        <div class="color-item">
+          <label>พื้นหลังเว็บ</label>
+          <input id="colorBg" type="color">
+        </div>
+
+        <div class="color-item">
+          <label>พื้นหลังกล่อง</label>
+          <input id="colorCard" type="color">
+        </div>
+
+        <div class="color-item">
+          <label>สีหลัก</label>
+          <input id="colorPrimary" type="color">
+        </div>
+
+        <div class="color-item">
+          <label>สีอ่อน</label>
+          <input id="colorSoft" type="color">
+        </div>
+
+        <div class="color-item">
+          <label>สีตัวอักษร</label>
+          <input id="colorText" type="color">
+        </div>
+
+        <div class="color-item">
+          <label>สีเข้ม</label>
+          <input id="colorDark" type="color">
+        </div>
+
+        <div class="color-item">
+          <label>สีขอบ</label>
+          <input id="colorBorder" type="color">
+        </div>
+
+        <div class="color-item">
+          <label>สีดาว</label>
+          <input id="colorStar" type="color">
+        </div>
+
+      </div>
+
+      <button
+        class="admin-save"
+        onclick="saveColors()">
+        บันทึกสี
+      </button>
+
+    </section>
+
+    <!-- ================= REVIEWS ADMIN ================= -->
+
+    <section
+      id="admin-reviewsAdmin"
+      class="admin-section">
+
+      <button
+        class="admin-save"
+        onclick="openAddReviewAdmin()">
+        ＋ เพิ่มรีวิว
+      </button>
+
+      <div
+        id="adminReviewList"
+        style="margin-top:14px;">
+      </div>
+
+    </section>
+
+    <button
+      class="modal-close"
+      onclick="logoutAdmin()">
+      ออกจากระบบ
+    </button>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     EDIT REVIEW MODAL
+========================= -->
+
+<div
+  id="editReviewModal"
+  class="modal">
+
+  <div class="modal-box">
+
+    <h2 class="modal-title">
+      ✏️ แก้ไขรีวิว
+    </h2>
+
+    <input
+      id="editReviewId"
+      type="hidden">
+
+    <label class="form-label">
+      ชื่อผู้รีวิว
+    </label>
+
+    <input
+      id="editReviewName"
+      class="input">
+
+    <label class="form-label">
+      คะแนนดาว
+    </label>
+
+    <select
+      id="editReviewRating"
+      class="input">
+
+      <option value="1">★ 1 ดาว</option>
+      <option value="2">★★ 2 ดาว</option>
+      <option value="3">★★★ 3 ดาว</option>
+      <option value="4">★★★★ 4 ดาว</option>
+      <option value="5">★★★★★ 5 ดาว</option>
+
+    </select>
+
+    <label class="form-label">
+      คำรีวิว
+    </label>
+
+    <textarea
+      id="editReviewText"
+      class="input"></textarea>
+
+    <button
+      class="admin-save"
+      onclick="saveEditedReview()">
+      บันทึกรีวิว
+    </button>
+
+    <button
+      class="modal-close"
+      onclick="closeModal('editReviewModal')">
+      ยกเลิก
+    </button>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     ADD REVIEW ADMIN
+========================= -->
+
+<div
+  id="addReviewModal"
+  class="modal">
+
+  <div class="modal-box">
+
+    <h2 class="modal-title">
+      ＋ เพิ่มรีวิว
+    </h2>
+
+    <input
+      id="addReviewName"
+      class="input"
+      placeholder="ชื่อผู้รีวิว">
+
+    <select
+      id="addReviewRating"
+      class="input">
+
+      <option value="5">★★★★★ 5 ดาว</option>
+      <option value="4">★★★★ 4 ดาว</option>
+      <option value="3">★★★ 3 ดาว</option>
+      <option value="2">★★ 2 ดาว</option>
+      <option value="1">★ 1 ดาว</option>
+
+    </select>
+
+    <textarea
+      id="addReviewText"
+      class="input"
+      placeholder="คำรีวิว"></textarea>
+
+    <button
+      class="admin-save"
+      onclick="addAdminReview()">
+      เพิ่มรีวิว
+    </button>
+
+    <button
+      class="modal-close"
+      onclick="closeModal('addReviewModal')">
+      ยกเลิก
+    </button>
+
+  </div>
+
+</div>
+
+<div
+  id="toast"
+  class="toast">
+</div>
+
+<script>
+
+/* =====================================================
+   DEFAULT DATA
+===================================================== */
+
+const DEFAULT_DATA = {
+
+  shopName: "My Cute Shop ♡",
+
+  shopDescription:
+    "ขอบคุณที่มารีวิวร้านของเรา ♡",
+
+  reviewTitle:
+    "พื้นที่รีวิวของลูกค้า",
+
+  banner: "",
+
+  plusVotes: 359,
+
+  minusVotes: 0,
+
+  links:{
+    line:"#",
+    instagram:"#",
+    facebook:"#",
+    minus:"#"
+  },
+
+  minusPopup:{
+    title:"ต้องการแจ้งปัญหาหรือไม่?",
+    text:"หากพบปัญหากับร้าน สามารถกดปุ่มด้านล่างเพื่อเปิดลิงก์สำหรับแจ้งปัญหาให้แอดมิน",
+    button:"เปิดลิงก์"
+  },
+
+  colors:{
+    bg:"#fff8fb",
+    card:"#ffffff",
+    primary:"#d99ab5",
+    soft:"#fff1f6",
+    text:"#81767b",
+    dark:"#655b60",
+    border:"#eadfe4",
+    star:"#f0b83d"
+  },
+
+  reviews:[
+    {
+      id:1,
+      name:"brownie",
+      rating:5,
+      text:"สินค้าน่ารักมากค่ะ ประทับใจมาก ♡",
+      date:"27/09/2569"
+    },
+    {
+      id:2,
+      name:"Mimi",
+      rating:5,
+      text:"แพ็กของดีมาก ส่งไวมากเลยค่ะ",
+      date:"26/09/2569"
+    },
+    {
+      id:3,
+      name:"ลูกค้าคนหนึ่ง",
+      rating:4,
+      text:"โดยรวมชอบมากค่ะ ไว้จะกลับมาอุดหนุนอีก",
+      date:"25/09/2569"
+    }
+  ]
+
+};
+
+/* =====================================================
+   LOAD DATA
+===================================================== */
+
+let data;
+
+try{
+
+  const saved =
+    localStorage.getItem("cuteReviewWebsite");
+
+  data = saved
+    ? JSON.parse(saved)
+    : JSON.parse(JSON.stringify(DEFAULT_DATA));
+
+}catch(e){
+
+  data =
+    JSON.parse(JSON.stringify(DEFAULT_DATA));
+
+}
+
+/* =====================================================
+   ADMIN
+===================================================== */
+
+let adminLoggedIn = false;
+
+let customerRating = 0;
+
+let editingReviewId = null;
+
+const ADMIN_PASSWORD = "1234";
+
+/* =====================================================
+   SAVE
+===================================================== */
+
+function saveData(){
+
+  localStorage.setItem(
+    "cuteReviewWebsite",
+    JSON.stringify(data)
+  );
+
+}
+
+/* =====================================================
+   APPLY COLORS
+===================================================== */
+
+function applyColors(){
+
+  const root =
+    document.documentElement;
+
+  root.style.setProperty(
+    "--bg",
+    data.colors.bg
+  );
+
+  root.style.setProperty(
+    "--card",
+    data.colors.card
+  );
+
+  root.style.setProperty(
+    "--primary",
+    data.colors.primary
+  );
+
+  root.style.setProperty(
+    "--soft",
+    data.colors.soft
+  );
+
+  root.style.setProperty(
+    "--text",
+    data.colors.text
+  );
+
+  root.style.setProperty(
+    "--dark",
+    data.colors.dark
+  );
+
+  root.style.setProperty(
+    "--border",
+    data.colors.border
+  );
+
+  root.style.setProperty(
+    "--star",
+    data.colors.star
+  );
+
+}
+
+/* =====================================================
+   RENDER WEBSITE
+===================================================== */
+
+function render(){
+
+  applyColors();
+
+  document.getElementById("shopName")
+    .textContent =
+    data.shopName;
+
+  document.getElementById("shopDescription")
+    .textContent =
+    data.shopDescription;
+
+  document.getElementById("reviewTitle")
+    .textContent =
+    data.reviewTitle;
+
+  document.getElementById("plusVotes")
+    .textContent =
+    formatNumber(data.plusVotes);
+
+  document.getElementById("minusVotes")
+    .textContent =
+    formatNumber(data.minusVotes);
+
+  const banner =
+    document.getElementById("bannerImage");
+
+  const placeholder =
+    document.getElementById("bannerPlaceholder");
+
+  if(data.banner){
+
+    banner.src =
+      data.banner;
+
+    banner.style.display =
+      "block";
+
+    placeholder.style.display =
+      "none";
+
+  }else{
+
+    banner.style.display =
+      "none";
+
+    placeholder.style.display =
+      "flex";
+
+  }
+
+  renderReviews();
+
+  calculateRating();
+
+}
+
+/* =====================================================
+   FORMAT NUMBER
+===================================================== */
+
+function formatNumber(number){
+
+  return Number(number || 0)
+    .toLocaleString("th-TH");
+
+}
+
+/* =====================================================
+   REVIEWS
+===================================================== */
+
+function renderReviews(){
+
+  const container =
+    document.getElementById("reviews");
+
+  container.innerHTML = "";
+
+  if(!data.reviews.length){
+
+    container.innerHTML = `
+      <div class="review-card"
+           style="text-align:center;">
+        ยังไม่มีรีวิว ♡
+      </div>
+    `;
+
+    return;
+
+  }
+
+  data.reviews.forEach(review=>{
+
+    const card =
+      document.createElement("article");
+
+    card.className =
+      "review-card";
+
+    const stars =
+      "★".repeat(review.rating) +
+      "☆".repeat(5-review.rating);
+
+    const initial =
+      (review.name || "?")
+      .charAt(0)
+      .toUpperCase();
+
+    card.innerHTML = `
+
+      <div class="review-top">
+
+        <div class="avatar">
+          ${escapeHTML(initial)}
+        </div>
+
+        <div>
+          <div class="review-name">
+            ${escapeHTML(review.name)}
+          </div>
+
+          <div class="review-date">
+            ${escapeHTML(review.date || "")}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="review-stars">
+        ${stars}
+      </div>
+
+      <p class="review-text">
+        ${escapeHTML(review.text)}
+      </p>
+
+    `;
+
+    container.appendChild(card);
+
+  });
+
+}
+
+/* =====================================================
+   CALCULATE RATING
+===================================================== */
+
+function calculateRating(){
+
+  const total =
+    data.reviews.length;
+
+  if(total === 0){
+
+    document.getElementById("averageRating")
+      .textContent = "0.0";
+
+    document.getElementById("averageStars")
+      .textContent = "☆☆☆☆☆";
+
+    document.getElementById("totalReviews")
+      .textContent = "0";
+
+    return;
+
+  }
+
+  const sum =
+    data.reviews.reduce(
+      (total,review)=>
+        total + Number(review.rating),
+      0
+    );
+
+  const average =
+    sum / total;
+
+  document.getElementById("averageRating")
+    .textContent =
+    average.toFixed(1);
+
+  const rounded =
+    Math.round(average);
+
+  document.getElementById("averageStars")
+    .textContent =
+    "★".repeat(rounded) +
+    "☆".repeat(5-rounded);
+
+  document.getElementById("totalReviews")
+    .textContent =
+    formatNumber(total);
+
+}
+
+/* =====================================================
+   CUSTOMER STAR
+===================================================== */
+
+function selectCustomerStar(rating){
+
+  customerRating =
+    rating;
+
+  const buttons =
+    document.querySelectorAll(
+      "#customerStars button"
+    );
+
+  buttons.forEach(
+    (button,index)=>{
+
+      button.classList.toggle(
+        "active",
+        index < rating
+      );
+
+    }
+  );
+
+}
+
+/* =====================================================
+   CUSTOMER SUBMIT REVIEW
+===================================================== */
+
+function submitCustomerReview(){
+
+  const name =
+    document.getElementById(
+      "customerName"
+    ).value.trim();
+
+  const text =
+    document.getElementById(
+      "customerReview"
+    ).value.trim();
+
+  if(!name){
+
+    showToast(
+      "กรุณาใส่ชื่อของคุณ"
+    );
+
+    return;
+
+  }
+
+  if(!customerRating){
+
+    showToast(
+      "กรุณาเลือกคะแนนดาว"
+    );
+
+    return;
+
+  }
+
+  if(!text){
+
+    showToast(
+      "กรุณาเขียนรีวิว"
+    );
+
+    return;
+
+  }
+
+  const now =
+    new Date();
+
+  const date =
+    now.toLocaleDateString(
+      "th-TH"
+    );
+
+  data.reviews.unshift({
+
+    id:Date.now(),
+
+    name:name,
+
+    rating:customerRating,
+
+    text:text,
+
+    date:date
+
+  });
+
+  saveData();
+
+  document.getElementById(
+    "customerName"
+  ).value = "";
+
+  document.getElementById(
+    "customerReview"
+  ).value = "";
+
+  selectCustomerStar(0);
+
+  render();
+
+  showToast(
+    "ส่งรีวิวเรียบร้อยแล้ว ♡"
+  );
+
+}
+
+/* =====================================================
+   PLUS VOTE
+===================================================== */
+
+function addPlusVote(){
+
+  data.plusVotes++;
+
+  saveData();
+
+  render();
+
+  showToast(
+    "ขอบคุณสำหรับ +1 ♡"
+  );
+
+}
+
+/* =====================================================
+   MINUS POPUP
+===================================================== */
+
+function openMinusPopup(){
+
+  /*
+    ตรงนี้ตั้งใจให้ -1
+    ยังไม่ถูกนับทันที
+  */
+
+  document.getElementById(
+    "minusTitle"
+  ).textContent =
+    data.minusPopup.title;
+
+  document.getElementById(
+    "minusText"
+  ).textContent =
+    data.minusPopup.text;
+
+  const link =
+    document.getElementById(
+      "minusLink"
+    );
+
+  link.textContent =
+    data.minusPopup.button;
+
+  link.href =
+    data.links.minus || "#";
+
+  document.getElementById(
+    "minusModal"
+  ).classList.add("show");
+
+}
+
+/* =====================================================
+   SOCIAL
+===================================================== */
+
+function openSocial(type){
+
+  const url =
+    data.links[type];
+
+  if(!url || url === "#"){
+
+    showToast(
+      "ยังไม่ได้ตั้งค่าลิงก์"
+    );
+
+    return;
+
+  }
+
+  window.open(
+    url,
+    "_blank"
+  );
+
+}
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function closeModal(id){
+
+  document.getElementById(id)
+    .classList.remove("show");
+
+}
+
+/* =====================================================
+   ADMIN LOGIN
+===================================================== */
+
+function openAdminLogin(){
+
+  if(adminLoggedIn){
+
+    openAdmin();
+
+    return;
+
+  }
+
+  document.getElementById(
+    "adminPassword"
+  ).value = "";
+
+  document.getElementById(
+    "loginModal"
+  ).classList.add("show");
+
+}
+
+function loginAdmin(){
+
+  const password =
+    document.getElementById(
+      "adminPassword"
+    ).value;
+
+  if(password !== ADMIN_PASSWORD){
+
+    showToast(
+      "รหัสผ่านไม่ถูกต้อง"
+    );
+
+    return;
+
+  }
+
+  adminLoggedIn = true;
+
+  closeModal("loginModal");
+
+  openAdmin();
+
+}
+
+function openAdmin(){
+
+  loadAdminFields();
+
+  document.getElementById(
+    "adminModal"
+  ).classList.add("show");
+
+  renderAdminReviews();
+
+}
+
+function logoutAdmin(){
+
+  adminLoggedIn = false;
+
+  closeModal("adminModal");
+
+  showToast(
+    "ออกจากระบบแล้ว"
+  );
+
+}
+
+/* =====================================================
+   ADMIN TABS
+===================================================== */
+
+function showAdminTab(tab,button){
+
+  document
+    .querySelectorAll(".admin-tab")
+    .forEach(
+      b=>b.classList.remove("active")
+    );
+
+  document
+    .querySelectorAll(".admin-section")
+    .forEach(
+      s=>s.classList.remove("active")
+    );
+
+  button.classList.add("active");
+
+  document
+    .getElementById(
+      "admin-" + tab
+    )
+    .classList.add("active");
+
+}
+
+/* =====================================================
+   LOAD ADMIN FIELDS
+===================================================== */
+
+function loadAdminFields(){
+
+  document.getElementById(
+    "adminShopName"
+  ).value =
+    data.shopName;
+
+  document.getElementById(
+    "adminShopDescription"
+  ).value =
+    data.shopDescription;
+
+  document.getElementById(
+    "adminReviewTitle"
+  ).value =
+    data.reviewTitle;
+
+  document.getElementById(
+    "adminBanner"
+  ).value =
+    data.banner;
+
+  document.getElementById(
+    "adminPlus"
+  ).value =
+    data.plusVotes;
+
+  document.getElementById(
+    "adminMinus"
+  ).value =
+    data.minusVotes;
+
+  document.getElementById(
+    "adminLine"
+  ).value =
+    data.links.line;
+
+  document.getElementById(
+    "adminInstagram"
+  ).value =
+    data.links.instagram;
+
+  document.getElementById(
+    "adminFacebook"
+  ).value =
+    data.links.facebook;
+
+  document.getElementById(
+    "adminMinusLink"
+  ).value =
+    data.links.minus;
+
+  document.getElementById(
+    "adminMinusTitle"
+  ).value =
+    data.minusPopup.title;
+
+  document.getElementById(
+    "adminMinusText"
+  ).value =
+    data.minusPopup.text;
+
+  document.getElementById(
+    "adminMinusButton"
+  ).value =
+    data.minusPopup.button;
+
+  document.getElementById("colorBg").value =
+    data.colors.bg;
+
+  document.getElementById("colorCard").value =
+    data.colors.card;
+
+  document.getElementById("colorPrimary").value =
+    data.colors.primary;
+
+  document.getElementById("colorSoft").value =
+    data.colors.soft;
+
+  document.getElementById("colorText").value =
+    data.colors.text;
+
+  document.getElementById("colorDark").value =
+    data.colors.dark;
+
+  document.getElementById("colorBorder").value =
+    data.colors.border;
+
+  document.getElementById("colorStar").value =
+    data.colors.star;
+
+}
+
+/* =====================================================
+   SAVE SHOP
+===================================================== */
+
+function saveShopSettings(){
+
+  data.shopName =
+    document.getElementById(
+      "adminShopName"
+    ).value.trim();
+
+  data.shopDescription =
+    document.getElementById(
+      "adminShopDescription"
+    ).value.trim();
+
+  data.reviewTitle =
+    document.getElementById(
+      "adminReviewTitle"
+    ).value.trim();
+
+  data.banner =
+    document.getElementById(
+      "adminBanner"
+    ).value.trim();
+
+  data.plusVotes =
+    Math.max(
+      0,
+      Number(
+        document.getElementById(
+          "adminPlus"
+        ).value
+      )
+    );
+
+  data.minusVotes =
+    Math.max(
+      0,
+      Number(
+        document.getElementById(
+          "adminMinus"
+        ).value
+      )
+    );
+
+  saveData();
+
+  render();
+
+  showToast(
+    "บันทึกข้อมูลร้านแล้ว ♡"
+  );
+
+}
+
+/* =====================================================
+   SAVE LINKS
+===================================================== */
+
+function saveLinkSettings(){
+
+  data.links.line =
+    document.getElementById(
+      "adminLine"
+    ).value.trim();
+
+  data.links.instagram =
+    document.getElementById(
+      "adminInstagram"
+    ).value.trim();
+
+  data.links.facebook =
+    document.getElementById(
+      "adminFacebook"
+    ).value.trim();
+
+  data.links.minus =
+    document.getElementById(
+      "adminMinusLink"
+    ).value.trim();
+
+  data.minusPopup.title =
+    document.getElementById(
+      "adminMinusTitle"
+    ).value.trim();
+
+  data.minusPopup.text =
+    document.getElementById(
+      "adminMinusText"
+    ).value.trim();
+
+  data.minusPopup.button =
+    document.getElementById(
+      "adminMinusButton"
+    ).value.trim();
+
+  saveData();
+
+  render();
+
+  showToast(
+    "บันทึกลิงก์แล้ว ♡"
+  );
+
+}
+
+/* =====================================================
+   SAVE COLORS
+===================================================== */
+
+function saveColors(){
+
+  data.colors.bg =
+    document.getElementById(
+      "colorBg"
+    ).value;
+
+  data.colors.card =
+    document.getElementById(
+      "colorCard"
+    ).value;
+
+  data.colors.primary =
+    document.getElementById(
+      "colorPrimary"
+    ).value;
+
+  data.colors.soft =
+    document.getElementById(
+      "colorSoft"
+    ).value;
+
+  data.colors.text =
+    document.getElementById(
+      "colorText"
+    ).value;
+
+  data.colors.dark =
+    document.getElementById(
+      "colorDark"
+    ).value;
+
+  data.colors.border =
+    document.getElementById(
+      "colorBorder"
+    ).value;
+
+  data.colors.star =
+    document.getElementById(
+      "colorStar"
+    ).value;
+
+  saveData();
+
+  render();
+
+  showToast(
+    "บันทึกสีทั้งหมดแล้ว ♡"
+  );
+
+}
+
+/* =====================================================
+   ADMIN REVIEW LIST
+===================================================== */
+
+function renderAdminReviews(){
+
+  const list =
+    document.getElementById(
+      "adminReviewList"
+    );
+
+  list.innerHTML = "";
+
+  if(!data.reviews.length){
+
+    list.innerHTML =
+      `<p style="text-align:center;">
+        ยังไม่มีรีวิว
+      </p>`;
+
+    return;
+
+  }
+
+  data.reviews.forEach(review=>{
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "admin-review";
+
+    const stars =
+      "★".repeat(review.rating) +
+      "☆".repeat(5-review.rating);
+
+    item.innerHTML = `
+
+      <div class="admin-review-head">
+
+        <div>
+          <strong>
+            ${escapeHTML(review.name)}
+          </strong>
+
+          <div
+            style="color:var(--star);">
+            ${stars}
+          </div>
+        </div>
+
+      </div>
+
+      <p
+        style="font-size:12px;
+               line-height:1.6;">
+        ${escapeHTML(review.text)}
+      </p>
+
+      <div class="admin-review-actions">
+
+        <button
+          class="small-btn edit-btn"
+          onclick="openEditReview(${review.id})">
+          แก้ไข
+        </button>
+
+        <button
+          class="small-btn delete-btn"
+          onclick="deleteReview(${review.id})">
+          ลบ
+        </button>
+
+      </div>
+
+    `;
+
+    list.appendChild(item);
+
+  });
+
+}
+
+/* =====================================================
+   OPEN EDIT REVIEW
+===================================================== */
+
+function openEditReview(id){
+
+  const review =
+    data.reviews.find(
+      r=>r.id === id
+    );
+
+  if(!review) return;
+
+  editingReviewId =
+    id;
+
+  document.getElementById(
+    "editReviewId"
+  ).value =
+    id;
+
+  document.getElementById(
+    "editReviewName"
+  ).value =
+    review.name;
+
+  document.getElementById(
+    "editReviewRating"
+  ).value =
+    review.rating;
+
+  document.getElementById(
+    "editReviewText"
+  ).value =
+    review.text;
+
+  document.getElementById(
+    "editReviewModal"
+  ).classList.add("show");
+
+}
+
+/* =====================================================
+   SAVE EDITED REVIEW
+===================================================== */
+
+function saveEditedReview(){
+
+  const review =
+    data.reviews.find(
+      r=>r.id === editingReviewId
+    );
+
+  if(!review) return;
+
+  review.name =
+    document.getElementById(
+      "editReviewName"
+    ).value.trim();
+
+  review.rating =
+    Number(
+      document.getElementById(
+        "editReviewRating"
+      ).value
+    );
+
+  review.text =
+    document.getElementById(
+      "editReviewText"
+    ).value.trim();
+
+  if(!review.name || !review.text){
+
+    showToast(
+      "กรุณากรอกข้อมูลให้ครบ"
+    );
+
+    return;
+
+  }
+
+  saveData();
+
+  render();
+
+  renderAdminReviews();
+
+  closeModal(
+    "editReviewModal"
+  );
+
+  showToast(
+    "แก้ไขรีวิวแล้ว ♡"
+  );
+
+}
+
+/* =====================================================
+   DELETE REVIEW
+===================================================== */
+
+function deleteReview(id){
+
+  const confirmDelete =
+    confirm(
+      "ต้องการลบรีวิวนี้หรือไม่?"
+    );
+
+  if(!confirmDelete) return;
+
+  data.reviews =
+    data.reviews.filter(
+      review=>review.id !== id
+    );
+
+  saveData();
+
+  render();
+
+  renderAdminReviews();
+
+  showToast(
+    "ลบรีวิวแล้ว"
+  );
+
+}
+
+/* =====================================================
+   ADD ADMIN REVIEW
+===================================================== */
+
+function openAddReviewAdmin(){
+
+  document.getElementById(
+    "addReviewName"
+  ).value = "";
+
+  document.getElementById(
+    "addReviewRating"
+  ).value = "5";
+
+  document.getElementById(
+    "addReviewText"
+  ).value = "";
+
+  document.getElementById(
+    "addReviewModal"
+  ).classList.add("show");
+
+}
+
+function addAdminReview(){
+
+  const name =
+    document.getElementById(
+      "addReviewName"
+    ).value.trim();
+
+  const rating =
+    Number(
+      document.getElementById(
+        "addReviewRating"
+      ).value
+    );
+
+  const text =
+    document.getElementById(
+      "addReviewText"
+    ).value.trim();
+
+  if(!name || !text){
+
+    showToast(
+      "กรุณากรอกข้อมูลให้ครบ"
+    );
+
+    return;
+
+  }
+
+  const now =
+    new Date();
+
+  data.reviews.unshift({
+
+    id:Date.now(),
+
+    name:name,
+
+    rating:rating,
+
+    text:text,
+
+    date:now.toLocaleDateString(
+      "th-TH"
+    )
+
+  });
+
+  saveData();
+
+  render();
+
+  renderAdminReviews();
+
+  closeModal(
+    "addReviewModal"
+  );
+
+  showToast(
+    "เพิ่มรีวิวแล้ว ♡"
+  );
+
+}
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent =
+    message;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(
+      ()=>{
+        toast.classList.remove("show");
+      },
+      2200
+    );
+
+}
+
+/* =====================================================
+   CLICK OUTSIDE MODAL
+===================================================== */
+
+document
+  .querySelectorAll(".modal")
+  .forEach(modal=>{
+
+    modal.addEventListener(
+      "click",
+      event=>{
+
+        if(event.target === modal){
+
+          modal.classList.remove(
+            "show"
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+/* =====================================================
+   START
+===================================================== */
+
+render();
+
+</script>
+
+</body>
+</html>
