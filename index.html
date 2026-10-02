@@ -5,7 +5,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Review Shop</title>
+/* =========================
+   MINUS REPORT POPUP
+========================= */
 
+.minus-popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+
+.minus-popup.show {
+    display: flex;
+}
+
+.minus-popup-box {
+    width: 100%;
+    max-width: 630px;
+    background: #fff5fb;
+    border-radius: 34px;
+    padding: 42px 35px 45px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.10);
+}
+
+.minus-popup-text {
+    color: #f5c4df;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.35;
+    white-space: pre-line;
+    margin-bottom: 35px;
+}
+
+.minus-popup-link {
+    display: block;
+    width: 85%;
+    margin: auto;
+    padding: 19px 25px;
+    border-radius: 50px;
+    background: #cbd5dd;
+    color: white;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.minus-popup-link:hover {
+    background: #b9c4cd;
+}
+
+.minus-popup-close {
+    margin-top: 18px;
+    border: 0;
+    background: transparent;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+
+    .minus-popup-box {
+        padding: 32px 20px 35px;
+        border-radius: 28px;
+    }
+
+    .minus-popup-text {
+        font-size: 21px;
+    }
+
+    .minus-popup-link {
+        width: 90%;
+    }
+}
 <style>
 * {
     box-sizing: border-box;
@@ -1118,7 +1199,43 @@ textarea {
     Admin
 </button>
 
+<!-- MINUS POPUP -->
 
+<div
+    id="minusPopup"
+    class="minus-popup"
+>
+
+    <div class="minus-popup-box">
+
+        <div
+            id="minusPopupText"
+            class="minus-popup-text"
+        >
+            กรุณาส่งหลักฐาน - แคปแชท และแจ้งปัญหาแอดมิน
+            ผ่านลิงค์ด้านล่าง
+        </div>
+
+        <a
+            id="minusPopupLink"
+            class="minus-popup-link"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            เปิดลิงก์
+        </a>
+
+        <button
+            class="minus-popup-close"
+            onclick="closeMinusPopup()"
+        >
+            ปิด
+        </button>
+
+    </div>
+
+</div>
 <script>
 
 /* =========================================================
@@ -1133,6 +1250,18 @@ const ADMIN_PASSWORD = "1234";
 ========================================================= */
 
 const defaultData = {
+    minusPopup: {
+
+    text:
+        "กรุณาส่งหลักฐาน - แคปแชท และแจ้งปัญหาแอดมิน\nผ่านลิงค์ด้านล่าง",
+
+    buttonText:
+        "เปิดลิงก์",
+
+    link:
+        "https://example.com"
+
+},
 
     shop: {
         name: "My Cute Shop",
@@ -1300,11 +1429,34 @@ function voteUp() {
 
 function voteDown() {
 
-    data.votes.down++;
+    const popup =
+        document.getElementById("minusPopup");
 
-    saveData();
+    const text =
+        document.getElementById("minusPopupText");
 
-    renderCustomerPage();
+    const link =
+        document.getElementById("minusPopupLink");
+
+    text.textContent =
+        data.minusPopup.text;
+
+    link.textContent =
+        data.minusPopup.buttonText;
+
+    link.href =
+        data.minusPopup.link;
+
+    popup.classList.add("show");
+
+}
+
+
+function closeMinusPopup() {
+
+    document
+        .getElementById("minusPopup")
+        .classList.remove("show");
 
 }
 
