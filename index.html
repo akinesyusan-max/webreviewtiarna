@@ -1,0 +1,2947 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+      maximum-scale=1.0, user-scalable=no">
+
+<title>Customer Voices ♡</title>
+
+<style>
+
+/* =========================================================
+   ROOT COLORS
+========================================================= */
+
+:root {
+  --bg: #fff9fb;
+  --card: #ffffff;
+  --soft: #fff3f8;
+  --primary: #d59ab4;
+  --primary-light: #f4dce8;
+  --text: #81777c;
+  --heading: #a48f98;
+  --border: #eadfe4;
+  --star: #e9b84c;
+  --positive: #8ed3b5;
+  --negative: #c8c1c5;
+  --shadow: 0 10px 30px rgba(110, 90, 100, 0.08);
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Noto Sans Thai",
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.page {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding-bottom: 100px;
+}
+
+
+/* =========================================================
+   BANNER
+========================================================= */
+
+.banner-section {
+  width: 100%;
+  padding: 16px 16px 0;
+}
+
+.shop-banner {
+  width: 100%;
+  height: 230px;
+
+  background: var(--soft);
+
+  border: 1px solid var(--border);
+  border-radius: 0 0 34px 34px;
+
+  overflow: hidden;
+
+  box-shadow: var(--shadow);
+}
+
+.shop-banner img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+
+/* =========================================================
+   TITLE SECTION
+========================================================= */
+
+.title-section {
+  text-align: center;
+  padding: 58px 20px 35px;
+}
+
+.small-title {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 5px;
+  color: #d1c5ca;
+  margin-bottom: 10px;
+}
+
+.main-title {
+  font-size: clamp(30px, 8vw, 52px);
+  font-weight: 800;
+  color: var(--heading);
+  line-height: 1.2;
+}
+
+.description {
+  margin-top: 12px;
+  font-size: 15px;
+  color: #b5aaaf;
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.divider {
+  width: calc(100% - 32px);
+  height: 1px;
+  background: var(--border);
+  margin: 0 auto 25px;
+}
+
+
+/* =========================================================
+   VOTE AREA
+========================================================= */
+
+.vote-section {
+  padding: 0 16px;
+}
+
+.vote-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.vote-button {
+  width: 100%;
+  min-height: 112px;
+
+  background: var(--card);
+
+  border: 1px solid var(--border);
+  border-radius: 28px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 17px;
+
+  text-align: left;
+
+  box-shadow: var(--shadow);
+
+  cursor: pointer;
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+.vote-button:active {
+  transform: scale(.97);
+}
+
+.vote-icon {
+  width: 62px;
+  height: 62px;
+
+  min-width: 62px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 27px;
+  font-weight: 800;
+
+  margin-right: 14px;
+}
+
+.plus-button .vote-icon {
+  background: #e5f5ee;
+  color: #79c6a5;
+}
+
+.minus-button .vote-icon {
+  background: #f0edef;
+  color: #b8b1b5;
+}
+
+.vote-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.vote-text strong {
+  font-size: 18px;
+  color: var(--heading);
+}
+
+.vote-text small {
+  font-size: 13px;
+  color: #b5aaaf;
+}
+
+
+/* =========================================================
+   RATING
+========================================================= */
+
+.rating-section {
+  padding: 42px 22px 25px;
+}
+
+.rating-heading {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--heading);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+}
+
+.rating-heading span {
+  font-size: 25px;
+  color: #aaa1a5;
+}
+
+.rating-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  align-items: center;
+}
+
+.average {
+  font-size: clamp(62px, 18vw, 100px);
+  line-height: .9;
+
+  font-weight: 900;
+
+  color: #000;
+}
+
+.stars-area {
+  text-align: center;
+}
+
+.stars {
+  font-size: clamp(24px, 7vw, 40px);
+  letter-spacing: 2px;
+  color: var(--star);
+  white-space: nowrap;
+}
+
+.total-rating {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #aaa1a5;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   REVIEWS
+========================================================= */
+
+.reviews-section {
+  padding: 15px 16px;
+}
+
+.review-card {
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 28px;
+
+  padding: 22px;
+
+  margin-bottom: 15px;
+
+  box-shadow: var(--shadow);
+}
+
+.review-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+
+  border-radius: 50%;
+
+  background: #eee8eb;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #aaa0a5;
+
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.reviewer-info {
+  flex: 1;
+}
+
+.reviewer-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--heading);
+}
+
+.review-date {
+  font-size: 12px;
+  color: #b9afb4;
+  margin-top: 3px;
+}
+
+.review-stars {
+  margin-top: 17px;
+  font-size: 22px;
+  color: var(--star);
+  letter-spacing: 2px;
+}
+
+.review-text {
+  margin-top: 13px;
+
+  font-size: 15px;
+  line-height: 1.8;
+
+  color: #91878c;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-review {
+  text-align: center;
+  padding: 45px 20px;
+
+  color: #b8adb2;
+}
+
+
+/* =========================================================
+   POPUP
+========================================================= */
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(65, 55, 60, .25);
+
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  z-index: 5000;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: .25s ease;
+}
+
+.popup-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.popup {
+  width: min(100%, 390px);
+
+  background: #fff;
+
+  border: 1px solid var(--border);
+
+  border-radius: 30px;
+
+  padding: 30px 22px;
+
+  text-align: center;
+
+  box-shadow:
+    0 20px 60px rgba(80, 65, 75, .20);
+
+  position: relative;
+}
+
+.popup-close {
+  position: absolute;
+
+  right: 14px;
+  top: 12px;
+
+  width: 38px;
+  height: 38px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #f2edef;
+
+  color: #aaa;
+
+  font-size: 24px;
+
+  cursor: pointer;
+}
+
+.popup h2 {
+  color: var(--heading);
+  font-size: 23px;
+  margin-bottom: 12px;
+}
+
+.popup p {
+  color: #aaa0a5;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.popup-button {
+  width: 100%;
+  height: 52px;
+
+  margin-top: 13px;
+
+  border-radius: 18px;
+
+  font-size: 15px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.gray-link-button {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+
+  background: #d0cdcf;
+  color: #fff;
+
+  border: none;
+}
+
+.confirm-minus {
+  background: #fff;
+  color: #aaa;
+
+  border: 1px solid #ddd6da;
+}
+
+
+/* =========================================================
+   ADMIN BUTTON
+========================================================= */
+
+.admin-open {
+  position: fixed;
+
+  right: 18px;
+  bottom: 22px;
+
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  border: 1px solid var(--border);
+
+  background: rgba(255,255,255,.95);
+
+  box-shadow: 0 8px 25px rgba(90,70,80,.15);
+
+  font-size: 25px;
+
+  cursor: pointer;
+
+  z-index: 3000;
+}
+
+
+/* =========================================================
+   ADMIN PANEL
+========================================================= */
+
+.admin-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(40,30,35,.25);
+
+  backdrop-filter: blur(8px);
+
+  z-index: 6000;
+
+  display: flex;
+  align-items: flex-end;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: .25s ease;
+}
+
+.admin-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.admin-panel {
+  width: 100%;
+  max-height: 92vh;
+
+  overflow-y: auto;
+
+  background: #fff;
+
+  border-radius: 30px 30px 0 0;
+
+  padding: 24px;
+
+  box-shadow: 0 -10px 50px rgba(80,60,70,.15);
+}
+
+.admin-inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+}
+
+.admin-header h2 {
+  color: var(--heading);
+}
+
+.admin-close {
+  width: 40px;
+  height: 40px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f2edef;
+
+  color: #999;
+
+  font-size: 22px;
+}
+
+.admin-section {
+  padding: 18px 0;
+
+  border-top: 1px solid var(--border);
+}
+
+.admin-section h3 {
+  color: var(--heading);
+  margin-bottom: 14px;
+}
+
+.field {
+  margin-bottom: 13px;
+}
+
+.field label {
+  display: block;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #998d93;
+
+  margin-bottom: 6px;
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+
+  padding: 13px 14px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 15px;
+
+  outline: none;
+
+  background: #fffafa;
+
+  color: #777;
+
+  font-family: inherit;
+
+  font-size: 14px;
+}
+
+.field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.color-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+}
+
+.color-input {
+  width: 100%;
+  height: 45px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  background: #fff;
+
+  padding: 3px;
+}
+
+.admin-button {
+  width: 100%;
+
+  min-height: 48px;
+
+  border: none;
+
+  border-radius: 16px;
+
+  background: var(--primary);
+
+  color: #fff;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  margin-top: 7px;
+}
+
+.admin-button.secondary {
+  background: #e9e4e7;
+  color: #8f858a;
+}
+
+.admin-button.danger {
+  background: #ead7dc;
+  color: #9c747d;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-box {
+  width: min(100%, 380px);
+
+  background: #fff;
+
+  border-radius: 28px;
+
+  padding: 30px 24px;
+
+  box-shadow: 0 20px 60px rgba(70,50,60,.18);
+
+  text-align: center;
+}
+
+.login-box h2 {
+  color: var(--heading);
+  margin-bottom: 10px;
+}
+
+.login-box p {
+  color: #aaa;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.login-input {
+  width: 100%;
+
+  height: 52px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  padding: 0 15px;
+
+  outline: none;
+
+  text-align: center;
+
+  font-size: 17px;
+}
+
+.login-error {
+  color: #c78b98;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+
+/* =========================================================
+   ADMIN REVIEW
+========================================================= */
+
+.admin-review {
+  background: #fffafa;
+
+  border: 1px solid var(--border);
+
+  border-radius: 18px;
+
+  padding: 14px;
+
+  margin-bottom: 10px;
+}
+
+.admin-review-title {
+  font-weight: 800;
+  color: var(--heading);
+}
+
+.admin-review-text {
+  font-size: 13px;
+  color: #999;
+  margin: 5px 0 10px;
+}
+
+.review-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.review-actions button {
+  flex: 1;
+
+  height: 38px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #e9e3e6;
+
+  color: #82777c;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+  position: fixed;
+
+  left: 50%;
+
+  bottom: 25px;
+
+  transform: translateX(-50%) translateY(20px);
+
+  background: #777075;
+
+  color: white;
+
+  padding: 12px 20px;
+
+  border-radius: 30px;
+
+  font-size: 14px;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: .3s ease;
+
+  z-index: 10000;
+
+  white-space: nowrap;
+}
+
+.toast.show {
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    translateY(0);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .page {
+    width: 100%;
+  }
+
+  .banner-section {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 14px;
+  }
+
+  .shop-banner {
+    height: 215px;
+    border-radius: 0 0 28px 28px;
+  }
+
+  .title-section {
+    padding-top: 45px;
+  }
+
+  .vote-button {
+    min-height: 105px;
+    padding: 13px;
+    border-radius: 25px;
+  }
+
+  .vote-icon {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    font-size: 24px;
+    margin-right: 10px;
+  }
+
+  .vote-text strong {
+    font-size: 16px;
+  }
+
+  .vote-text small {
+    font-size: 12px;
+  }
+
+  .rating-box {
+    gap: 10px;
+  }
+
+  .average {
+    font-size: 65px;
+  }
+
+  .stars {
+    font-size: 22px;
+  }
+
+  .admin-panel {
+    padding: 20px 16px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 360px) {
+
+  .vote-grid {
+    gap: 8px;
+  }
+
+  .vote-button {
+    padding: 10px;
+  }
+
+  .vote-icon {
+    width: 47px;
+    height: 47px;
+    min-width: 47px;
+  }
+
+  .vote-text strong {
+    font-size: 14px;
+  }
+
+  .average {
+    font-size: 56px;
+  }
+
+  .stars {
+    font-size: 19px;
+  }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="page">
+
+  <!-- =====================================================
+       BANNER
+  ====================================================== -->
+
+  <section class="banner-section">
+
+    <div class="shop-banner">
+
+      <img
+        id="bannerImage"
+        alt="Shop Banner"
+      >
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       TITLE
+  ====================================================== -->
+
+  <section class="title-section">
+
+    <div class="small-title" id="smallTitle">
+      CUSTOMER VOICES
+    </div>
+
+    <h1 class="main-title" id="mainTitle">
+      พื้นที่รีวิวของลูกค้า
+    </h1>
+
+    <p class="description" id="mainDescription">
+      รีวิวและความคิดเห็นจากลูกค้าของร้าน ♡
+    </p>
+
+  </section>
+
+
+  <div class="divider"></div>
+
+
+  <!-- =====================================================
+       VOTES
+  ====================================================== -->
+
+  <section class="vote-section">
+
+    <div class="vote-grid">
+
+      <button
+        class="vote-button plus-button"
+        onclick="addPlusVote()"
+      >
+
+        <span class="vote-icon">
+          +1
+        </span>
+
+        <span class="vote-text">
+
+          <strong>
+            Plus one
+          </strong>
+
+          <small id="plusCount">
+            359 โหวต
+          </small>
+
+        </span>
+
+      </button>
+
+
+      <button
+        class="vote-button minus-button"
+        onclick="openMinusPopup()"
+      >
+
+        <span class="vote-icon">
+          −1
+        </span>
+
+        <span class="vote-text">
+
+          <strong>
+            Minus one
+          </strong>
+
+          <small id="minusCount">
+            0 โหวต
+          </small>
+
+        </span>
+
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       RATING
+  ====================================================== -->
+
+  <section class="rating-section">
+
+    <div class="rating-heading">
+
+      <span id="ratingTitle">
+        การจัดอันดับและความคิดเห็น
+      </span>
+
+      <span>
+        ›
+      </span>
+
+    </div>
+
+
+    <div class="rating-box">
+
+      <div
+        class="average"
+        id="averageRating"
+      >
+        4.5
+      </div>
+
+
+      <div class="stars-area">
+
+        <div
+          class="stars"
+          id="ratingStars"
+        >
+          ★★★★★
+        </div>
+
+        <div
+          class="total-rating"
+          id="totalRating"
+        >
+          ทั้งหมด 1.2M
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       REVIEWS
+  ====================================================== -->
+
+  <section class="reviews-section">
+
+    <div id="reviewsContainer"></div>
+
+  </section>
+
+</div>
+
+
+<!-- =========================================================
+     ADMIN FLOAT BUTTON
+========================================================= -->
+
+<button
+  class="admin-open"
+  onclick="openAdminLogin()"
+  aria-label="Admin"
+>
+  ⚙️
+</button>
+
+
+<!-- =========================================================
+     MINUS POPUP
+========================================================= -->
+
+<div
+  class="popup-overlay"
+  id="minusPopup"
+>
+
+  <div class="popup">
+
+    <button
+      class="popup-close"
+      onclick="closeMinusPopup()"
+    >
+      ×
+    </button>
+
+    <h2 id="minusPopupTitle">
+      แจ้งปัญหา / กด -1
+    </h2>
+
+    <p id="minusPopupText">
+      หากต้องการแจ้งปัญหาหรือส่งหลักฐาน
+      สามารถกดปุ่มด้านล่างเพื่อไปยังลิงก์ที่ร้านกำหนด
+    </p>
+
+
+    <!-- ปุ่มสีเทาเปิดลิงก์ -->
+
+    <a
+      class="popup-button gray-link-button"
+      id="minusLink"
+      href="#"
+      target="_blank"
+      rel="noopener"
+    >
+      เปิดลิงก์
+    </a>
+
+
+    <!-- ต้องกดยืนยันจึงจะนับ -->
+
+    <button
+      class="popup-button confirm-minus"
+      onclick="confirmMinus()"
+    >
+      ยืนยัน -1
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     LOGIN
+========================================================= -->
+
+<div
+  class="popup-overlay"
+  id="loginOverlay"
+>
+
+  <div class="login-box">
+
+    <h2>
+      🔐 Admin
+    </h2>
+
+    <p>
+      กรุณาใส่รหัสผ่านเพื่อจัดการเว็บไซต์
+    </p>
+
+    <input
+      class="login-input"
+      type="password"
+      id="adminPassword"
+      placeholder="รหัสผ่าน"
+      onkeydown="if(event.key==='Enter') loginAdmin()"
+    >
+
+    <button
+      class="admin-button"
+      onclick="loginAdmin()"
+    >
+      เข้าสู่ระบบ
+    </button>
+
+    <div
+      class="login-error"
+      id="loginError"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     ADMIN PANEL
+========================================================= -->
+
+<div
+  class="admin-overlay"
+  id="adminOverlay"
+>
+
+  <div class="admin-panel">
+
+    <div class="admin-inner">
+
+
+      <!-- ADMIN HEADER -->
+
+      <div class="admin-header">
+
+        <h2>
+          ⚙️ ตั้งค่าเว็บไซต์
+        </h2>
+
+        <button
+          class="admin-close"
+          onclick="closeAdmin()"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <!-- ===================================================
+           SHOP CONTENT
+      ==================================================== -->
+
+      <div class="admin-section">
+
+        <h3>
+          📝 ข้อมูลหน้าเว็บ
+        </h3>
+
+
+        <div class="field">
+
+          <label>
+            ข้อความเล็กด้านบน
+          </label>
+
+          <input
+            id="editSmallTitle"
+            type="text"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            หัวข้อหลัก
+          </label>
+
+          <input
+            id="editMainTitle"
+            type="text"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            คำอธิบาย
+          </label>
+
+          <textarea
+            id="editDescription"
+          ></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            หัวข้อคะแนน
+          </label>
+
+          <input
+            id="editRatingTitle"
+            type="text"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            คะแนนเฉลี่ย
+          </label>
+
+          <input
+            id="editAverage"
+            type="number"
+            min="0"
+            max="5"
+            step="0.1"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            จำนวนรีวิวที่แสดง
+          </label>
+
+          <input
+            id="editTotalRating"
+            type="text"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================
+           BANNER
+      ==================================================== -->
+
+      <div class="admin-section">
+
+        <h3>
+          🖼️ แบนเนอร์
+        </h3>
+
+
+        <div class="field">
+
+          <label>
+            อัปโหลดรูปแบนเนอร์
+          </label>
+
+          <input
+            id="bannerUpload"
+            type="file"
+            accept="image/*"
+          >
+
+        </div>
+
+
+        <button
+          class="admin-button secondary"
+          onclick="removeBanner()"
+        >
+          ลบรูปแบนเนอร์
+        </button>
+
+      </div>
+
+
+      <!-- ===================================================
+           VOTES
+      ==================================================== -->
+
+      <div class="admin-section">
+
+        <h3>
+          🗳️ จำนวนโหวต
+        </h3>
+
+
+        <div class="field">
+
+          <label>
+            +1
+          </label>
+
+          <input
+            id="editPlus"
+            type="number"
+            min="0"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            -1
+          </label>
+
+          <input
+            id="editMinus"
+            type="number"
+            min="0"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================
+           MINUS POPUP
+      ==================================================== -->
+
+      <div class="admin-section">
+
+        <h3>
+          🔗 Popup ของ -1
+        </h3>
+
+
+        <div class="field">
+
+          <label>
+            หัวข้อ Popup
+          </label>
+
+          <input
+            id="editMinusTitle"
+            type="text"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ข้อความ Popup
+          </label>
+
+          <textarea
+            id="editMinusText"
+          ></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            ลิงก์ของปุ่มสีเทา
+          </label>
+
+          <input
+            id="editMinusLink"
+            type="url"
+            placeholder="https://..."
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================
+           COLORS
+      ==================================================== -->
+
+      <div class="admin-section">
+
+        <h3>
+          🎨 ปรับสีเว็บไซต์
+        </h3>
+
+
+        <div class="color-grid">
+
+
+          <div class="field">
+
+            <label>
+              สีพื้นหลัง
+            </label>
+
+            <input
+              class="color-input"
+              id="colorBg"
+              type="color"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              สีการ์ด
+            </label>
+
+            <input
+              class="color-input"
+              id="colorCard"
+              type="color"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              สีพื้นอ่อน
+            </label>
+
+            <input
+              class="color-input"
+              id="colorSoft"
+              type="color"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              สีหลัก
+            </label>
+
+            <input
+              class="color-input"
+              id="colorPrimary"
+              type="color"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              สีหัวข้อ
+            </label>
+
+            <input
+              class="color-input"
+              id="colorHeading"
+              type="color"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              สีข้อความ
+            </label>
+
+            <input
+              class="color-input"
+              id="colorText"
+              type="color"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              สีขอบ
+            </label>
+
+            <input
+              class="color-input"
+              id="colorBorder"
+              type="color"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              สีดาว
+            </label>
+
+            <input
+              class="color-input"
+              id="colorStar"
+              type="color"
+            >
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================
+           REVIEWS ADMIN
+      ==================================================== -->
+
+      <div class="admin-section">
+
+        <h3>
+          💬 จัดการรีวิวลูกค้า
+        </h3>
+
+
+        <div id="adminReviews"></div>
+
+
+        <button
+          class="admin-button secondary"
+          onclick="addReview()"
+        >
+          ＋ เพิ่มรีวิว
+        </button>
+
+      </div>
+
+
+      <!-- ===================================================
+           SAVE
+      ==================================================== -->
+
+      <div class="admin-section">
+
+        <button
+          class="admin-button"
+          onclick="saveAdminSettings()"
+        >
+          💾 บันทึกการเปลี่ยนแปลง
+        </button>
+
+
+        <button
+          class="admin-button danger"
+          onclick="resetWebsite()"
+        >
+          รีเซ็ตเว็บไซต์เป็นค่าเริ่มต้น
+        </button>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+  class="toast"
+  id="toast"
+>
+  บันทึกเรียบร้อย ♡
+</div>
+
+
+<script>
+
+/* =========================================================
+   DEFAULT DATA
+========================================================= */
+
+const defaultData = {
+
+  smallTitle: "CUSTOMER VOICES",
+
+  mainTitle: "พื้นที่รีวิวของลูกค้า",
+
+  description:
+    "รีวิวและความคิดเห็นจากลูกค้าของร้าน ♡",
+
+  ratingTitle:
+    "การจัดอันดับและความคิดเห็น",
+
+  average: 4.5,
+
+  totalRating: "ทั้งหมด 1.2M",
+
+  plus: 359,
+
+  minus: 0,
+
+  banner: "",
+
+  minusTitle:
+    "แจ้งปัญหา / กด -1",
+
+  minusText:
+    "หากต้องการแจ้งปัญหาหรือส่งหลักฐาน สามารถกดปุ่มด้านล่างเพื่อไปยังลิงก์ที่ร้านกำหนด",
+
+  minusLink:
+    "https://example.com/",
+
+  colors: {
+
+    bg: "#fff9fb",
+
+    card: "#ffffff",
+
+    soft: "#fff3f8",
+
+    primary: "#d59ab4",
+
+    heading: "#a48f98",
+
+    text: "#81777c",
+
+    border: "#eadfe4",
+
+    star: "#e9b84c"
+
+  },
+
+  reviews: [
+
+    {
+      name: "M",
+      date: "27/9/2569",
+      stars: 5,
+      text: "+1 แม่ค้าน่ารักค่ะ"
+    },
+
+    {
+      name: "brownie",
+      date: "26/9/2569",
+      stars: 5,
+      text: "แพ็กสินค้าดีมากค่ะ ส่งเร็วมาก"
+    },
+
+    {
+      name: "Aki",
+      date: "25/9/2569",
+      stars: 4,
+      text: "สินค้าน่ารักมาก ประทับใจค่ะ"
+    }
+
+  ]
+
+};
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+let data;
+
+try {
+
+  const saved =
+    localStorage.getItem("customerVoiceData");
+
+  if (saved) {
+
+    data = JSON.parse(saved);
+
+  } else {
+
+    data = JSON.parse(
+      JSON.stringify(defaultData)
+    );
+
+  }
+
+} catch (error) {
+
+  data = JSON.parse(
+    JSON.stringify(defaultData)
+  );
+
+}
+
+
+/* =========================================================
+   SAVE DATA
+========================================================= */
+
+function saveData() {
+
+  localStorage.setItem(
+    "customerVoiceData",
+    JSON.stringify(data)
+  );
+
+}
+
+
+/* =========================================================
+   APPLY COLORS
+========================================================= */
+
+function applyColors() {
+
+  const root =
+    document.documentElement;
+
+  root.style.setProperty(
+    "--bg",
+    data.colors.bg
+  );
+
+  root.style.setProperty(
+    "--card",
+    data.colors.card
+  );
+
+  root.style.setProperty(
+    "--soft",
+    data.colors.soft
+  );
+
+  root.style.setProperty(
+    "--primary",
+    data.colors.primary
+  );
+
+  root.style.setProperty(
+    "--heading",
+    data.colors.heading
+  );
+
+  root.style.setProperty(
+    "--text",
+    data.colors.text
+  );
+
+  root.style.setProperty(
+    "--border",
+    data.colors.border
+  );
+
+  root.style.setProperty(
+    "--star",
+    data.colors.star
+  );
+
+}
+
+
+/* =========================================================
+   RENDER PAGE
+========================================================= */
+
+function renderPage() {
+
+  applyColors();
+
+
+  document.getElementById(
+    "smallTitle"
+  ).textContent =
+    data.smallTitle;
+
+
+  document.getElementById(
+    "mainTitle"
+  ).textContent =
+    data.mainTitle;
+
+
+  document.getElementById(
+    "mainDescription"
+  ).textContent =
+    data.description;
+
+
+  document.getElementById(
+    "ratingTitle"
+  ).textContent =
+    data.ratingTitle;
+
+
+  document.getElementById(
+    "averageRating"
+  ).textContent =
+    Number(data.average).toFixed(1);
+
+
+  document.getElementById(
+    "totalRating"
+  ).textContent =
+    data.totalRating;
+
+
+  document.getElementById(
+    "plusCount"
+  ).textContent =
+    formatNumber(data.plus) +
+    " โหวต";
+
+
+  document.getElementById(
+    "minusCount"
+  ).textContent =
+    formatNumber(data.minus) +
+    " โหวต";
+
+
+  const banner =
+    document.getElementById(
+      "bannerImage"
+    );
+
+  if (data.banner) {
+
+    banner.src = data.banner;
+
+    banner.style.display =
+      "block";
+
+  } else {
+
+    banner.removeAttribute("src");
+
+    banner.style.display =
+      "none";
+
+  }
+
+
+  document.getElementById(
+    "minusPopupTitle"
+  ).textContent =
+    data.minusTitle;
+
+
+  document.getElementById(
+    "minusPopupText"
+  ).textContent =
+    data.minusText;
+
+
+  document.getElementById(
+    "minusLink"
+  ).href =
+    data.minusLink;
+
+
+  renderReviews();
+
+}
+
+
+/* =========================================================
+   NUMBER FORMAT
+========================================================= */
+
+function formatNumber(number) {
+
+  return Number(number || 0)
+    .toLocaleString("th-TH");
+
+}
+
+
+/* =========================================================
+   RENDER REVIEWS
+========================================================= */
+
+function renderReviews() {
+
+  const container =
+    document.getElementById(
+      "reviewsContainer"
+    );
+
+  container.innerHTML = "";
+
+
+  if (!data.reviews.length) {
+
+    container.innerHTML = `
+      <div class="empty-review">
+        ยังไม่มีรีวิวจากลูกค้า ♡
+      </div>
+    `;
+
+    return;
+  }
+
+
+  data.reviews.forEach(
+    (review) => {
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "review-card";
+
+
+      const stars =
+        "★".repeat(
+          Math.max(
+            0,
+            Math.min(
+              5,
+              Number(review.stars)
+            )
+          )
+        ) +
+        "☆".repeat(
+          5 -
+          Math.max(
+            0,
+            Math.min(
+              5,
+              Number(review.stars)
+            )
+          )
+        );
+
+
+      const firstLetter =
+        review.name
+          ? review.name.charAt(0)
+          : "?";
+
+
+      card.innerHTML = `
+
+        <div class="review-top">
+
+          <div class="avatar">
+            ${escapeHTML(firstLetter)}
+          </div>
+
+          <div class="reviewer-info">
+
+            <div class="reviewer-name">
+              ${escapeHTML(review.name)}
+            </div>
+
+            <div class="review-date">
+              ${escapeHTML(review.date)}
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="review-stars">
+          ${stars}
+        </div>
+
+        <div class="review-text">
+          ${escapeHTML(review.text)}
+        </div>
+
+      `;
+
+
+      container.appendChild(card);
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(text) {
+
+  return String(text ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================================================
+   PLUS VOTE
+========================================================= */
+
+function addPlusVote() {
+
+  data.plus++;
+
+  saveData();
+
+  renderPage();
+
+  showToast("เพิ่ม +1 แล้ว ♡");
+
+}
+
+
+/* =========================================================
+   MINUS POPUP
+========================================================= */
+
+function openMinusPopup() {
+
+  /*
+    สำคัญ:
+    ตรงนี้ยังไม่เพิ่ม data.minus
+  */
+
+  document
+    .getElementById("minusPopup")
+    .classList.add("show");
+
+}
+
+
+function closeMinusPopup() {
+
+  document
+    .getElementById("minusPopup")
+    .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   CONFIRM MINUS
+========================================================= */
+
+function confirmMinus() {
+
+  data.minus++;
+
+  saveData();
+
+  renderPage();
+
+  closeMinusPopup();
+
+  showToast("บันทึก -1 แล้ว");
+
+}
+
+
+/* =========================================================
+   CLOSE POPUP WHEN CLICK OUTSIDE
+========================================================= */
+
+document
+  .getElementById("minusPopup")
+  .addEventListener(
+    "click",
+    function(event) {
+
+      if (
+        event.target === this
+      ) {
+
+        closeMinusPopup();
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   ADMIN LOGIN
+========================================================= */
+
+function openAdminLogin() {
+
+  document
+    .getElementById("loginOverlay")
+    .classList.add("show");
+
+  document
+    .getElementById("adminPassword")
+    .value = "";
+
+  document
+    .getElementById("loginError")
+    .textContent = "";
+
+}
+
+
+function loginAdmin() {
+
+  const password =
+    document
+      .getElementById(
+        "adminPassword"
+      )
+      .value;
+
+
+  /*
+    รหัสเริ่มต้นคือ 1234
+    สามารถเปลี่ยนในโค้ดได้
+  */
+
+  if (password === "1234") {
+
+    document
+      .getElementById(
+        "loginOverlay"
+      )
+      .classList.remove("show");
+
+
+    openAdmin();
+
+  } else {
+
+    document
+      .getElementById(
+        "loginError"
+      )
+      .textContent =
+      "รหัสผ่านไม่ถูกต้อง";
+
+  }
+
+}
+
+
+/* =========================================================
+   OPEN ADMIN
+========================================================= */
+
+function openAdmin() {
+
+  loadAdminForm();
+
+  document
+    .getElementById(
+      "adminOverlay"
+    )
+    .classList.add("show");
+
+}
+
+
+/* =========================================================
+   CLOSE ADMIN
+========================================================= */
+
+function closeAdmin() {
+
+  document
+    .getElementById(
+      "adminOverlay"
+    )
+    .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   LOAD ADMIN FORM
+========================================================= */
+
+function loadAdminForm() {
+
+  document.getElementById(
+    "editSmallTitle"
+  ).value =
+    data.smallTitle;
+
+
+  document.getElementById(
+    "editMainTitle"
+  ).value =
+    data.mainTitle;
+
+
+  document.getElementById(
+    "editDescription"
+  ).value =
+    data.description;
+
+
+  document.getElementById(
+    "editRatingTitle"
+  ).value =
+    data.ratingTitle;
+
+
+  document.getElementById(
+    "editAverage"
+  ).value =
+    data.average;
+
+
+  document.getElementById(
+    "editTotalRating"
+  ).value =
+    data.totalRating;
+
+
+  document.getElementById(
+    "editPlus"
+  ).value =
+    data.plus;
+
+
+  document.getElementById(
+    "editMinus"
+  ).value =
+    data.minus;
+
+
+  document.getElementById(
+    "editMinusTitle"
+  ).value =
+    data.minusTitle;
+
+
+  document.getElementById(
+    "editMinusText"
+  ).value =
+    data.minusText;
+
+
+  document.getElementById(
+    "editMinusLink"
+  ).value =
+    data.minusLink;
+
+
+  document.getElementById(
+    "colorBg"
+  ).value =
+    data.colors.bg;
+
+
+  document.getElementById(
+    "colorCard"
+  ).value =
+    data.colors.card;
+
+
+  document.getElementById(
+    "colorSoft"
+  ).value =
+    data.colors.soft;
+
+
+  document.getElementById(
+    "colorPrimary"
+  ).value =
+    data.colors.primary;
+
+
+  document.getElementById(
+    "colorHeading"
+  ).value =
+    data.colors.heading;
+
+
+  document.getElementById(
+    "colorText"
+  ).value =
+    data.colors.text;
+
+
+  document.getElementById(
+    "colorBorder"
+  ).value =
+    data.colors.border;
+
+
+  document.getElementById(
+    "colorStar"
+  ).value =
+    data.colors.star;
+
+
+  renderAdminReviews();
+
+}
+
+
+/* =========================================================
+   SAVE ADMIN SETTINGS
+========================================================= */
+
+function saveAdminSettings() {
+
+  data.smallTitle =
+    document.getElementById(
+      "editSmallTitle"
+    ).value;
+
+
+  data.mainTitle =
+    document.getElementById(
+      "editMainTitle"
+    ).value;
+
+
+  data.description =
+    document.getElementById(
+      "editDescription"
+    ).value;
+
+
+  data.ratingTitle =
+    document.getElementById(
+      "editRatingTitle"
+    ).value;
+
+
+  data.average =
+    Number(
+      document.getElementById(
+        "editAverage"
+      ).value
+    );
+
+
+  data.totalRating =
+    document.getElementById(
+      "editTotalRating"
+    ).value;
+
+
+  data.plus =
+    Number(
+      document.getElementById(
+        "editPlus"
+      ).value
+    );
+
+
+  data.minus =
+    Number(
+      document.getElementById(
+        "editMinus"
+      ).value
+    );
+
+
+  data.minusTitle =
+    document.getElementById(
+      "editMinusTitle"
+    ).value;
+
+
+  data.minusText =
+    document.getElementById(
+      "editMinusText"
+    ).value;
+
+
+  data.minusLink =
+    document.getElementById(
+      "editMinusLink"
+    ).value;
+
+
+  data.colors.bg =
+    document.getElementById(
+      "colorBg"
+    ).value;
+
+
+  data.colors.card =
+    document.getElementById(
+      "colorCard"
+    ).value;
+
+
+  data.colors.soft =
+    document.getElementById(
+      "colorSoft"
+    ).value;
+
+
+  data.colors.primary =
+    document.getElementById(
+      "colorPrimary"
+    ).value;
+
+
+  data.colors.heading =
+    document.getElementById(
+      "colorHeading"
+    ).value;
+
+
+  data.colors.text =
+    document.getElementById(
+      "colorText"
+    ).value;
+
+
+  data.colors.border =
+    document.getElementById(
+      "colorBorder"
+    ).value;
+
+
+  data.colors.star =
+    document.getElementById(
+      "colorStar"
+    ).value;
+
+
+  saveData();
+
+  renderPage();
+
+  showToast(
+    "บันทึกการตั้งค่าแล้ว ♡"
+  );
+
+}
+
+
+/* =========================================================
+   BANNER UPLOAD
+========================================================= */
+
+document
+  .getElementById("bannerUpload")
+  .addEventListener(
+    "change",
+    function(event) {
+
+      const file =
+        event.target.files[0];
+
+      if (!file) return;
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(e) {
+
+          data.banner =
+            e.target.result;
+
+          saveData();
+
+          renderPage();
+
+          showToast(
+            "อัปโหลดแบนเนอร์แล้ว ♡"
+          );
+
+        };
+
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+
+/* =========================================================
+   REMOVE BANNER
+========================================================= */
+
+function removeBanner() {
+
+  data.banner = "";
+
+  saveData();
+
+  renderPage();
+
+  showToast(
+    "ลบแบนเนอร์แล้ว"
+  );
+
+}
+
+
+/* =========================================================
+   RENDER ADMIN REVIEWS
+========================================================= */
+
+function renderAdminReviews() {
+
+  const container =
+    document.getElementById(
+      "adminReviews"
+    );
+
+  container.innerHTML = "";
+
+
+  data.reviews.forEach(
+    (review, index) => {
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "admin-review";
+
+
+      item.innerHTML = `
+
+        <div class="admin-review-title">
+          ${escapeHTML(review.name)}
+          · ${review.stars} ★
+        </div>
+
+        <div class="admin-review-text">
+          ${escapeHTML(review.text)}
+        </div>
+
+        <div class="review-actions">
+
+          <button
+            onclick="editReview(${index})"
+          >
+            แก้ไข
+          </button>
+
+          <button
+            onclick="deleteReview(${index})"
+          >
+            ลบ
+          </button>
+
+        </div>
+
+      `;
+
+
+      container.appendChild(item);
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ADD REVIEW
+========================================================= */
+
+function addReview() {
+
+  const name =
+    prompt(
+      "ชื่อผู้รีวิว:"
+    );
+
+  if (name === null) return;
+
+
+  const text =
+    prompt(
+      "ข้อความรีวิว:"
+    );
+
+  if (text === null) return;
+
+
+  const stars =
+    Number(
+      prompt(
+        "คะแนน 1-5:",
+        "5"
+      )
+    );
+
+
+  data.reviews.unshift({
+
+    name:
+      name || "Anonymous",
+
+    date:
+      new Date()
+        .toLocaleDateString(
+          "th-TH"
+        ),
+
+    stars:
+      Math.max(
+        1,
+        Math.min(
+          5,
+          stars || 5
+        )
+      ),
+
+    text:
+      text || ""
+
+  });
+
+
+  saveData();
+
+  renderPage();
+
+  renderAdminReviews();
+
+  showToast(
+    "เพิ่มรีวิวแล้ว ♡"
+  );
+
+}
+
+
+/* =========================================================
+   EDIT REVIEW
+========================================================= */
+
+function editReview(index) {
+
+  const review =
+    data.reviews[index];
+
+
+  const name =
+    prompt(
+      "ชื่อผู้รีวิว:",
+      review.name
+    );
+
+  if (name === null) return;
+
+
+  const text =
+    prompt(
+      "ข้อความรีวิว:",
+      review.text
+    );
+
+  if (text === null) return;
+
+
+  const stars =
+    Number(
+      prompt(
+        "คะแนน 1-5:",
+        review.stars
+      )
+    );
+
+
+  review.name =
+    name;
+
+
+  review.text =
+    text;
+
+
+  review.stars =
+    Math.max(
+      1,
+      Math.min(
+        5,
+        stars || review.stars
+      )
+    );
+
+
+  saveData();
+
+  renderPage();
+
+  renderAdminReviews();
+
+  showToast(
+    "แก้ไขรีวิวแล้ว"
+  );
+
+}
+
+
+/* =========================================================
+   DELETE REVIEW
+========================================================= */
+
+function deleteReview(index) {
+
+  if (
+    !confirm(
+      "ต้องการลบรีวิวนี้หรือไม่?"
+    )
+  ) return;
+
+
+  data.reviews.splice(
+    index,
+    1
+  );
+
+
+  saveData();
+
+  renderPage();
+
+  renderAdminReviews();
+
+  showToast(
+    "ลบรีวิวแล้ว"
+  );
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetWebsite() {
+
+  if (
+    !confirm(
+      "ต้องการรีเซ็ตข้อมูลทั้งหมดหรือไม่?"
+    )
+  ) return;
+
+
+  data =
+    JSON.parse(
+      JSON.stringify(
+        defaultData
+      )
+    );
+
+
+  saveData();
+
+  renderPage();
+
+  loadAdminForm();
+
+  showToast(
+    "รีเซ็ตเว็บไซต์แล้ว"
+  );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent =
+    message;
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    () => {
+
+      toast.classList.remove(
+        "show"
+      );
+
+    },
+    2200
+  );
+
+}
+
+
+/* =========================================================
+   INITIAL
+========================================================= */
+
+renderPage();
+
+</script>
+
+</body>
+</html>
