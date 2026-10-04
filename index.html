@@ -1,0 +1,3259 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Cute Shop ♡</title>
+
+<style>
+:root{
+  --bg:#fff7fb;
+  --card:#ffffff;
+  --text:#665761;
+  --main:#f49bc0;
+  --main-dark:#db82a8;
+  --button:#f5a0c2;
+  --button-text:#ffffff;
+  --plus:#dff4ed;
+  --minus:#f7e8ee;
+  --border:#ead9e1;
+  --star:#f4b400;
+  --shadow:0 8px 25px rgba(160,110,135,.10);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans Thai",
+    sans-serif;
+  transition:.25s;
+}
+
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.page{
+  width:100%;
+  max-width:900px;
+  margin:auto;
+  padding:18px 16px 70px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+  text-align:center;
+  margin-bottom:16px;
+}
+
+.banner{
+  width:100%;
+  border-radius:24px;
+  overflow:hidden;
+  position:relative;
+  background:var(--card);
+  border:1.5px solid var(--border);
+  box-shadow:var(--shadow);
+}
+
+.banner img{
+  width:100%;
+  height:240px;
+  object-fit:cover;
+  display:block;
+}
+
+.banner-empty{
+  height:180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#aaa;
+  font-size:14px;
+}
+
+.shop-info{
+  padding:22px 15px 12px;
+  text-align:center;
+}
+
+.logo{
+  width:82px;
+  height:82px;
+  border-radius:50%;
+  object-fit:cover;
+  border:5px solid var(--card);
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
+  margin-top:-55px;
+  position:relative;
+  background:var(--card);
+}
+
+.shop-name{
+  margin:12px 0 4px;
+  color:var(--main-dark);
+  font-size:32px;
+  line-height:1.15;
+  font-weight:800;
+}
+
+.shop-description{
+  margin:0;
+  font-size:17px;
+  color:var(--text);
+}
+
+/* =========================
+   VOTE
+========================= */
+
+.vote-section{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:18px 0;
+}
+
+.vote-card{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:22px;
+  padding:10px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+
+.vote-btn{
+  width:100%;
+  min-height:50px;
+  padding:8px 12px;
+  font-size:18px;
+  font-weight:800;
+  border-radius:15px;
+  color:var(--button-text);
+  transition:.2s;
+}
+
+.vote-btn:active{
+  transform:scale(.97);
+}
+
+.plus-btn{
+  background:var(--plus);
+}
+
+.minus-btn{
+  background:var(--minus);
+}
+
+.vote-number{
+  font-size:34px;
+  font-weight:800;
+  margin:7px 0 1px;
+  color:var(--text);
+}
+
+/* =========================
+   RATING
+========================= */
+
+.rating-card{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:22px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  text-align:center;
+  margin-bottom:16px;
+}
+
+.rating-title{
+  margin:0 0 5px;
+  font-size:21px;
+  font-weight:800;
+}
+
+.rating-score{
+  font-size:38px;
+  font-weight:900;
+}
+
+.stars{
+  color:var(--star);
+  letter-spacing:3px;
+  font-size:28px;
+  line-height:1;
+}
+
+.review-count{
+  margin-top:7px;
+  color:#999;
+  font-size:14px;
+}
+
+/* =========================
+   WRITE REVIEW
+========================= */
+
+.write-card,
+.reviews-card{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:22px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  margin-bottom:16px;
+}
+
+.section-title{
+  margin:0 0 16px;
+  font-size:27px;
+  font-weight:800;
+}
+
+.input{
+  width:100%;
+  border:1.5px solid var(--border);
+  border-radius:18px;
+  padding:14px 17px;
+  outline:none;
+  color:var(--text);
+  background:#fff;
+  margin-bottom:12px;
+}
+
+.input:focus,
+textarea:focus{
+  border-color:var(--main);
+}
+
+textarea.input{
+  min-height:130px;
+  resize:vertical;
+}
+
+.star-picker{
+  display:flex;
+  gap:7px;
+  margin:8px 0 16px;
+}
+
+.star-picker button{
+  background:transparent;
+  color:#d2d2d2;
+  font-size:42px;
+  padding:0;
+  line-height:1;
+}
+
+.star-picker button.active{
+  color:var(--star);
+}
+
+.submit-btn{
+  width:100%;
+  min-height:48px;
+  border-radius:15px;
+  padding:9px 16px;
+  background:var(--button);
+  color:var(--button-text);
+  font-weight:800;
+  font-size:16px;
+}
+
+.submit-btn:active{
+  transform:scale(.98);
+}
+
+/* =========================
+   REVIEWS
+========================= */
+
+.review-item{
+  padding:17px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.review-item:last-child{
+  border-bottom:0;
+  padding-bottom:0;
+}
+
+.review-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.review-name{
+  font-weight:800;
+  font-size:17px;
+}
+
+.review-stars{
+  color:var(--star);
+  letter-spacing:1px;
+}
+
+.review-text{
+  margin:8px 0 0;
+  line-height:1.6;
+  white-space:pre-wrap;
+}
+
+.empty-review{
+  color:#a79da2;
+  font-size:16px;
+}
+
+/* =========================
+   ADMIN BUTTON
+========================= */
+
+.admin-gear{
+  position:fixed;
+  right:18px;
+  bottom:20px;
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:#fff;
+  border:0;
+  box-shadow:0 8px 25px rgba(0,0,0,.13);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+}
+
+.admin-gear svg{
+  width:24px;
+  height:24px;
+  fill:#666;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(30,20,25,.52);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  z-index:1000;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:650px;
+  max-height:92vh;
+  overflow-y:auto;
+  background:var(--card);
+  border-radius:28px;
+  padding:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.22);
+  animation:modalIn .18s ease;
+}
+
+@keyframes modalIn{
+  from{
+    opacity:0;
+    transform:translateY(10px) scale(.98);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.modal-title{
+  margin:0;
+  font-size:25px;
+  font-weight:800;
+}
+
+.close-btn{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:transparent;
+  color:#8e7d86;
+  font-size:28px;
+  line-height:1;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-box{
+  max-width:400px;
+  text-align:center;
+}
+
+.login-icon{
+  font-size:38px;
+  margin-bottom:4px;
+}
+
+.login-box h2{
+  margin:0 0 18px;
+}
+
+.remember{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+  font-size:14px;
+  margin:5px 0 15px;
+}
+
+.remember input{
+  width:17px;
+  height:17px;
+}
+
+/* =========================
+   MINUS POPUP
+========================= */
+
+.minus-message{
+  text-align:center;
+}
+
+.minus-message h2{
+  margin-top:0;
+  font-size:25px;
+}
+
+.minus-message p{
+  line-height:1.7;
+}
+
+.gray-link-btn{
+  width:100%;
+  min-height:44px;
+  padding:9px 15px;
+  border-radius:14px;
+  background:#aaa;
+  color:#fff;
+  font-weight:700;
+}
+
+/* =========================
+   ADMIN
+========================= */
+
+.admin-box{
+  max-width:760px;
+}
+
+.admin-tabs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.admin-tab{
+  min-height:42px;
+  padding:8px 12px;
+  border-radius:14px;
+  background:var(--bg);
+  border:1.5px solid #777;
+  color:var(--text);
+  font-weight:700;
+  font-size:14px;
+}
+
+.admin-tab.active{
+  background:#bdbdbd;
+  color:#fff;
+  border-color:#bdbdbd;
+}
+
+.admin-content{
+  display:none;
+}
+
+.admin-content.active{
+  display:block;
+}
+
+.input-group{
+  margin-bottom:16px;
+}
+
+.input-group label{
+  display:block;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+.input-group input,
+.input-group textarea{
+  width:100%;
+  border:1.5px solid var(--border);
+  border-radius:14px;
+  padding:12px 14px;
+  outline:none;
+  color:var(--text);
+  background:#fff;
+}
+
+.input-group textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+/* =========================
+   ADMIN BUTTONS
+========================= */
+
+.small-btn{
+  min-height:40px;
+  padding:8px 14px;
+  border-radius:13px;
+  background:var(--button);
+  color:var(--button-text);
+  font-weight:700;
+  font-size:14px;
+}
+
+.danger-btn{
+  background:#d56f82;
+}
+
+.save-btn{
+  width:100%;
+  min-height:46px;
+  padding:9px 16px;
+  border-radius:14px;
+  background:var(--button);
+  color:#fff;
+  font-weight:800;
+  font-size:16px;
+  margin-top:8px;
+}
+
+/* =========================
+   COLOR PICKERS
+========================= */
+
+.color-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px 16px;
+}
+
+.color-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-height:60px;
+}
+
+.color-name{
+  font-size:15px;
+  font-weight:700;
+}
+
+.color-input{
+  width:55px;
+  height:40px;
+  padding:3px;
+  border:1.5px solid #777;
+  border-radius:12px;
+  background:#fff;
+  cursor:pointer;
+}
+
+/* =========================
+   THEME BUTTONS
+========================= */
+
+.theme-title{
+  font-size:18px;
+  font-weight:800;
+  margin:4px 0 10px;
+}
+
+.theme-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.theme-btn{
+  min-height:62px;
+  border:1.5px solid var(--border);
+  border-radius:16px;
+  padding:8px;
+  background:#fff;
+  text-align:left;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#555;
+}
+
+.theme-btn:active{
+  transform:scale(.98);
+}
+
+.theme-preview{
+  width:43px;
+  height:43px;
+  border-radius:12px;
+  flex-shrink:0;
+  border:1px solid rgba(0,0,0,.08);
+}
+
+.theme-label{
+  font-size:14px;
+  font-weight:800;
+}
+
+/* =========================
+   STAR COLOR
+========================= */
+
+.star-color-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 0;
+}
+
+.star-demo{
+  font-size:30px;
+  color:var(--star);
+  letter-spacing:2px;
+}
+
+/* =========================
+   REVIEW ADMIN
+========================= */
+
+.admin-review{
+  padding:14px;
+  border:1.5px solid var(--border);
+  border-radius:16px;
+  margin-bottom:10px;
+}
+
+.admin-review-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+
+.admin-review-stars{
+  color:var(--star);
+}
+
+.admin-review-text{
+  margin:7px 0;
+  line-height:1.5;
+}
+
+.admin-review-actions{
+  display:flex;
+  gap:7px;
+}
+
+/* =========================
+   BANNER PREVIEW
+========================= */
+
+.banner-preview{
+  margin-top:10px;
+  border-radius:14px;
+  overflow:hidden;
+  display:none;
+  border:1px solid var(--border);
+  background:#fffafd;
+}
+
+.banner-preview img{
+  width:100%;
+  max-height:220px;
+  object-fit:cover;
+  display:block;
+}
+
+/* =========================
+   SAVED POPUP / TOAST
+========================= */
+
+.saved-popup{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(.95);
+  background:rgba(70,65,68,.95);
+  color:#fff;
+  padding:15px 24px;
+  border-radius:18px;
+  font-weight:700;
+  z-index:3000;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+}
+
+.saved-popup.show{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%);
+  background:#555;
+  color:#fff;
+  padding:10px 17px;
+  border-radius:13px;
+  font-size:14px;
+  z-index:4000;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+}
+
+.toast.show{
+  opacity:1;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px){
+
+  .page{
+    padding:12px 10px 80px;
+  }
+
+  .banner{
+    border-radius:20px;
+  }
+
+  .banner img{
+    height:190px;
+  }
+
+  .shop-name{
+    font-size:27px;
+  }
+
+  .shop-description{
+    font-size:15px;
+  }
+
+  .vote-section{
+    gap:8px;
+  }
+
+  .vote-card{
+    padding:8px;
+    border-radius:18px;
+  }
+
+  .vote-btn{
+    min-height:45px;
+    font-size:16px;
+    border-radius:13px;
+  }
+
+  .vote-number{
+    font-size:30px;
+  }
+
+  .rating-card,
+  .write-card,
+  .reviews-card{
+    padding:18px;
+    border-radius:19px;
+  }
+
+  .section-title{
+    font-size:24px;
+  }
+
+  .star-picker button{
+    font-size:35px;
+  }
+
+  .admin-gear{
+    width:48px;
+    height:48px;
+    right:14px;
+    bottom:14px;
+  }
+
+  .admin-gear svg{
+    width:22px;
+    height:22px;
+  }
+
+  .modal{
+    padding:10px;
+  }
+
+  .modal-box{
+    padding:18px;
+    border-radius:24px;
+  }
+
+  .admin-tabs{
+    gap:7px;
+  }
+
+  .admin-tab{
+    min-height:39px;
+    padding:7px 8px;
+    font-size:13px;
+  }
+
+  .color-list{
+    grid-template-columns:1fr 1fr;
+    gap:5px 10px;
+  }
+
+  .color-row{
+    min-height:55px;
+  }
+
+  .color-name{
+    font-size:13px;
+  }
+
+  .color-input{
+    width:48px;
+    height:36px;
+  }
+
+  .theme-grid{
+    gap:8px;
+  }
+
+  .theme-btn{
+    min-height:57px;
+    padding:7px;
+  }
+
+  .theme-preview{
+    width:38px;
+    height:38px;
+  }
+
+  .theme-label{
+    font-size:12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <header class="header">
+
+    <div class="banner" id="bannerBox">
+      <img id="bannerImage" src="" alt="แบนเนอร์ร้าน" style="display:none;">
+      <div id="bannerEmpty" class="banner-empty">
+        ♡
+      </div>
+    </div>
+
+    <div class="shop-info">
+
+      <img
+        id="logoImage"
+        class="logo"
+        src="https://via.placeholder.com/200/ffe1ed/ffffff?text=%E2%99%A1"
+        alt="โลโก้ร้าน"
+      >
+
+      <h1 class="shop-name" id="shopName">
+        My Cute Shop ♡
+      </h1>
+
+      <p class="shop-description" id="shopDescription">
+        ขอบคุณที่มารีวิวร้านของเรา ♡
+      </p>
+
+    </div>
+
+  </header>
+
+  <!-- =========================
+       VOTE
+  ========================== -->
+
+  <section class="vote-section">
+
+    <div class="vote-card">
+      <button
+        class="vote-btn plus-btn"
+        id="plusButton"
+        onclick="addPlus()"
+      >
+        +1
+      </button>
+
+      <div class="vote-number" id="plusCount">0</div>
+    </div>
+
+    <div class="vote-card">
+      <button
+        class="vote-btn minus-btn"
+        id="minusButton"
+        onclick="openMinusModal()"
+      >
+        -1
+      </button>
+
+      <div class="vote-number" id="minusCount">0</div>
+    </div>
+
+  </section>
+
+  <!-- =========================
+       RATING
+  ========================== -->
+
+  <section class="rating-card">
+
+    <h2 class="rating-title">
+      การจัดอันดับและความคิดเห็น
+    </h2>
+
+    <div class="rating-score" id="averageRating">
+      0.0
+    </div>
+
+    <div class="stars" id="averageStars">
+      ☆☆☆☆☆
+    </div>
+
+    <div class="review-count" id="reviewCount">
+      0 รีวิว
+    </div>
+
+  </section>
+
+  <!-- =========================
+       WRITE REVIEW
+  ========================== -->
+
+  <section class="write-card">
+
+    <h2 class="section-title">
+      เขียนรีวิว
+    </h2>
+
+    <input
+      class="input"
+      id="reviewName"
+      type="text"
+      maxlength="50"
+      placeholder="ชื่อของคุณ"
+    >
+
+    <div class="star-picker" id="starPicker">
+
+      <button type="button" onclick="selectStar(1)">★</button>
+      <button type="button" onclick="selectStar(2)">★</button>
+      <button type="button" onclick="selectStar(3)">★</button>
+      <button type="button" onclick="selectStar(4)">★</button>
+      <button type="button" onclick="selectStar(5)">★</button>
+
+    </div>
+
+    <textarea
+      class="input"
+      id="reviewText"
+      maxlength="500"
+      placeholder="เขียนความคิดเห็นของคุณ..."
+    ></textarea>
+
+    <button
+      class="submit-btn"
+      onclick="submitReview()"
+    >
+      ส่งรีวิว ♡
+    </button>
+
+  </section>
+
+  <!-- =========================
+       REVIEWS
+  ========================== -->
+
+  <section class="reviews-card">
+
+    <h2 class="section-title">
+      รีวิวลูกค้า
+    </h2>
+
+    <div id="reviewsList"></div>
+
+  </section>
+
+</div>
+
+
+<!-- =========================
+     ADMIN GEAR
+========================== -->
+
+<button
+  class="admin-gear"
+  onclick="openAdminLogin()"
+  aria-label="ตั้งค่าแอดมิน"
+>
+
+  <svg
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M19.43 12.98c.04-.32.07-.65.07-.98s-.02-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.37-.31-.6-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98L14.5 2.42C14.47 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.5.42L9.12 5.07c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.08-.48 0-.6.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.08.65-.08.98s.03.66.08.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.37.31.6.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1c.23.08.48 0 .6-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5z"/>
+  </svg>
+
+</button>
+
+
+<!-- =========================
+     MINUS MODAL
+========================== -->
+
+<div
+  class="modal"
+  id="minusModal"
+  onclick="closeModalOutside(event,'minusModal')"
+>
+
+  <div class="modal-box minus-message">
+
+    <div class="modal-head">
+      <h2 class="modal-title" id="minusTitle">
+        กรุณาส่งหลักฐาน
+      </h2>
+
+      <button
+        class="close-btn"
+        onclick="closeModal('minusModal')"
+      >
+        ×
+      </button>
+    </div>
+
+    <p id="minusDescription">
+      แคปแชทและแจ้งปัญหาให้แอดมินตรวจสอบได้เลยนะคะ ♡
+    </p>
+
+    <button
+      class="gray-link-btn"
+      id="minusLinkButton"
+      onclick="openMinusLink()"
+    >
+      เปิดลิงก์
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     LOGIN MODAL
+========================== -->
+
+<div
+  class="modal"
+  id="loginModal"
+  onclick="closeModalOutside(event,'loginModal')"
+>
+
+  <div class="modal-box login-box">
+
+    <div class="modal-head">
+
+      <h2 class="modal-title">
+        ⚙️ ตั้งค่าแอดมิน
+      </h2>
+
+      <button
+        class="close-btn"
+        onclick="closeModal('loginModal')"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="login-icon">
+      🔐
+    </div>
+
+    <input
+      class="input"
+      id="adminPasswordInput"
+      type="password"
+      placeholder="รหัสแอดมิน"
+      onkeydown="if(event.key==='Enter') adminLogin()"
+    >
+
+    <label class="remember">
+      <input
+        type="checkbox"
+        id="rememberAdmin"
+      >
+      จำเครื่องที่ใส่รหัสไว้
+    </label>
+
+    <button
+      class="save-btn"
+      onclick="adminLogin()"
+    >
+      เข้าสู่ระบบ
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     ADMIN MODAL
+========================== -->
+
+<div
+  class="modal"
+  id="adminModal"
+  onclick="closeModalOutside(event,'adminModal')"
+>
+
+  <div class="modal-box admin-box">
+
+    <div class="modal-head">
+
+      <h2 class="modal-title">
+        ⚙️ ตั้งค่าแอดมิน
+      </h2>
+
+      <button
+        class="close-btn"
+        onclick="closeModal('adminModal')"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <!-- ADMIN TABS -->
+
+    <div class="admin-tabs">
+
+      <button
+        class="admin-tab active"
+        onclick="showAdminTab('general',this)"
+      >
+        ร้าน
+      </button>
+
+      <button
+        class="admin-tab"
+        onclick="showAdminTab('minus',this)"
+      >
+        -1
+      </button>
+
+      <button
+        class="admin-tab"
+        onclick="showAdminTab('votes',this)"
+      >
+        คะแนน
+      </button>
+
+      <button
+        class="admin-tab"
+        onclick="showAdminTab('reviews',this)"
+      >
+        รีวิว
+      </button>
+
+      <button
+        class="admin-tab"
+        onclick="showAdminTab('colors',this)"
+      >
+        สี
+      </button>
+
+      <button
+        class="admin-tab"
+        onclick="showAdminTab('password',this)"
+      >
+        รหัส
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         GENERAL
+    ========================== -->
+
+    <div
+      class="admin-content active"
+      id="admin-general"
+    >
+
+      <div class="input-group">
+
+        <label>
+          ชื่อร้าน
+        </label>
+
+        <input
+          id="adminShopName"
+          type="text"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          ข้อความใต้ชื่อร้าน
+        </label>
+
+        <input
+          id="adminShopDescription"
+          type="text"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          รูปโลโก้ร้าน
+        </label>
+
+        <input
+          id="adminLogo"
+          type="file"
+          accept="image/*"
+          onchange="previewLogo(this)"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          แบนเนอร์แบบรูปธรรมดา
+        </label>
+
+        <input
+          id="adminBannerFile"
+          type="file"
+          accept="image/*"
+          onchange="previewBannerFile(this)"
+        >
+
+        <div style="font-size:13px;color:#999;margin-top:6px;">
+          เลือกรูปจากมือถือได้เลย
+        </div>
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          หรือใส่ GIF จาก Google Drive
+        </label>
+
+        <input
+          id="adminBannerUrl"
+          type="url"
+          placeholder="https://drive.google.com/file/d..."
+        >
+
+        <div style="font-size:13px;color:#999;margin-top:6px;line-height:1.5;">
+          ตั้งค่าไฟล์ใน Google Drive เป็น
+          <b>ทุกคนที่มีลิงก์ → ผู้ดู</b>
+          ก่อนนำลิงก์มาใส่
+        </div>
+
+        <button
+          class="small-btn"
+          type="button"
+          onclick="previewBannerFromDrive()"
+          style="width:100%;margin-top:10px;"
+        >
+          ดูตัวอย่าง GIF
+        </button>
+
+        <div
+          class="banner-preview"
+          id="bannerPreview"
+        >
+          <img
+            id="bannerPreviewImage"
+            alt="ตัวอย่าง GIF"
+          >
+        </div>
+
+      </div>
+
+
+      <button
+        class="save-btn"
+        onclick="saveGeneral()"
+      >
+        บันทึกข้อมูล
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         MINUS
+    ========================== -->
+
+    <div
+      class="admin-content"
+      id="admin-minus"
+    >
+
+      <div class="input-group">
+
+        <label>
+          หัวข้อ popup -1
+        </label>
+
+        <input
+          id="adminMinusTitle"
+          type="text"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          ข้อความ popup -1
+        </label>
+
+        <textarea
+          id="adminMinusDescription"
+        ></textarea>
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          ข้อความปุ่ม
+        </label>
+
+        <input
+          id="adminMinusButton"
+          type="text"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          ลิงก์
+        </label>
+
+        <input
+          id="adminMinusLink"
+          type="url"
+        >
+
+      </div>
+
+
+      <button
+        class="save-btn"
+        onclick="saveMinusSettings()"
+      >
+        บันทึกข้อมูล
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         VOTES
+    ========================== -->
+
+    <div
+      class="admin-content"
+      id="admin-votes"
+    >
+
+      <div class="input-group">
+
+        <label>
+          จำนวน +1
+        </label>
+
+        <input
+          id="adminPlusVotes"
+          type="number"
+          min="0"
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          จำนวน -1
+        </label>
+
+        <input
+          id="adminMinusVotes"
+          type="number"
+          min="0"
+        >
+
+      </div>
+
+
+      <button
+        class="save-btn"
+        onclick="saveVotes()"
+      >
+        บันทึกคะแนน
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         REVIEWS
+    ========================== -->
+
+    <div
+      class="admin-content"
+      id="admin-reviews"
+    >
+
+      <div id="adminReviewsList"></div>
+
+    </div>
+
+
+    <!-- =========================
+         COLORS
+    ========================== -->
+
+    <div
+      class="admin-content"
+      id="admin-colors"
+    >
+
+      <div class="theme-title">
+        ธีมสีพื้นฐาน
+      </div>
+
+      <div class="theme-grid">
+
+        <button
+          class="theme-btn"
+          onclick="applyTheme('pink')"
+        >
+          <span
+            class="theme-preview"
+            style="background:linear-gradient(135deg,#fff1f7 50%,#f49bc0 50%);"
+          ></span>
+          <span class="theme-label">
+            ชมพู
+          </span>
+        </button>
+
+
+        <button
+          class="theme-btn"
+          onclick="applyTheme('pinkblue')"
+        >
+          <span
+            class="theme-preview"
+            style="background:linear-gradient(135deg,#ffd9e9 50%,#9ed8f0 50%);"
+          ></span>
+          <span class="theme-label">
+            ชมพูฟ้า
+          </span>
+        </button>
+
+
+        <button
+          class="theme-btn"
+          onclick="applyTheme('blueyellow')"
+        >
+          <span
+            class="theme-preview"
+            style="background:linear-gradient(135deg,#bfe7fa 50%,#ffe58a 50%);"
+          ></span>
+          <span class="theme-label">
+            ฟ้าเหลือง
+          </span>
+        </button>
+
+
+        <button
+          class="theme-btn"
+          onclick="applyTheme('bluewhite')"
+        >
+          <span
+            class="theme-preview"
+            style="background:linear-gradient(135deg,#a9dff5 50%,#ffffff 50%);"
+          ></span>
+          <span class="theme-label">
+            ฟ้าขาว
+          </span>
+        </button>
+
+
+        <button
+          class="theme-btn"
+          onclick="applyTheme('pinkwhite')"
+        >
+          <span
+            class="theme-preview"
+            style="background:linear-gradient(135deg,#f49bc0 50%,#ffffff 50%);"
+          ></span>
+          <span class="theme-label">
+            ชมพูขาว
+          </span>
+        </button>
+
+
+        <button
+          class="theme-btn"
+          onclick="applyTheme('blackwhite')"
+        >
+          <span
+            class="theme-preview"
+            style="background:linear-gradient(135deg,#ffffff 50%,#222222 50%);"
+          ></span>
+          <span class="theme-label">
+            ขาวดำ
+          </span>
+        </button>
+
+
+        <button
+          class="theme-btn"
+          onclick="applyTheme('blackred')"
+        >
+          <span
+            class="theme-preview"
+            style="background:linear-gradient(135deg,#191919 50%,#e74c5b 50%);"
+          ></span>
+          <span class="theme-label">
+            ดำแดง
+          </span>
+        </button>
+
+
+        <button
+          class="theme-btn"
+          onclick="applyTheme('lavender')"
+        >
+          <span
+            class="theme-preview"
+            style="background:linear-gradient(135deg,#f1e8ff 50%,#b99be8 50%);"
+          ></span>
+          <span class="theme-label">
+            ม่วงลาเวนเดอร์
+          </span>
+        </button>
+
+      </div>
+
+
+      <div class="theme-title">
+        ปรับสีเอง
+      </div>
+
+
+      <div class="color-list">
+
+        <div class="color-row">
+          <span class="color-name">พื้นหลัง</span>
+          <input class="color-input" type="color" id="colorBg">
+        </div>
+
+        <div class="color-row">
+          <span class="color-name">พื้นการ์ด</span>
+          <input class="color-input" type="color" id="colorCard">
+        </div>
+
+        <div class="color-row">
+          <span class="color-name">สีตัวอักษร</span>
+          <input class="color-input" type="color" id="colorText">
+        </div>
+
+        <div class="color-row">
+          <span class="color-name">สีหลัก</span>
+          <input class="color-input" type="color" id="colorMain">
+        </div>
+
+        <div class="color-row">
+          <span class="color-name">สีหลักเข้ม</span>
+          <input class="color-input" type="color" id="colorMainDark">
+        </div>
+
+        <div class="color-row">
+          <span class="color-name">สีปุ่ม</span>
+          <input class="color-input" type="color" id="colorButton">
+        </div>
+
+        <div class="color-row">
+          <span class="color-name">สีตัวอักษรปุ่ม</span>
+          <input class="color-input" type="color" id="colorButtonText">
+        </div>
+
+        <div class="color-row">
+          <span class="color-name">สี +1</span>
+          <input class="color-input" type="color" id="colorPlus">
+        </div>
+
+        <div class="color-row">
+          <span class="color-name">สี -1</span>
+          <input class="color-input" type="color" id="colorMinus">
+        </div>
+
+        <div class="color-row">
+          <span class="color-name">สีขอบ</span>
+          <input class="color-input" type="color" id="colorBorder">
+        </div>
+
+      </div>
+
+
+      <div class="star-color-row">
+
+        <div>
+          <div class="color-name">
+            สีดาว
+          </div>
+
+          <div class="star-demo">
+            ★★★★★
+          </div>
+        </div>
+
+        <input
+          class="color-input"
+          type="color"
+          id="colorStar"
+        >
+
+      </div>
+
+
+      <button
+        class="save-btn"
+        onclick="saveColors()"
+      >
+        บันทึกสี
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         PASSWORD
+    ========================== -->
+
+    <div
+      class="admin-content"
+      id="admin-password"
+    >
+
+      <div class="input-group">
+
+        <label>
+          รหัสแอดมินใหม่
+        </label>
+
+        <input
+          id="newAdminPassword"
+          type="password"
+          placeholder="ใส่รหัสใหม่"
+        >
+
+      </div>
+
+
+      <button
+        class="save-btn"
+        onclick="changeAdminPassword()"
+      >
+        เปลี่ยนรหัส
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     SAVED POPUP
+========================== -->
+
+<div
+  class="saved-popup"
+  id="savedPopup"
+>
+  บันทึกข้อมูลแล้ว ♡
+</div>
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const STORAGE_KEY = "cuteShopReviewData";
+const ADMIN_SESSION_KEY = "cuteShopAdminRemembered";
+
+const DEFAULT_DATA = {
+
+  shopName:"My Cute Shop ♡",
+
+  shopDescription:"ขอบคุณที่มารีวิวร้านของเรา ♡",
+
+  logo:"https://via.placeholder.com/200/ffe1ed/ffffff?text=%E2%99%A1",
+
+  banner:"",
+
+  plusVotes:0,
+
+  minusVotes:0,
+
+  minusTitle:"กรุณาส่งหลักฐาน",
+
+  minusDescription:"แคปแชทและแจ้งปัญหาให้แอดมินตรวจสอบได้เลยนะคะ ♡",
+
+  minusButton:"เปิดลิงก์",
+
+  minusLink:"https://example.com",
+
+  adminPassword:"1234",
+
+  colors:{
+
+    bg:"#fff7fb",
+
+    card:"#ffffff",
+
+    text:"#665761",
+
+    main:"#f49bc0",
+
+    mainDark:"#db82a8",
+
+    button:"#f5a0c2",
+
+    buttonText:"#ffffff",
+
+    plus:"#dff4ed",
+
+    minus:"#f7e8ee",
+
+    border:"#ead9e1",
+
+    star:"#f4b400"
+
+  },
+
+  reviews:[]
+
+};
+
+
+let data = loadData();
+
+let selectedRating = 0;
+
+
+/* =========================================================
+   LOAD / SAVE
+========================================================= */
+
+function loadData(){
+
+  try{
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if(!saved){
+      return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+
+    const parsed = JSON.parse(saved);
+
+    return {
+
+      ...JSON.parse(JSON.stringify(DEFAULT_DATA)),
+
+      ...parsed,
+
+      colors:{
+        ...DEFAULT_DATA.colors,
+        ...(parsed.colors || {})
+      },
+
+      reviews:Array.isArray(parsed.reviews)
+        ? parsed.reviews
+        : []
+
+    };
+
+  }catch(error){
+
+    console.error(error);
+
+    return JSON.parse(JSON.stringify(DEFAULT_DATA));
+
+  }
+
+}
+
+
+function saveData(){
+
+  try{
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(data)
+    );
+
+    return true;
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast("บันทึกข้อมูลไม่สำเร็จ");
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   COLORS
+========================================================= */
+
+function applyColors(){
+
+  const root = document.documentElement;
+
+  root.style.setProperty("--bg",data.colors.bg);
+  root.style.setProperty("--card",data.colors.card);
+  root.style.setProperty("--text",data.colors.text);
+  root.style.setProperty("--main",data.colors.main);
+  root.style.setProperty("--main-dark",data.colors.mainDark);
+  root.style.setProperty("--button",data.colors.button);
+  root.style.setProperty("--button-text",data.colors.buttonText);
+  root.style.setProperty("--plus",data.colors.plus);
+  root.style.setProperty("--minus",data.colors.minus);
+  root.style.setProperty("--border",data.colors.border);
+  root.style.setProperty("--star",data.colors.star);
+
+}
+
+
+function setColorInput(id,value){
+
+  const el=document.getElementById(id);
+
+  if(el){
+    el.value=value;
+  }
+
+}
+
+
+function loadColorInputs(){
+
+  setColorInput("colorBg",data.colors.bg);
+  setColorInput("colorCard",data.colors.card);
+  setColorInput("colorText",data.colors.text);
+  setColorInput("colorMain",data.colors.main);
+  setColorInput("colorMainDark",data.colors.mainDark);
+  setColorInput("colorButton",data.colors.button);
+  setColorInput("colorButtonText",data.colors.buttonText);
+  setColorInput("colorPlus",data.colors.plus);
+  setColorInput("colorMinus",data.colors.minus);
+  setColorInput("colorBorder",data.colors.border);
+  setColorInput("colorStar",data.colors.star);
+
+}
+
+
+/* =========================================================
+   THEMES
+========================================================= */
+
+const THEMES = {
+
+  pink:{
+    bg:"#fff4f8",
+    card:"#ffffff",
+    text:"#665761",
+    main:"#f49bc0",
+    mainDark:"#db82a8",
+    button:"#f49bc0",
+    buttonText:"#ffffff",
+    plus:"#dff4ed",
+    minus:"#f7e8ee",
+    border:"#ead9e1",
+    star:"#f4b400"
+  },
+
+  pinkblue:{
+    bg:"#f8f8ff",
+    card:"#ffffff",
+    text:"#5e6270",
+    main:"#f39abb",
+    mainDark:"#d978a0",
+    button:"#91cde8",
+    buttonText:"#ffffff",
+    plus:"#d8f1e9",
+    minus:"#f8e3ec",
+    border:"#dcdce9",
+    star:"#f5b942"
+  },
+
+  blueyellow:{
+    bg:"#f7fbff",
+    card:"#ffffff",
+    text:"#58616b",
+    main:"#8dcced",
+    mainDark:"#62acd2",
+    button:"#f2d56f",
+    buttonText:"#ffffff",
+    plus:"#d9f0fa",
+    minus:"#fff1c7",
+    border:"#dbe8ee",
+    star:"#efb93f"
+  },
+
+  bluewhite:{
+    bg:"#f6fbff",
+    card:"#ffffff",
+    text:"#5d6870",
+    main:"#8fd1ed",
+    mainDark:"#65afd1",
+    button:"#8fcfea",
+    buttonText:"#ffffff",
+    plus:"#d9f2fb",
+    minus:"#edf5f9",
+    border:"#d8e8ee",
+    star:"#f3ba45"
+  },
+
+  pinkwhite:{
+    bg:"#fff7fb",
+    card:"#ffffff",
+    text:"#665761",
+    main:"#f49bc0",
+    mainDark:"#db82a8",
+    button:"#f49bc0",
+    buttonText:"#ffffff",
+    plus:"#dff4ed",
+    minus:"#f7e8ee",
+    border:"#ead9e1",
+    star:"#f4b400"
+  },
+
+  blackwhite:{
+    bg:"#f4f4f4",
+    card:"#ffffff",
+    text:"#222222",
+    main:"#222222",
+    mainDark:"#111111",
+    button:"#222222",
+    buttonText:"#ffffff",
+    plus:"#e8e8e8",
+    minus:"#d8d8d8",
+    border:"#cfcfcf",
+    star:"#777777"
+  },
+
+  blackred:{
+    bg:"#171717",
+    card:"#242424",
+    text:"#eeeeee",
+    main:"#e74c5b",
+    mainDark:"#ff6875",
+    button:"#e74c5b",
+    buttonText:"#ffffff",
+    plus:"#343434",
+    minus:"#3a292b",
+    border:"#58383c",
+    star:"#ff6975"
+  },
+
+  lavender:{
+    bg:"#faf7ff",
+    card:"#ffffff",
+    text:"#62596d",
+    main:"#b99be8",
+    mainDark:"#9874cf",
+    button:"#b99be8",
+    buttonText:"#ffffff",
+    plus:"#e8f5ee",
+    minus:"#f1e8f7",
+    border:"#e5dcef",
+    star:"#d69bdf"
+  }
+
+};
+
+
+function applyTheme(name){
+
+  const theme=THEMES[name];
+
+  if(!theme) return;
+
+  data.colors={
+    ...theme
+  };
+
+  applyColors();
+  loadColorInputs();
+
+  if(saveData()){
+    showSavedPopup();
+  }
+
+}
+
+
+/* =========================================================
+   RENDER SHOP
+========================================================= */
+
+function renderShop(){
+
+  document.getElementById("shopName").textContent =
+    data.shopName;
+
+  document.getElementById("shopDescription").textContent =
+    data.shopDescription;
+
+  document.getElementById("plusCount").textContent =
+    Number(data.plusVotes)||0;
+
+  document.getElementById("minusCount").textContent =
+    Number(data.minusVotes)||0;
+
+
+  /* logo */
+
+  const logo=document.getElementById("logoImage");
+
+  if(data.logo){
+
+    logo.src=data.logo;
+    logo.style.display="block";
+
+  }
+
+
+  /* banner */
+
+  const bannerImage=document.getElementById("bannerImage");
+  const bannerEmpty=document.getElementById("bannerEmpty");
+
+  if(data.banner){
+
+    bannerImage.src=data.banner;
+    bannerImage.style.display="block";
+    bannerEmpty.style.display="none";
+
+  }else{
+
+    bannerImage.removeAttribute("src");
+    bannerImage.style.display="none";
+    bannerEmpty.style.display="flex";
+
+  }
+
+
+  /* minus popup */
+
+  document.getElementById("minusTitle").textContent =
+    data.minusTitle;
+
+  document.getElementById("minusDescription").textContent =
+    data.minusDescription;
+
+  document.getElementById("minusLinkButton").textContent =
+    data.minusButton;
+
+
+  renderRating();
+  renderReviews();
+
+}
+
+
+/* =========================================================
+   RATING
+========================================================= */
+
+function getAverageRating(){
+
+  if(!data.reviews.length){
+    return 0;
+  }
+
+  const total=data.reviews.reduce(
+    (sum,review)=>sum + Number(review.rating||0),
+    0
+  );
+
+  return total/data.reviews.length;
+
+}
+
+
+function makeStars(rating){
+
+  const rounded=Math.round(Number(rating)||0);
+
+  let result="";
+
+  for(let i=1;i<=5;i++){
+
+    result += i<=rounded ? "★" : "☆";
+
+  }
+
+  return result;
+
+}
+
+
+function renderRating(){
+
+  const average=getAverageRating();
+
+  document.getElementById("averageRating").textContent =
+    average.toFixed(1);
+
+  document.getElementById("averageStars").textContent =
+    makeStars(average);
+
+  document.getElementById("reviewCount").textContent =
+    `${data.reviews.length} รีวิว`;
+
+}
+
+
+/* =========================================================
+   STAR PICKER
+========================================================= */
+
+function selectStar(number){
+
+  selectedRating=number;
+
+  const buttons=
+    document.querySelectorAll("#starPicker button");
+
+  buttons.forEach((button,index)=>{
+
+    button.classList.toggle(
+      "active",
+      index < number
+    );
+
+  });
+
+}
+
+
+/* =========================================================
+   SUBMIT REVIEW
+========================================================= */
+
+function submitReview(){
+
+  const name=
+    document.getElementById("reviewName")
+      .value.trim();
+
+  const text=
+    document.getElementById("reviewText")
+      .value.trim();
+
+
+  if(!name){
+
+    showToast("กรุณาใส่ชื่อของคุณ");
+
+    return;
+
+  }
+
+
+  if(!selectedRating){
+
+    showToast("กรุณาเลือกจำนวนดาว");
+
+    return;
+
+  }
+
+
+  if(!text){
+
+    showToast("กรุณาเขียนความคิดเห็น");
+
+    return;
+
+  }
+
+
+  data.reviews.push({
+
+    name:name,
+
+    rating:selectedRating,
+
+    text:text,
+
+    date:new Date().toISOString()
+
+  });
+
+
+  saveData();
+
+  document.getElementById("reviewName").value="";
+  document.getElementById("reviewText").value="";
+
+  selectStar(0);
+
+  renderRating();
+  renderReviews();
+
+  showSavedPopup();
+
+}
+
+
+/* =========================================================
+   RENDER REVIEWS
+========================================================= */
+
+function renderReviews(){
+
+  const list=
+    document.getElementById("reviewsList");
+
+  if(!data.reviews.length){
+
+    list.innerHTML=`
+      <div class="empty-review">
+        ยังไม่มีรีวิว เป็นคนแรกที่รีวิวร้านนี้ได้นะ ♡
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML=data.reviews.map(review=>`
+
+    <div class="review-item">
+
+      <div class="review-top">
+
+        <div class="review-name">
+          ${escapeHTML(review.name)}
+        </div>
+
+        <div class="review-stars">
+          ${makeStars(review.rating)}
+        </div>
+
+      </div>
+
+      <div class="review-text">
+        ${escapeHTML(review.text)}
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+/* =========================================================
+   PLUS
+========================================================= */
+
+function addPlus(){
+
+  data.plusVotes++;
+
+  saveData();
+
+  document.getElementById("plusCount").textContent =
+    data.plusVotes;
+
+}
+
+
+/* =========================================================
+   MINUS
+========================================================= */
+
+function openMinusModal(){
+
+  document.getElementById("minusModal")
+    .classList.add("show");
+
+}
+
+
+function openMinusLink(){
+
+  if(!data.minusLink){
+
+    showToast("ยังไม่ได้ใส่ลิงก์");
+
+    return;
+
+  }
+
+  window.open(
+    data.minusLink,
+    "_blank"
+  );
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function closeModal(id){
+
+  document.getElementById(id)
+    .classList.remove("show");
+
+}
+
+
+function closeModalOutside(event,id){
+
+  if(event.target.id===id){
+
+    closeModal(id);
+
+  }
+
+}
+
+
+/* =========================================================
+   ADMIN LOGIN
+========================================================= */
+
+function openAdminLogin(){
+
+  const remembered=
+    localStorage.getItem(
+      ADMIN_SESSION_KEY
+    )==="true";
+
+
+  if(remembered){
+
+    openAdmin();
+
+    return;
+
+  }
+
+
+  document.getElementById("adminPasswordInput").value="";
+
+  document.getElementById("rememberAdmin").checked=false;
+
+  document.getElementById("loginModal")
+    .classList.add("show");
+
+}
+
+
+function adminLogin(){
+
+  const password=
+    document.getElementById("adminPasswordInput")
+      .value;
+
+  if(password !== data.adminPassword){
+
+    showToast("รหัสแอดมินไม่ถูกต้อง");
+
+    return;
+
+  }
+
+
+  if(
+    document.getElementById("rememberAdmin")
+      .checked
+  ){
+
+    localStorage.setItem(
+      ADMIN_SESSION_KEY,
+      "true"
+    );
+
+  }
+
+
+  closeModal("loginModal");
+
+  openAdmin();
+
+}
+
+
+/* =========================================================
+   OPEN ADMIN
+========================================================= */
+
+function openAdmin(){
+
+  loadAdminFields();
+
+  document.getElementById("adminModal")
+    .classList.add("show");
+
+}
+
+
+function showAdminTab(name,button){
+
+  document
+    .querySelectorAll(".admin-content")
+    .forEach(content=>{
+      content.classList.remove("active");
+    });
+
+
+  document
+    .querySelectorAll(".admin-tab")
+    .forEach(tab=>{
+      tab.classList.remove("active");
+    });
+
+
+  document
+    .getElementById("admin-"+name)
+    .classList.add("active");
+
+
+  if(button){
+
+    button.classList.add("active");
+
+  }
+
+
+  if(name==="reviews"){
+
+    renderAdminReviews();
+
+  }
+
+
+  if(name==="colors"){
+
+    loadColorInputs();
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD ADMIN FIELDS
+========================================================= */
+
+function loadAdminFields(){
+
+  document.getElementById("adminShopName").value =
+    data.shopName;
+
+  document.getElementById("adminShopDescription").value =
+    data.shopDescription;
+
+
+  document.getElementById("adminBannerUrl").value =
+    data.banner || "";
+
+
+  document.getElementById("adminMinusTitle").value =
+    data.minusTitle;
+
+  document.getElementById("adminMinusDescription").value =
+    data.minusDescription;
+
+  document.getElementById("adminMinusButton").value =
+    data.minusButton;
+
+  document.getElementById("adminMinusLink").value =
+    data.minusLink;
+
+
+  document.getElementById("adminPlusVotes").value =
+    data.plusVotes;
+
+  document.getElementById("adminMinusVotes").value =
+    data.minusVotes;
+
+
+  loadColorInputs();
+
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+function previewLogo(input){
+
+  const file=input.files[0];
+
+  if(!file) return;
+
+  const reader=new FileReader();
+
+  reader.onload=function(event){
+
+    data.logo=event.target.result;
+
+    document.getElementById("logoImage").src =
+      data.logo;
+
+  };
+
+  reader.readAsDataURL(file);
+
+}
+
+
+/* =========================================================
+   BANNER FROM MOBILE
+========================================================= */
+
+function previewBannerFile(input){
+
+  const file=input.files[0];
+
+  if(!file) return;
+
+  const reader=new FileReader();
+
+  reader.onload=function(event){
+
+    data.banner=event.target.result;
+
+    const preview=
+      document.getElementById("bannerPreview");
+
+    const image=
+      document.getElementById("bannerPreviewImage");
+
+    image.src=data.banner;
+
+    preview.style.display="block";
+
+  };
+
+  reader.readAsDataURL(file);
+
+}
+
+
+/* =========================================================
+   GOOGLE DRIVE GIF
+========================================================= */
+
+function convertGoogleDriveUrl(url){
+
+  if(!url) return "";
+
+  url=url.trim();
+
+
+  const fileMatch=
+    url.match(
+      /drive\.google\.com\/file\/d\/([^/]+)/
+    );
+
+
+  if(fileMatch){
+
+    const fileId=fileMatch[1];
+
+    return(
+      "https://drive.google.com/uc?export=view&id="
+      +
+      encodeURIComponent(fileId)
+    );
+
+  }
+
+
+  const idMatch=
+    url.match(/[?&]id=([^&]+)/);
+
+
+  if(
+    idMatch &&
+    url.includes("drive.google.com")
+  ){
+
+    return(
+      "https://drive.google.com/uc?export=view&id="
+      +
+      encodeURIComponent(idMatch[1])
+    );
+
+  }
+
+
+  return url;
+
+}
+
+
+function previewBannerFromDrive(){
+
+  const input=
+    document.getElementById("adminBannerUrl");
+
+  const originalUrl=
+    input.value.trim();
+
+
+  if(!originalUrl){
+
+    showToast("กรุณาวางลิงก์ GIF ก่อน");
+
+    return;
+
+  }
+
+
+  const imageUrl=
+    convertGoogleDriveUrl(originalUrl);
+
+
+  const preview=
+    document.getElementById("bannerPreview");
+
+  const image=
+    document.getElementById("bannerPreviewImage");
+
+
+  image.onerror=function(){
+
+    preview.style.display="none";
+
+    showToast(
+      "โหลด GIF ไม่ได้ ตรวจสอบสิทธิ์ไฟล์ใน Google Drive"
+    );
+
+  };
+
+
+  image.onload=function(){
+
+    preview.style.display="block";
+
+  };
+
+
+  image.src=imageUrl;
+
+}
+
+
+/* =========================================================
+   SAVE GENERAL
+========================================================= */
+
+function saveGeneral(){
+
+  data.shopName=
+    document.getElementById("adminShopName")
+      .value.trim()
+    ||
+    DEFAULT_DATA.shopName;
+
+
+  data.shopDescription=
+    document.getElementById("adminShopDescription")
+      .value.trim();
+
+
+  const bannerUrl=
+    document.getElementById("adminBannerUrl")
+      .value.trim();
+
+
+  if(bannerUrl){
+
+    data.banner=
+      convertGoogleDriveUrl(bannerUrl);
+
+  }
+
+
+  if(saveData()){
+
+    renderShop();
+
+    showSavedPopup();
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVE MINUS
+========================================================= */
+
+function saveMinusSettings(){
+
+  data.minusTitle=
+    document.getElementById("adminMinusTitle")
+      .value.trim();
+
+
+  data.minusDescription=
+    document.getElementById("adminMinusDescription")
+      .value.trim();
+
+
+  data.minusButton=
+    document.getElementById("adminMinusButton")
+      .value.trim();
+
+
+  data.minusLink=
+    document.getElementById("adminMinusLink")
+      .value.trim();
+
+
+  if(saveData()){
+
+    renderShop();
+
+    showSavedPopup();
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVE VOTES
+========================================================= */
+
+function saveVotes(){
+
+  data.plusVotes=
+    Math.max(
+      0,
+      Number(
+        document.getElementById("adminPlusVotes").value
+      ) || 0
+    );
+
+
+  data.minusVotes=
+    Math.max(
+      0,
+      Number(
+        document.getElementById("adminMinusVotes").value
+      ) || 0
+    );
+
+
+  if(saveData()){
+
+    renderShop();
+
+    showSavedPopup();
+
+  }
+
+}
+
+
+/* =========================================================
+   ADMIN REVIEWS
+========================================================= */
+
+function renderAdminReviews(){
+
+  const list=
+    document.getElementById("adminReviewsList");
+
+
+  if(!data.reviews.length){
+
+    list.innerHTML=`
+      <div class="empty-review">
+        ยังไม่มีรีวิว
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML=data.reviews.map(
+    (review,index)=>`
+
+    <div class="admin-review">
+
+      <div class="admin-review-head">
+
+        <strong>
+          ${escapeHTML(review.name)}
+        </strong>
+
+        <div class="admin-review-stars">
+          ${makeStars(review.rating)}
+        </div>
+
+      </div>
+
+      <div class="admin-review-text">
+        ${escapeHTML(review.text)}
+      </div>
+
+      <div class="admin-review-actions">
+
+        <button
+          class="small-btn"
+          onclick="editReview(${index})"
+        >
+          แก้ไข
+        </button>
+
+        <button
+          class="small-btn danger-btn"
+          onclick="deleteReview(${index})"
+        >
+          ลบ
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+/* =========================================================
+   EDIT REVIEW
+========================================================= */
+
+function editReview(index){
+
+  const review=data.reviews[index];
+
+  if(!review) return;
+
+
+  const name=
+    prompt(
+      "แก้ชื่อรีวิว",
+      review.name
+    );
+
+
+  if(name===null) return;
+
+
+  const ratingInput=
+    prompt(
+      "แก้คะแนนดาว 1–5",
+      review.rating
+    );
+
+
+  if(ratingInput===null) return;
+
+
+  const rating=
+    Number(ratingInput);
+
+
+  if(
+    !Number.isInteger(rating) ||
+    rating<1 ||
+    rating>5
+  ){
+
+    showToast("คะแนนต้องเป็น 1–5 ดาว");
+
+    return;
+
+  }
+
+
+  const text=
+    prompt(
+      "แก้ข้อความรีวิว",
+      review.text
+    );
+
+
+  if(text===null) return;
+
+
+  if(!name.trim() || !text.trim()){
+
+    showToast("กรุณากรอกข้อมูลให้ครบ");
+
+    return;
+
+  }
+
+
+  data.reviews[index]={
+
+    ...review,
+
+    name:name.trim(),
+
+    rating:rating,
+
+    text:text.trim()
+
+  };
+
+
+  saveData();
+
+  renderRating();
+  renderReviews();
+  renderAdminReviews();
+
+  showSavedPopup();
+
+}
+
+
+/* =========================================================
+   DELETE REVIEW
+========================================================= */
+
+function deleteReview(index){
+
+  if(!confirm("ต้องการลบรีวิวนี้ใช่ไหม?")){
+
+    return;
+
+  }
+
+
+  data.reviews.splice(index,1);
+
+  saveData();
+
+  renderRating();
+  renderReviews();
+  renderAdminReviews();
+
+  showSavedPopup();
+
+}
+
+
+/* =========================================================
+   SAVE COLORS
+========================================================= */
+
+function getColor(id){
+
+  return document.getElementById(id).value;
+
+}
+
+
+function saveColors(){
+
+  data.colors.bg=getColor("colorBg");
+  data.colors.card=getColor("colorCard");
+  data.colors.text=getColor("colorText");
+  data.colors.main=getColor("colorMain");
+  data.colors.mainDark=getColor("colorMainDark");
+  data.colors.button=getColor("colorButton");
+  data.colors.buttonText=getColor("colorButtonText");
+  data.colors.plus=getColor("colorPlus");
+  data.colors.minus=getColor("colorMinus");
+  data.colors.border=getColor("colorBorder");
+  data.colors.star=getColor("colorStar");
+
+
+  applyColors();
+
+
+  if(saveData()){
+
+    renderShop();
+
+    showSavedPopup();
+
+  }
+
+}
+
+
+/* =========================================================
+   CHANGE PASSWORD
+========================================================= */
+
+function changeAdminPassword(){
+
+  const newPassword=
+    document.getElementById("newAdminPassword")
+      .value.trim();
+
+
+  if(newPassword.length<4){
+
+    showToast(
+      "รหัสใหม่ต้องมีอย่างน้อย 4 ตัว"
+    );
+
+    return;
+
+  }
+
+
+  data.adminPassword=newPassword;
+
+  saveData();
+
+  document.getElementById("newAdminPassword").value="";
+
+  showSavedPopup();
+
+}
+
+
+/* =========================================================
+   POPUPS
+========================================================= */
+
+let savedTimer=null;
+
+function showSavedPopup(){
+
+  const popup=
+    document.getElementById("savedPopup");
+
+  popup.classList.add("show");
+
+
+  clearTimeout(savedTimer);
+
+
+  savedTimer=setTimeout(()=>{
+
+    popup.classList.remove("show");
+
+  },1500);
+
+}
+
+
+let toastTimer=null;
+
+function showToast(message){
+
+  const toast=
+    document.getElementById("toast");
+
+  toast.textContent=message;
+
+  toast.classList.add("show");
+
+
+  clearTimeout(toastTimer);
+
+
+  toastTimer=setTimeout(()=>{
+
+    toast.classList.remove("show");
+
+  },2000);
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   ESC KEY
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key==="Escape"){
+
+      document
+        .querySelectorAll(".modal.show")
+        .forEach(modal=>{
+
+          modal.classList.remove("show");
+
+        });
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+applyColors();
+renderShop();
+
+</script>
+
+</body>
+</html>
