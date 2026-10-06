@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pink Blossom Store & Queue</title>
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
+    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Kanit & Inter -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&display=swap');
         
         body {
             font-family: 'Kanit', 'Inter', sans-serif;
-            background-color: #fce7f3; /* pink-100 */
+            background-color: #fce7f3;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -33,7 +33,7 @@
         }
         .marquee-content {
             display: inline-block;
-            animation: marquee 15s linear infinite;
+            animation: marquee 16s linear infinite;
         }
         @keyframes marquee {
             0% { transform: translateX(100%); }
@@ -41,7 +41,7 @@
         }
 
         .glass-nav {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
@@ -68,6 +68,7 @@
 </head>
 <body class="flex justify-center h-screen overflow-hidden text-gray-800 bg-gray-100">
 
+    <!-- App Main Container (Mobile Frame Simulator) -->
     <div id="app-container" class="w-full max-w-md bg-theme-50 h-full relative flex flex-col shadow-2xl overflow-hidden mx-auto">
         
         <!-- Admin Hamburger Menu Button (Top Right) -->
@@ -78,7 +79,7 @@
         <!-- Dynamic Content Body -->
         <main id="main-content" class="flex-1 overflow-y-auto no-scrollbar pb-24 relative"></main>
 
-        <!-- Floating Bottom Navigation -->
+        <!-- Floating Bottom Navigation Bar -->
         <nav class="absolute bottom-4 left-4 right-4 glass-nav rounded-2xl shadow-lg border border-theme-100 flex justify-around items-center py-3 px-2 z-50">
             <button onclick="navigate('home')" class="nav-btn flex flex-col items-center gap-1 w-16 transition-colors" data-target="home">
                 <i class="fa-solid fa-house text-xl text-gray-400"></i>
@@ -104,6 +105,7 @@
         </div>
     </div>
 
+    <!-- Application Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -127,11 +129,12 @@
             currentView: 'home',
             store: {
                 isOpen: true,
-                marqueeText: "ยินดีต้อนรับสู่ Pink Blossom 🌸 สมัครสมาชิกวันนี้รับแต้มสะสมทันที!"
+                marqueeText: "ยินดีต้อนรับสู่ Pink Blossom 🌸 เปิดให้บริการทุกวัน สั่งซื้อหรือจองคิวได้เลยค่ะ!"
             },
             queues: [],
             cart: [],
             pendingPayment: null,
+            selectedProductModal: null,
             userData: {
                 name: '',
                 lineId: '',
@@ -144,12 +147,12 @@
                 extraContacts: []
             },
             products: [
-                { id: 'p1', name: 'เซ็ตบำรุงผิวซากุระ', price: 1290, category: 'skincare', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Skincare' },
-                { id: 'p2', name: 'ลิปสติกสีพีช', price: 450, category: 'makeup', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Lipstick' },
-                { id: 'p3', name: 'น้ำหอมกลิ่นเชอร์รี่บลอสซั่ม', price: 2500, category: 'fragrance', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Perfume' },
-                { id: 'p4', name: 'พาเลทตาโทนหวาน', price: 890, category: 'makeup', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Palette' },
-                { id: 'p5', name: 'ครีมกันแดดเนื้อบางเบา', price: 690, category: 'skincare', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Sunscreen' },
-                { id: 'p6', name: 'บลัชออนเนื้อครีม', price: 350, category: 'makeup', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Blush' }
+                { id: 'p1', name: 'เซ็ตบำรุงผิวซากุระ', desc: 'เซ็ตบำรุงผิวหน้าสูตรอ่อนโยน ผิวเนียนนุ่มชุ่มชื้น', price: 1290, category: 'skincare', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Skincare' },
+                { id: 'p2', name: 'ลิปสติกสีพีช', desc: 'ลิปเนื้อแมตต์กำมะหยี่ ติดทนนานตลอดวัน', price: 450, category: 'makeup', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Lipstick' },
+                { id: 'p3', name: 'น้ำหอมกลิ่นเชอร์รี่บลอสซั่ม', desc: 'กลิ่นหอมละมุนดั่งดอกซากุระบานสะพรั่ง', price: 2500, category: 'fragrance', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Perfume' },
+                { id: 'p4', name: 'พาเลทตาโทนหวาน', desc: 'พาเลทอายแชโดว์ 9 เฉดสีโทนชมพูพีช', price: 890, category: 'makeup', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Palette' },
+                { id: 'p5', name: 'ครีมกันแดดเนื้อบางเบา', desc: 'SPF50+ PA++++ ป้องกันรังสี UV ได้ดีเยี่ยม', price: 690, category: 'skincare', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Sunscreen' },
+                { id: 'p6', name: 'บลัชออนเนื้อครีม', desc: 'บลัชออนแก้มใส แก้มอมชมพูธรรมชาติ', price: 350, category: 'makeup', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Blush' }
             ]
         };
 
@@ -337,7 +340,7 @@
                             </div>
                             <div class="flex overflow-x-auto gap-4 pb-4 no-scrollbar">
                                 ${state.products.slice(0, 4).map(p => `
-                                    <div class="min-w-[140px] bg-white rounded-2xl shadow-sm border border-theme-100 overflow-hidden flex-shrink-0">
+                                    <div onclick="openProductModal('${p.id}')" class="min-w-[140px] bg-white rounded-2xl shadow-sm border border-theme-100 overflow-hidden flex-shrink-0 cursor-pointer">
                                         <div class="h-32 bg-gray-50 p-2">
                                             <img src="${p.image}" class="w-full h-full object-cover rounded-xl">
                                         </div>
@@ -382,22 +385,50 @@
 
                     <div class="p-5 grid grid-cols-2 gap-4 flex-1 overflow-y-auto no-scrollbar pb-[140px]">
                         ${filtered.map(p => `
-                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col group">
+                            <div onclick="openProductModal('${p.id}')" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col group cursor-pointer">
                                 <div class="h-36 bg-theme-50 relative p-2">
                                     <img src="${p.image}" class="w-full h-full object-cover rounded-xl transition transform group-hover:scale-105">
                                 </div>
                                 <div class="p-3 flex-1 flex flex-col justify-between">
                                     <div>
-                                        <h3 class="text-xs font-medium text-gray-700 leading-tight mb-1">${p.name}</h3>
-                                        <p class="text-theme-600 font-bold text-sm">฿${p.price.toLocaleString()}</p>
+                                        <h3 class="text-sm font-bold text-gray-800 leading-tight mb-1 truncate">${p.name}</h3>
+                                        <p class="text-xs text-gray-400 truncate mb-2">${p.desc}</p>
                                     </div>
-                                    <button onclick="addToCart('${p.id}')" class="mt-3 w-full bg-theme-50 hover:bg-theme-100 text-theme-600 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
-                                        <i class="fa-solid fa-plus"></i> เพิ่มลงตะกร้า
-                                    </button>
+                                    <div class="flex items-center justify-between mt-auto">
+                                        <span class="text-theme-600 font-bold text-sm">฿${p.price.toLocaleString()}</span>
+                                        <button class="w-8 h-8 bg-theme-50 hover:bg-theme-100 text-theme-600 rounded-full flex items-center justify-center transition">
+                                            <i class="fa-solid fa-plus text-xs"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         `).join('')}
                     </div>
+
+                    <!-- Product Detail Modal -->
+                    ${state.selectedProductModal ? `
+                        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
+                            <div class="bg-white rounded-3xl p-6 w-full max-w-sm relative shadow-2xl animate-in fade-in zoom-in duration-200">
+                                <button onclick="closeProductModal()" class="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center text-gray-600 transition">
+                                    <i class="fa-solid fa-xmark text-sm"></i>
+                                </button>
+                                <div class="h-56 bg-theme-50 rounded-2xl p-4 mb-4">
+                                    <img src="${state.selectedProductModal.image}" class="w-full h-full object-cover rounded-xl shadow-sm">
+                                </div>
+                                <h2 class="text-lg font-bold text-gray-800 mb-1">${state.selectedProductModal.name}</h2>
+                                <p class="text-xs text-gray-500 mb-3 leading-relaxed">${state.selectedProductModal.desc}</p>
+                                
+                                <div class="flex items-center justify-between mb-6 border-t border-gray-100 pt-3">
+                                    <span class="text-2xl font-bold text-theme-600">฿${state.selectedProductModal.price.toLocaleString()}</span>
+                                    <span class="text-xs font-semibold bg-theme-100 text-theme-600 px-3 py-1 rounded-full">สินค้าพร้อมส่ง</span>
+                                </div>
+
+                                <button onclick="addToCartFromModal('${state.selectedProductModal.id}')" class="w-full bg-gradient-to-r from-theme-400 to-theme-600 hover:opacity-95 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-theme-500/30 transition flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-cart-shopping"></i> ใส่ตะกร้า
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
 
                     ${state.cart.length > 0 ? `
                         <div class="fixed bottom-[72px] left-4 right-4 max-w-[400px] mx-auto bg-gray-900 text-white rounded-2xl p-4 shadow-2xl flex justify-between items-center z-40 border border-gray-700">
@@ -422,9 +453,22 @@
         }
 
         window.setProdFilter = (cat) => { window.productFilter = cat; renderView(); };
-        window.addToCart = (id) => { 
+        window.openProductModal = (id) => {
+            state.selectedProductModal = state.products.find(p => p.id === id);
+            renderView();
+        };
+        window.closeProductModal = () => {
+            state.selectedProductModal = null;
+            renderView();
+        };
+        window.addToCartFromModal = (id) => {
             const p = state.products.find(x => x.id === id);
-            if(p) { state.cart.push(p); showToast(`เพิ่ม ${p.name} ลงตะกร้าแล้ว`); renderView(); }
+            if(p) { 
+                state.cart.push(p); 
+                showToast(`เพิ่ม ${p.name} ลงตะกร้าแล้ว`); 
+                state.selectedProductModal = null;
+                renderView(); 
+            }
         };
 
         window.initiateQueuePayment = (type) => {
@@ -773,7 +817,7 @@
                         </div>
                     </div>
 
-                    <!-- Edit Profile Modal / Form Container -->
+                    <!-- Edit Profile Modal -->
                     <div id="profileModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
                         <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4 shadow-2xl">
                             <h3 class="font-bold text-gray-800 text-lg">แก้ไขโปรไฟล์และแบนเนอร์</h3>
