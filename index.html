@@ -1,3259 +1,1027 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>My Cute Shop ♡</title>
-
-<style>
-:root{
-  --bg:#fff7fb;
-  --card:#ffffff;
-  --text:#665761;
-  --main:#f49bc0;
-  --main-dark:#db82a8;
-  --button:#f5a0c2;
-  --button-text:#ffffff;
-  --plus:#dff4ed;
-  --minus:#f7e8ee;
-  --border:#ead9e1;
-  --star:#f4b400;
-  --shadow:0 8px 25px rgba(160,110,135,.10);
-}
-
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Noto Sans Thai",
-    sans-serif;
-  transition:.25s;
-}
-
-button,
-input,
-textarea{
-  font:inherit;
-}
-
-button{
-  border:0;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-}
-
-.page{
-  width:100%;
-  max-width:900px;
-  margin:auto;
-  padding:18px 16px 70px;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.header{
-  text-align:center;
-  margin-bottom:16px;
-}
-
-.banner{
-  width:100%;
-  border-radius:24px;
-  overflow:hidden;
-  position:relative;
-  background:var(--card);
-  border:1.5px solid var(--border);
-  box-shadow:var(--shadow);
-}
-
-.banner img{
-  width:100%;
-  height:240px;
-  object-fit:cover;
-  display:block;
-}
-
-.banner-empty{
-  height:180px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#aaa;
-  font-size:14px;
-}
-
-.shop-info{
-  padding:22px 15px 12px;
-  text-align:center;
-}
-
-.logo{
-  width:82px;
-  height:82px;
-  border-radius:50%;
-  object-fit:cover;
-  border:5px solid var(--card);
-  box-shadow:0 5px 18px rgba(0,0,0,.08);
-  margin-top:-55px;
-  position:relative;
-  background:var(--card);
-}
-
-.shop-name{
-  margin:12px 0 4px;
-  color:var(--main-dark);
-  font-size:32px;
-  line-height:1.15;
-  font-weight:800;
-}
-
-.shop-description{
-  margin:0;
-  font-size:17px;
-  color:var(--text);
-}
-
-/* =========================
-   VOTE
-========================= */
-
-.vote-section{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin:18px 0;
-}
-
-.vote-card{
-  background:var(--card);
-  border:1.5px solid var(--border);
-  border-radius:22px;
-  padding:10px;
-  box-shadow:var(--shadow);
-  text-align:center;
-}
-
-.vote-btn{
-  width:100%;
-  min-height:50px;
-  padding:8px 12px;
-  font-size:18px;
-  font-weight:800;
-  border-radius:15px;
-  color:var(--button-text);
-  transition:.2s;
-}
-
-.vote-btn:active{
-  transform:scale(.97);
-}
-
-.plus-btn{
-  background:var(--plus);
-}
-
-.minus-btn{
-  background:var(--minus);
-}
-
-.vote-number{
-  font-size:34px;
-  font-weight:800;
-  margin:7px 0 1px;
-  color:var(--text);
-}
-
-/* =========================
-   RATING
-========================= */
-
-.rating-card{
-  background:var(--card);
-  border:1.5px solid var(--border);
-  border-radius:22px;
-  padding:18px;
-  box-shadow:var(--shadow);
-  text-align:center;
-  margin-bottom:16px;
-}
-
-.rating-title{
-  margin:0 0 5px;
-  font-size:21px;
-  font-weight:800;
-}
-
-.rating-score{
-  font-size:38px;
-  font-weight:900;
-}
-
-.stars{
-  color:var(--star);
-  letter-spacing:3px;
-  font-size:28px;
-  line-height:1;
-}
-
-.review-count{
-  margin-top:7px;
-  color:#999;
-  font-size:14px;
-}
-
-/* =========================
-   WRITE REVIEW
-========================= */
-
-.write-card,
-.reviews-card{
-  background:var(--card);
-  border:1.5px solid var(--border);
-  border-radius:22px;
-  padding:22px;
-  box-shadow:var(--shadow);
-  margin-bottom:16px;
-}
-
-.section-title{
-  margin:0 0 16px;
-  font-size:27px;
-  font-weight:800;
-}
-
-.input{
-  width:100%;
-  border:1.5px solid var(--border);
-  border-radius:18px;
-  padding:14px 17px;
-  outline:none;
-  color:var(--text);
-  background:#fff;
-  margin-bottom:12px;
-}
-
-.input:focus,
-textarea:focus{
-  border-color:var(--main);
-}
-
-textarea.input{
-  min-height:130px;
-  resize:vertical;
-}
-
-.star-picker{
-  display:flex;
-  gap:7px;
-  margin:8px 0 16px;
-}
-
-.star-picker button{
-  background:transparent;
-  color:#d2d2d2;
-  font-size:42px;
-  padding:0;
-  line-height:1;
-}
-
-.star-picker button.active{
-  color:var(--star);
-}
-
-.submit-btn{
-  width:100%;
-  min-height:48px;
-  border-radius:15px;
-  padding:9px 16px;
-  background:var(--button);
-  color:var(--button-text);
-  font-weight:800;
-  font-size:16px;
-}
-
-.submit-btn:active{
-  transform:scale(.98);
-}
-
-/* =========================
-   REVIEWS
-========================= */
-
-.review-item{
-  padding:17px 0;
-  border-bottom:1px solid var(--border);
-}
-
-.review-item:last-child{
-  border-bottom:0;
-  padding-bottom:0;
-}
-
-.review-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.review-name{
-  font-weight:800;
-  font-size:17px;
-}
-
-.review-stars{
-  color:var(--star);
-  letter-spacing:1px;
-}
-
-.review-text{
-  margin:8px 0 0;
-  line-height:1.6;
-  white-space:pre-wrap;
-}
-
-.empty-review{
-  color:#a79da2;
-  font-size:16px;
-}
-
-/* =========================
-   ADMIN BUTTON
-========================= */
-
-.admin-gear{
-  position:fixed;
-  right:18px;
-  bottom:20px;
-  width:52px;
-  height:52px;
-  border-radius:50%;
-  background:#fff;
-  border:0;
-  box-shadow:0 8px 25px rgba(0,0,0,.13);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:100;
-}
-
-.admin-gear svg{
-  width:24px;
-  height:24px;
-  fill:#666;
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(30,20,25,.52);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-  z-index:1000;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-box{
-  width:100%;
-  max-width:650px;
-  max-height:92vh;
-  overflow-y:auto;
-  background:var(--card);
-  border-radius:28px;
-  padding:22px;
-  box-shadow:0 20px 60px rgba(0,0,0,.22);
-  animation:modalIn .18s ease;
-}
-
-@keyframes modalIn{
-  from{
-    opacity:0;
-    transform:translateY(10px) scale(.98);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-.modal-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.modal-title{
-  margin:0;
-  font-size:25px;
-  font-weight:800;
-}
-
-.close-btn{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  background:transparent;
-  color:#8e7d86;
-  font-size:28px;
-  line-height:1;
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-.login-box{
-  max-width:400px;
-  text-align:center;
-}
-
-.login-icon{
-  font-size:38px;
-  margin-bottom:4px;
-}
-
-.login-box h2{
-  margin:0 0 18px;
-}
-
-.remember{
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  gap:8px;
-  font-size:14px;
-  margin:5px 0 15px;
-}
-
-.remember input{
-  width:17px;
-  height:17px;
-}
-
-/* =========================
-   MINUS POPUP
-========================= */
-
-.minus-message{
-  text-align:center;
-}
-
-.minus-message h2{
-  margin-top:0;
-  font-size:25px;
-}
-
-.minus-message p{
-  line-height:1.7;
-}
-
-.gray-link-btn{
-  width:100%;
-  min-height:44px;
-  padding:9px 15px;
-  border-radius:14px;
-  background:#aaa;
-  color:#fff;
-  font-weight:700;
-}
-
-/* =========================
-   ADMIN
-========================= */
-
-.admin-box{
-  max-width:760px;
-}
-
-.admin-tabs{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-bottom:20px;
-}
-
-.admin-tab{
-  min-height:42px;
-  padding:8px 12px;
-  border-radius:14px;
-  background:var(--bg);
-  border:1.5px solid #777;
-  color:var(--text);
-  font-weight:700;
-  font-size:14px;
-}
-
-.admin-tab.active{
-  background:#bdbdbd;
-  color:#fff;
-  border-color:#bdbdbd;
-}
-
-.admin-content{
-  display:none;
-}
-
-.admin-content.active{
-  display:block;
-}
-
-.input-group{
-  margin-bottom:16px;
-}
-
-.input-group label{
-  display:block;
-  font-weight:700;
-  margin-bottom:7px;
-}
-
-.input-group input,
-.input-group textarea{
-  width:100%;
-  border:1.5px solid var(--border);
-  border-radius:14px;
-  padding:12px 14px;
-  outline:none;
-  color:var(--text);
-  background:#fff;
-}
-
-.input-group textarea{
-  min-height:100px;
-  resize:vertical;
-}
-
-/* =========================
-   ADMIN BUTTONS
-========================= */
-
-.small-btn{
-  min-height:40px;
-  padding:8px 14px;
-  border-radius:13px;
-  background:var(--button);
-  color:var(--button-text);
-  font-weight:700;
-  font-size:14px;
-}
-
-.danger-btn{
-  background:#d56f82;
-}
-
-.save-btn{
-  width:100%;
-  min-height:46px;
-  padding:9px 16px;
-  border-radius:14px;
-  background:var(--button);
-  color:#fff;
-  font-weight:800;
-  font-size:16px;
-  margin-top:8px;
-}
-
-/* =========================
-   COLOR PICKERS
-========================= */
-
-.color-list{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px 16px;
-}
-
-.color-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  min-height:60px;
-}
-
-.color-name{
-  font-size:15px;
-  font-weight:700;
-}
-
-.color-input{
-  width:55px;
-  height:40px;
-  padding:3px;
-  border:1.5px solid #777;
-  border-radius:12px;
-  background:#fff;
-  cursor:pointer;
-}
-
-/* =========================
-   THEME BUTTONS
-========================= */
-
-.theme-title{
-  font-size:18px;
-  font-weight:800;
-  margin:4px 0 10px;
-}
-
-.theme-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-bottom:20px;
-}
-
-.theme-btn{
-  min-height:62px;
-  border:1.5px solid var(--border);
-  border-radius:16px;
-  padding:8px;
-  background:#fff;
-  text-align:left;
-  display:flex;
-  align-items:center;
-  gap:9px;
-  color:#555;
-}
-
-.theme-btn:active{
-  transform:scale(.98);
-}
-
-.theme-preview{
-  width:43px;
-  height:43px;
-  border-radius:12px;
-  flex-shrink:0;
-  border:1px solid rgba(0,0,0,.08);
-}
-
-.theme-label{
-  font-size:14px;
-  font-weight:800;
-}
-
-/* =========================
-   STAR COLOR
-========================= */
-
-.star-color-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:12px 0;
-}
-
-.star-demo{
-  font-size:30px;
-  color:var(--star);
-  letter-spacing:2px;
-}
-
-/* =========================
-   REVIEW ADMIN
-========================= */
-
-.admin-review{
-  padding:14px;
-  border:1.5px solid var(--border);
-  border-radius:16px;
-  margin-bottom:10px;
-}
-
-.admin-review-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:8px;
-}
-
-.admin-review-stars{
-  color:var(--star);
-}
-
-.admin-review-text{
-  margin:7px 0;
-  line-height:1.5;
-}
-
-.admin-review-actions{
-  display:flex;
-  gap:7px;
-}
-
-/* =========================
-   BANNER PREVIEW
-========================= */
-
-.banner-preview{
-  margin-top:10px;
-  border-radius:14px;
-  overflow:hidden;
-  display:none;
-  border:1px solid var(--border);
-  background:#fffafd;
-}
-
-.banner-preview img{
-  width:100%;
-  max-height:220px;
-  object-fit:cover;
-  display:block;
-}
-
-/* =========================
-   SAVED POPUP / TOAST
-========================= */
-
-.saved-popup{
-  position:fixed;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%) scale(.95);
-  background:rgba(70,65,68,.95);
-  color:#fff;
-  padding:15px 24px;
-  border-radius:18px;
-  font-weight:700;
-  z-index:3000;
-  opacity:0;
-  pointer-events:none;
-  transition:.2s;
-}
-
-.saved-popup.show{
-  opacity:1;
-  transform:translate(-50%,-50%) scale(1);
-}
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:25px;
-  transform:translateX(-50%);
-  background:#555;
-  color:#fff;
-  padding:10px 17px;
-  border-radius:13px;
-  font-size:14px;
-  z-index:4000;
-  opacity:0;
-  pointer-events:none;
-  transition:.2s;
-}
-
-.toast.show{
-  opacity:1;
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:600px){
-
-  .page{
-    padding:12px 10px 80px;
-  }
-
-  .banner{
-    border-radius:20px;
-  }
-
-  .banner img{
-    height:190px;
-  }
-
-  .shop-name{
-    font-size:27px;
-  }
-
-  .shop-description{
-    font-size:15px;
-  }
-
-  .vote-section{
-    gap:8px;
-  }
-
-  .vote-card{
-    padding:8px;
-    border-radius:18px;
-  }
-
-  .vote-btn{
-    min-height:45px;
-    font-size:16px;
-    border-radius:13px;
-  }
-
-  .vote-number{
-    font-size:30px;
-  }
-
-  .rating-card,
-  .write-card,
-  .reviews-card{
-    padding:18px;
-    border-radius:19px;
-  }
-
-  .section-title{
-    font-size:24px;
-  }
-
-  .star-picker button{
-    font-size:35px;
-  }
-
-  .admin-gear{
-    width:48px;
-    height:48px;
-    right:14px;
-    bottom:14px;
-  }
-
-  .admin-gear svg{
-    width:22px;
-    height:22px;
-  }
-
-  .modal{
-    padding:10px;
-  }
-
-  .modal-box{
-    padding:18px;
-    border-radius:24px;
-  }
-
-  .admin-tabs{
-    gap:7px;
-  }
-
-  .admin-tab{
-    min-height:39px;
-    padding:7px 8px;
-    font-size:13px;
-  }
-
-  .color-list{
-    grid-template-columns:1fr 1fr;
-    gap:5px 10px;
-  }
-
-  .color-row{
-    min-height:55px;
-  }
-
-  .color-name{
-    font-size:13px;
-  }
-
-  .color-input{
-    width:48px;
-    height:36px;
-  }
-
-  .theme-grid{
-    gap:8px;
-  }
-
-  .theme-btn{
-    min-height:57px;
-    padding:7px;
-  }
-
-  .theme-preview{
-    width:38px;
-    height:38px;
-  }
-
-  .theme-label{
-    font-size:12px;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pink Blossom Store & Queue</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&display=swap');
+        
+        body {
+            font-family: 'Kanit', 'Inter', sans-serif;
+            background-color: #fce7f3; /* pink-100 */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-
-<body>
-
-<div class="page">
-
-  <!-- =========================
-       HEADER
-  ========================== -->
-
-  <header class="header">
-
-    <div class="banner" id="bannerBox">
-      <img id="bannerImage" src="" alt="แบนเนอร์ร้าน" style="display:none;">
-      <div id="bannerEmpty" class="banner-empty">
-        ♡
-      </div>
-    </div>
-
-    <div class="shop-info">
-
-      <img
-        id="logoImage"
-        class="logo"
-        src="https://via.placeholder.com/200/ffe1ed/ffffff?text=%E2%99%A1"
-        alt="โลโก้ร้าน"
-      >
-
-      <h1 class="shop-name" id="shopName">
-        My Cute Shop ♡
-      </h1>
-
-      <p class="shop-description" id="shopDescription">
-        ขอบคุณที่มารีวิวร้านของเรา ♡
-      </p>
-
-    </div>
-
-  </header>
-
-  <!-- =========================
-       VOTE
-  ========================== -->
-
-  <section class="vote-section">
-
-    <div class="vote-card">
-      <button
-        class="vote-btn plus-btn"
-        id="plusButton"
-        onclick="addPlus()"
-      >
-        +1
-      </button>
-
-      <div class="vote-number" id="plusCount">0</div>
-    </div>
-
-    <div class="vote-card">
-      <button
-        class="vote-btn minus-btn"
-        id="minusButton"
-        onclick="openMinusModal()"
-      >
-        -1
-      </button>
-
-      <div class="vote-number" id="minusCount">0</div>
-    </div>
-
-  </section>
-
-  <!-- =========================
-       RATING
-  ========================== -->
-
-  <section class="rating-card">
-
-    <h2 class="rating-title">
-      การจัดอันดับและความคิดเห็น
-    </h2>
-
-    <div class="rating-score" id="averageRating">
-      0.0
-    </div>
-
-    <div class="stars" id="averageStars">
-      ☆☆☆☆☆
-    </div>
-
-    <div class="review-count" id="reviewCount">
-      0 รีวิว
-    </div>
-
-  </section>
-
-  <!-- =========================
-       WRITE REVIEW
-  ========================== -->
-
-  <section class="write-card">
-
-    <h2 class="section-title">
-      เขียนรีวิว
-    </h2>
-
-    <input
-      class="input"
-      id="reviewName"
-      type="text"
-      maxlength="50"
-      placeholder="ชื่อของคุณ"
-    >
-
-    <div class="star-picker" id="starPicker">
-
-      <button type="button" onclick="selectStar(1)">★</button>
-      <button type="button" onclick="selectStar(2)">★</button>
-      <button type="button" onclick="selectStar(3)">★</button>
-      <button type="button" onclick="selectStar(4)">★</button>
-      <button type="button" onclick="selectStar(5)">★</button>
-
-    </div>
-
-    <textarea
-      class="input"
-      id="reviewText"
-      maxlength="500"
-      placeholder="เขียนความคิดเห็นของคุณ..."
-    ></textarea>
-
-    <button
-      class="submit-btn"
-      onclick="submitReview()"
-    >
-      ส่งรีวิว ♡
-    </button>
-
-  </section>
-
-  <!-- =========================
-       REVIEWS
-  ========================== -->
-
-  <section class="reviews-card">
-
-    <h2 class="section-title">
-      รีวิวลูกค้า
-    </h2>
-
-    <div id="reviewsList"></div>
-
-  </section>
-
-</div>
-
-
-<!-- =========================
-     ADMIN GEAR
-========================== -->
-
-<button
-  class="admin-gear"
-  onclick="openAdminLogin()"
-  aria-label="ตั้งค่าแอดมิน"
->
-
-  <svg
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M19.43 12.98c.04-.32.07-.65.07-.98s-.02-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.37-.31-.6-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98L14.5 2.42C14.47 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.5.42L9.12 5.07c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.08-.48 0-.6.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.08.65-.08.98s.03.66.08.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.37.31.6.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1c.23.08.48 0 .6-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5z"/>
-  </svg>
-
-</button>
-
-
-<!-- =========================
-     MINUS MODAL
-========================== -->
-
-<div
-  class="modal"
-  id="minusModal"
-  onclick="closeModalOutside(event,'minusModal')"
->
-
-  <div class="modal-box minus-message">
-
-    <div class="modal-head">
-      <h2 class="modal-title" id="minusTitle">
-        กรุณาส่งหลักฐาน
-      </h2>
-
-      <button
-        class="close-btn"
-        onclick="closeModal('minusModal')"
-      >
-        ×
-      </button>
-    </div>
-
-    <p id="minusDescription">
-      แคปแชทและแจ้งปัญหาให้แอดมินตรวจสอบได้เลยนะคะ ♡
-    </p>
-
-    <button
-      class="gray-link-btn"
-      id="minusLinkButton"
-      onclick="openMinusLink()"
-    >
-      เปิดลิงก์
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     LOGIN MODAL
-========================== -->
-
-<div
-  class="modal"
-  id="loginModal"
-  onclick="closeModalOutside(event,'loginModal')"
->
-
-  <div class="modal-box login-box">
-
-    <div class="modal-head">
-
-      <h2 class="modal-title">
-        ⚙️ ตั้งค่าแอดมิน
-      </h2>
-
-      <button
-        class="close-btn"
-        onclick="closeModal('loginModal')"
-      >
-        ×
-      </button>
-
-    </div>
-
-    <div class="login-icon">
-      🔐
-    </div>
-
-    <input
-      class="input"
-      id="adminPasswordInput"
-      type="password"
-      placeholder="รหัสแอดมิน"
-      onkeydown="if(event.key==='Enter') adminLogin()"
-    >
-
-    <label class="remember">
-      <input
-        type="checkbox"
-        id="rememberAdmin"
-      >
-      จำเครื่องที่ใส่รหัสไว้
-    </label>
-
-    <button
-      class="save-btn"
-      onclick="adminLogin()"
-    >
-      เข้าสู่ระบบ
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     ADMIN MODAL
-========================== -->
-
-<div
-  class="modal"
-  id="adminModal"
-  onclick="closeModalOutside(event,'adminModal')"
->
-
-  <div class="modal-box admin-box">
-
-    <div class="modal-head">
-
-      <h2 class="modal-title">
-        ⚙️ ตั้งค่าแอดมิน
-      </h2>
-
-      <button
-        class="close-btn"
-        onclick="closeModal('adminModal')"
-      >
-        ×
-      </button>
-
-    </div>
-
-
-    <!-- ADMIN TABS -->
-
-    <div class="admin-tabs">
-
-      <button
-        class="admin-tab active"
-        onclick="showAdminTab('general',this)"
-      >
-        ร้าน
-      </button>
-
-      <button
-        class="admin-tab"
-        onclick="showAdminTab('minus',this)"
-      >
-        -1
-      </button>
-
-      <button
-        class="admin-tab"
-        onclick="showAdminTab('votes',this)"
-      >
-        คะแนน
-      </button>
-
-      <button
-        class="admin-tab"
-        onclick="showAdminTab('reviews',this)"
-      >
-        รีวิว
-      </button>
-
-      <button
-        class="admin-tab"
-        onclick="showAdminTab('colors',this)"
-      >
-        สี
-      </button>
-
-      <button
-        class="admin-tab"
-        onclick="showAdminTab('password',this)"
-      >
-        รหัส
-      </button>
-
-    </div>
-
-
-    <!-- =========================
-         GENERAL
-    ========================== -->
-
-    <div
-      class="admin-content active"
-      id="admin-general"
-    >
-
-      <div class="input-group">
-
-        <label>
-          ชื่อร้าน
-        </label>
-
-        <input
-          id="adminShopName"
-          type="text"
-        >
-
-      </div>
-
-
-      <div class="input-group">
-
-        <label>
-          ข้อความใต้ชื่อร้าน
-        </label>
-
-        <input
-          id="adminShopDescription"
-          type="text"
-        >
-
-      </div>
-
-
-      <div class="input-group">
-
-        <label>
-          รูปโลโก้ร้าน
-        </label>
-
-        <input
-          id="adminLogo"
-          type="file"
-          accept="image/*"
-          onchange="previewLogo(this)"
-        >
-
-      </div>
-
-
-      <div class="input-group">
-
-        <label>
-          แบนเนอร์แบบรูปธรรมดา
-        </label>
-
-        <input
-          id="adminBannerFile"
-          type="file"
-          accept="image/*"
-          onchange="previewBannerFile(this)"
-        >
-
-        <div style="font-size:13px;color:#999;margin-top:6px;">
-          เลือกรูปจากมือถือได้เลย
-        </div>
-
-      </div>
-
-
-      <div class="input-group">
-
-        <label>
-          หรือใส่ GIF จาก Google Drive
-        </label>
-
-        <input
-          id="adminBannerUrl"
-          type="url"
-          placeholder="https://drive.google.com/file/d..."
-        >
-
-        <div style="font-size:13px;color:#999;margin-top:6px;line-height:1.5;">
-          ตั้งค่าไฟล์ใน Google Drive เป็น
-          <b>ทุกคนที่มีลิงก์ → ผู้ดู</b>
-          ก่อนนำลิงก์มาใส่
-        </div>
-
-        <button
-          class="small-btn"
-          type="button"
-          onclick="previewBannerFromDrive()"
-          style="width:100%;margin-top:10px;"
-        >
-          ดูตัวอย่าง GIF
+<body class="flex justify-center h-screen overflow-hidden text-gray-800 bg-gray-100">
+
+    <div id="app-container" class="w-full max-w-md bg-theme-50 h-full relative flex flex-col shadow-2xl overflow-hidden mx-auto">
+        
+        <!-- Admin Hamburger Menu Button (Top Right) -->
+        <button id="admin-menu-btn" onclick="navigate('admin-login')" class="absolute top-4 right-4 z-[60] w-10 h-10 bg-white/90 backdrop-blur-md rounded-full shadow-md flex items-center justify-center text-gray-700 hover:text-theme-500 transition-colors">
+            <i class="fa-solid fa-bars text-lg"></i>
         </button>
 
-        <div
-          class="banner-preview"
-          id="bannerPreview"
-        >
-          <img
-            id="bannerPreviewImage"
-            alt="ตัวอย่าง GIF"
-          >
+        <!-- Dynamic Content Body -->
+        <main id="main-content" class="flex-1 overflow-y-auto no-scrollbar pb-24 relative"></main>
+
+        <!-- Floating Bottom Navigation -->
+        <nav class="absolute bottom-4 left-4 right-4 glass-nav rounded-2xl shadow-lg border border-theme-100 flex justify-around items-center py-3 px-2 z-50">
+            <button onclick="navigate('home')" class="nav-btn flex flex-col items-center gap-1 w-16 transition-colors" data-target="home">
+                <i class="fa-solid fa-house text-xl text-gray-400"></i>
+                <span class="text-[10px] font-medium text-gray-500">หน้าหลัก</span>
+            </button>
+            <button onclick="navigate('products')" class="nav-btn flex flex-col items-center gap-1 w-16 transition-colors" data-target="products">
+                <i class="fa-solid fa-bag-shopping text-xl text-gray-400"></i>
+                <span class="text-[10px] font-medium text-gray-500">สินค้า</span>
+            </button>
+            <button onclick="navigate('queue')" class="nav-btn flex flex-col items-center gap-1 w-16 transition-colors" data-target="queue">
+                <i class="fa-solid fa-list-ol text-xl text-gray-400"></i>
+                <span class="text-[10px] font-medium text-gray-500">เช็คคิว</span>
+            </button>
+            <button onclick="navigate('account')" class="nav-btn flex flex-col items-center gap-1 w-16 transition-colors" data-target="account">
+                <i class="fa-solid fa-user text-xl text-gray-400"></i>
+                <span class="text-[10px] font-medium text-gray-500">บัญชี</span>
+            </button>
+        </nav>
+
+        <!-- Global Toast Notification -->
+        <div id="toast" class="absolute top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-xl opacity-0 transition-opacity duration-300 pointer-events-none z-[100] whitespace-nowrap">
+            แจ้งเตือน
         </div>
-
-      </div>
-
-
-      <button
-        class="save-btn"
-        onclick="saveGeneral()"
-      >
-        บันทึกข้อมูล
-      </button>
-
     </div>
 
-
-    <!-- =========================
-         MINUS
-    ========================== -->
-
-    <div
-      class="admin-content"
-      id="admin-minus"
-    >
-
-      <div class="input-group">
-
-        <label>
-          หัวข้อ popup -1
-        </label>
-
-        <input
-          id="adminMinusTitle"
-          type="text"
-        >
-
-      </div>
-
-
-      <div class="input-group">
-
-        <label>
-          ข้อความ popup -1
-        </label>
-
-        <textarea
-          id="adminMinusDescription"
-        ></textarea>
-
-      </div>
-
-
-      <div class="input-group">
-
-        <label>
-          ข้อความปุ่ม
-        </label>
-
-        <input
-          id="adminMinusButton"
-          type="text"
-        >
-
-      </div>
-
-
-      <div class="input-group">
-
-        <label>
-          ลิงก์
-        </label>
-
-        <input
-          id="adminMinusLink"
-          type="url"
-        >
-
-      </div>
-
-
-      <button
-        class="save-btn"
-        onclick="saveMinusSettings()"
-      >
-        บันทึกข้อมูล
-      </button>
-
-    </div>
-
-
-    <!-- =========================
-         VOTES
-    ========================== -->
-
-    <div
-      class="admin-content"
-      id="admin-votes"
-    >
-
-      <div class="input-group">
-
-        <label>
-          จำนวน +1
-        </label>
-
-        <input
-          id="adminPlusVotes"
-          type="number"
-          min="0"
-        >
-
-      </div>
-
-
-      <div class="input-group">
-
-        <label>
-          จำนวน -1
-        </label>
-
-        <input
-          id="adminMinusVotes"
-          type="number"
-          min="0"
-        >
-
-      </div>
-
-
-      <button
-        class="save-btn"
-        onclick="saveVotes()"
-      >
-        บันทึกคะแนน
-      </button>
-
-    </div>
-
-
-    <!-- =========================
-         REVIEWS
-    ========================== -->
-
-    <div
-      class="admin-content"
-      id="admin-reviews"
-    >
-
-      <div id="adminReviewsList"></div>
-
-    </div>
-
-
-    <!-- =========================
-         COLORS
-    ========================== -->
-
-    <div
-      class="admin-content"
-      id="admin-colors"
-    >
-
-      <div class="theme-title">
-        ธีมสีพื้นฐาน
-      </div>
-
-      <div class="theme-grid">
-
-        <button
-          class="theme-btn"
-          onclick="applyTheme('pink')"
-        >
-          <span
-            class="theme-preview"
-            style="background:linear-gradient(135deg,#fff1f7 50%,#f49bc0 50%);"
-          ></span>
-          <span class="theme-label">
-            ชมพู
-          </span>
-        </button>
-
-
-        <button
-          class="theme-btn"
-          onclick="applyTheme('pinkblue')"
-        >
-          <span
-            class="theme-preview"
-            style="background:linear-gradient(135deg,#ffd9e9 50%,#9ed8f0 50%);"
-          ></span>
-          <span class="theme-label">
-            ชมพูฟ้า
-          </span>
-        </button>
-
-
-        <button
-          class="theme-btn"
-          onclick="applyTheme('blueyellow')"
-        >
-          <span
-            class="theme-preview"
-            style="background:linear-gradient(135deg,#bfe7fa 50%,#ffe58a 50%);"
-          ></span>
-          <span class="theme-label">
-            ฟ้าเหลือง
-          </span>
-        </button>
-
-
-        <button
-          class="theme-btn"
-          onclick="applyTheme('bluewhite')"
-        >
-          <span
-            class="theme-preview"
-            style="background:linear-gradient(135deg,#a9dff5 50%,#ffffff 50%);"
-          ></span>
-          <span class="theme-label">
-            ฟ้าขาว
-          </span>
-        </button>
-
-
-        <button
-          class="theme-btn"
-          onclick="applyTheme('pinkwhite')"
-        >
-          <span
-            class="theme-preview"
-            style="background:linear-gradient(135deg,#f49bc0 50%,#ffffff 50%);"
-          ></span>
-          <span class="theme-label">
-            ชมพูขาว
-          </span>
-        </button>
-
-
-        <button
-          class="theme-btn"
-          onclick="applyTheme('blackwhite')"
-        >
-          <span
-            class="theme-preview"
-            style="background:linear-gradient(135deg,#ffffff 50%,#222222 50%);"
-          ></span>
-          <span class="theme-label">
-            ขาวดำ
-          </span>
-        </button>
-
-
-        <button
-          class="theme-btn"
-          onclick="applyTheme('blackred')"
-        >
-          <span
-            class="theme-preview"
-            style="background:linear-gradient(135deg,#191919 50%,#e74c5b 50%);"
-          ></span>
-          <span class="theme-label">
-            ดำแดง
-          </span>
-        </button>
-
-
-        <button
-          class="theme-btn"
-          onclick="applyTheme('lavender')"
-        >
-          <span
-            class="theme-preview"
-            style="background:linear-gradient(135deg,#f1e8ff 50%,#b99be8 50%);"
-          ></span>
-          <span class="theme-label">
-            ม่วงลาเวนเดอร์
-          </span>
-        </button>
-
-      </div>
-
-
-      <div class="theme-title">
-        ปรับสีเอง
-      </div>
-
-
-      <div class="color-list">
-
-        <div class="color-row">
-          <span class="color-name">พื้นหลัง</span>
-          <input class="color-input" type="color" id="colorBg">
-        </div>
-
-        <div class="color-row">
-          <span class="color-name">พื้นการ์ด</span>
-          <input class="color-input" type="color" id="colorCard">
-        </div>
-
-        <div class="color-row">
-          <span class="color-name">สีตัวอักษร</span>
-          <input class="color-input" type="color" id="colorText">
-        </div>
-
-        <div class="color-row">
-          <span class="color-name">สีหลัก</span>
-          <input class="color-input" type="color" id="colorMain">
-        </div>
-
-        <div class="color-row">
-          <span class="color-name">สีหลักเข้ม</span>
-          <input class="color-input" type="color" id="colorMainDark">
-        </div>
-
-        <div class="color-row">
-          <span class="color-name">สีปุ่ม</span>
-          <input class="color-input" type="color" id="colorButton">
-        </div>
-
-        <div class="color-row">
-          <span class="color-name">สีตัวอักษรปุ่ม</span>
-          <input class="color-input" type="color" id="colorButtonText">
-        </div>
-
-        <div class="color-row">
-          <span class="color-name">สี +1</span>
-          <input class="color-input" type="color" id="colorPlus">
-        </div>
-
-        <div class="color-row">
-          <span class="color-name">สี -1</span>
-          <input class="color-input" type="color" id="colorMinus">
-        </div>
-
-        <div class="color-row">
-          <span class="color-name">สีขอบ</span>
-          <input class="color-input" type="color" id="colorBorder">
-        </div>
-
-      </div>
-
-
-      <div class="star-color-row">
-
-        <div>
-          <div class="color-name">
-            สีดาว
-          </div>
-
-          <div class="star-demo">
-            ★★★★★
-          </div>
-        </div>
-
-        <input
-          class="color-input"
-          type="color"
-          id="colorStar"
-        >
-
-      </div>
-
-
-      <button
-        class="save-btn"
-        onclick="saveColors()"
-      >
-        บันทึกสี
-      </button>
-
-    </div>
-
-
-    <!-- =========================
-         PASSWORD
-    ========================== -->
-
-    <div
-      class="admin-content"
-      id="admin-password"
-    >
-
-      <div class="input-group">
-
-        <label>
-          รหัสแอดมินใหม่
-        </label>
-
-        <input
-          id="newAdminPassword"
-          type="password"
-          placeholder="ใส่รหัสใหม่"
-        >
-
-      </div>
-
-
-      <button
-        class="save-btn"
-        onclick="changeAdminPassword()"
-      >
-        เปลี่ยนรหัส
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     SAVED POPUP
-========================== -->
-
-<div
-  class="saved-popup"
-  id="savedPopup"
->
-  บันทึกข้อมูลแล้ว ♡
-</div>
-
-<div
-  class="toast"
-  id="toast"
-></div>
-
-
-<script>
-
-/* =========================================================
-   DATA
-========================================================= */
-
-const STORAGE_KEY = "cuteShopReviewData";
-const ADMIN_SESSION_KEY = "cuteShopAdminRemembered";
-
-const DEFAULT_DATA = {
-
-  shopName:"My Cute Shop ♡",
-
-  shopDescription:"ขอบคุณที่มารีวิวร้านของเรา ♡",
-
-  logo:"https://via.placeholder.com/200/ffe1ed/ffffff?text=%E2%99%A1",
-
-  banner:"",
-
-  plusVotes:0,
-
-  minusVotes:0,
-
-  minusTitle:"กรุณาส่งหลักฐาน",
-
-  minusDescription:"แคปแชทและแจ้งปัญหาให้แอดมินตรวจสอบได้เลยนะคะ ♡",
-
-  minusButton:"เปิดลิงก์",
-
-  minusLink:"https://example.com",
-
-  adminPassword:"1234",
-
-  colors:{
-
-    bg:"#fff7fb",
-
-    card:"#ffffff",
-
-    text:"#665761",
-
-    main:"#f49bc0",
-
-    mainDark:"#db82a8",
-
-    button:"#f5a0c2",
-
-    buttonText:"#ffffff",
-
-    plus:"#dff4ed",
-
-    minus:"#f7e8ee",
-
-    border:"#ead9e1",
-
-    star:"#f4b400"
-
-  },
-
-  reviews:[]
-
-};
-
-
-let data = loadData();
-
-let selectedRating = 0;
-
-
-/* =========================================================
-   LOAD / SAVE
-========================================================= */
-
-function loadData(){
-
-  try{
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-
-    if(!saved){
-      return JSON.parse(JSON.stringify(DEFAULT_DATA));
-    }
-
-    const parsed = JSON.parse(saved);
-
-    return {
-
-      ...JSON.parse(JSON.stringify(DEFAULT_DATA)),
-
-      ...parsed,
-
-      colors:{
-        ...DEFAULT_DATA.colors,
-        ...(parsed.colors || {})
-      },
-
-      reviews:Array.isArray(parsed.reviews)
-        ? parsed.reviews
-        : []
-
-    };
-
-  }catch(error){
-
-    console.error(error);
-
-    return JSON.parse(JSON.stringify(DEFAULT_DATA));
-
-  }
-
-}
-
-
-function saveData(){
-
-  try{
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(data)
-    );
-
-    return true;
-
-  }catch(error){
-
-    console.error(error);
-
-    showToast("บันทึกข้อมูลไม่สำเร็จ");
-
-    return false;
-
-  }
-
-}
-
-
-/* =========================================================
-   COLORS
-========================================================= */
-
-function applyColors(){
-
-  const root = document.documentElement;
-
-  root.style.setProperty("--bg",data.colors.bg);
-  root.style.setProperty("--card",data.colors.card);
-  root.style.setProperty("--text",data.colors.text);
-  root.style.setProperty("--main",data.colors.main);
-  root.style.setProperty("--main-dark",data.colors.mainDark);
-  root.style.setProperty("--button",data.colors.button);
-  root.style.setProperty("--button-text",data.colors.buttonText);
-  root.style.setProperty("--plus",data.colors.plus);
-  root.style.setProperty("--minus",data.colors.minus);
-  root.style.setProperty("--border",data.colors.border);
-  root.style.setProperty("--star",data.colors.star);
-
-}
-
-
-function setColorInput(id,value){
-
-  const el=document.getElementById(id);
-
-  if(el){
-    el.value=value;
-  }
-
-}
-
-
-function loadColorInputs(){
-
-  setColorInput("colorBg",data.colors.bg);
-  setColorInput("colorCard",data.colors.card);
-  setColorInput("colorText",data.colors.text);
-  setColorInput("colorMain",data.colors.main);
-  setColorInput("colorMainDark",data.colors.mainDark);
-  setColorInput("colorButton",data.colors.button);
-  setColorInput("colorButtonText",data.colors.buttonText);
-  setColorInput("colorPlus",data.colors.plus);
-  setColorInput("colorMinus",data.colors.minus);
-  setColorInput("colorBorder",data.colors.border);
-  setColorInput("colorStar",data.colors.star);
-
-}
-
-
-/* =========================================================
-   THEMES
-========================================================= */
-
-const THEMES = {
-
-  pink:{
-    bg:"#fff4f8",
-    card:"#ffffff",
-    text:"#665761",
-    main:"#f49bc0",
-    mainDark:"#db82a8",
-    button:"#f49bc0",
-    buttonText:"#ffffff",
-    plus:"#dff4ed",
-    minus:"#f7e8ee",
-    border:"#ead9e1",
-    star:"#f4b400"
-  },
-
-  pinkblue:{
-    bg:"#f8f8ff",
-    card:"#ffffff",
-    text:"#5e6270",
-    main:"#f39abb",
-    mainDark:"#d978a0",
-    button:"#91cde8",
-    buttonText:"#ffffff",
-    plus:"#d8f1e9",
-    minus:"#f8e3ec",
-    border:"#dcdce9",
-    star:"#f5b942"
-  },
-
-  blueyellow:{
-    bg:"#f7fbff",
-    card:"#ffffff",
-    text:"#58616b",
-    main:"#8dcced",
-    mainDark:"#62acd2",
-    button:"#f2d56f",
-    buttonText:"#ffffff",
-    plus:"#d9f0fa",
-    minus:"#fff1c7",
-    border:"#dbe8ee",
-    star:"#efb93f"
-  },
-
-  bluewhite:{
-    bg:"#f6fbff",
-    card:"#ffffff",
-    text:"#5d6870",
-    main:"#8fd1ed",
-    mainDark:"#65afd1",
-    button:"#8fcfea",
-    buttonText:"#ffffff",
-    plus:"#d9f2fb",
-    minus:"#edf5f9",
-    border:"#d8e8ee",
-    star:"#f3ba45"
-  },
-
-  pinkwhite:{
-    bg:"#fff7fb",
-    card:"#ffffff",
-    text:"#665761",
-    main:"#f49bc0",
-    mainDark:"#db82a8",
-    button:"#f49bc0",
-    buttonText:"#ffffff",
-    plus:"#dff4ed",
-    minus:"#f7e8ee",
-    border:"#ead9e1",
-    star:"#f4b400"
-  },
-
-  blackwhite:{
-    bg:"#f4f4f4",
-    card:"#ffffff",
-    text:"#222222",
-    main:"#222222",
-    mainDark:"#111111",
-    button:"#222222",
-    buttonText:"#ffffff",
-    plus:"#e8e8e8",
-    minus:"#d8d8d8",
-    border:"#cfcfcf",
-    star:"#777777"
-  },
-
-  blackred:{
-    bg:"#171717",
-    card:"#242424",
-    text:"#eeeeee",
-    main:"#e74c5b",
-    mainDark:"#ff6875",
-    button:"#e74c5b",
-    buttonText:"#ffffff",
-    plus:"#343434",
-    minus:"#3a292b",
-    border:"#58383c",
-    star:"#ff6975"
-  },
-
-  lavender:{
-    bg:"#faf7ff",
-    card:"#ffffff",
-    text:"#62596d",
-    main:"#b99be8",
-    mainDark:"#9874cf",
-    button:"#b99be8",
-    buttonText:"#ffffff",
-    plus:"#e8f5ee",
-    minus:"#f1e8f7",
-    border:"#e5dcef",
-    star:"#d69bdf"
-  }
-
-};
-
-
-function applyTheme(name){
-
-  const theme=THEMES[name];
-
-  if(!theme) return;
-
-  data.colors={
-    ...theme
-  };
-
-  applyColors();
-  loadColorInputs();
-
-  if(saveData()){
-    showSavedPopup();
-  }
-
-}
-
-
-/* =========================================================
-   RENDER SHOP
-========================================================= */
-
-function renderShop(){
-
-  document.getElementById("shopName").textContent =
-    data.shopName;
-
-  document.getElementById("shopDescription").textContent =
-    data.shopDescription;
-
-  document.getElementById("plusCount").textContent =
-    Number(data.plusVotes)||0;
-
-  document.getElementById("minusCount").textContent =
-    Number(data.minusVotes)||0;
-
-
-  /* logo */
-
-  const logo=document.getElementById("logoImage");
-
-  if(data.logo){
-
-    logo.src=data.logo;
-    logo.style.display="block";
-
-  }
-
-
-  /* banner */
-
-  const bannerImage=document.getElementById("bannerImage");
-  const bannerEmpty=document.getElementById("bannerEmpty");
-
-  if(data.banner){
-
-    bannerImage.src=data.banner;
-    bannerImage.style.display="block";
-    bannerEmpty.style.display="none";
-
-  }else{
-
-    bannerImage.removeAttribute("src");
-    bannerImage.style.display="none";
-    bannerEmpty.style.display="flex";
-
-  }
-
-
-  /* minus popup */
-
-  document.getElementById("minusTitle").textContent =
-    data.minusTitle;
-
-  document.getElementById("minusDescription").textContent =
-    data.minusDescription;
-
-  document.getElementById("minusLinkButton").textContent =
-    data.minusButton;
-
-
-  renderRating();
-  renderReviews();
-
-}
-
-
-/* =========================================================
-   RATING
-========================================================= */
-
-function getAverageRating(){
-
-  if(!data.reviews.length){
-    return 0;
-  }
-
-  const total=data.reviews.reduce(
-    (sum,review)=>sum + Number(review.rating||0),
-    0
-  );
-
-  return total/data.reviews.length;
-
-}
-
-
-function makeStars(rating){
-
-  const rounded=Math.round(Number(rating)||0);
-
-  let result="";
-
-  for(let i=1;i<=5;i++){
-
-    result += i<=rounded ? "★" : "☆";
-
-  }
-
-  return result;
-
-}
-
-
-function renderRating(){
-
-  const average=getAverageRating();
-
-  document.getElementById("averageRating").textContent =
-    average.toFixed(1);
-
-  document.getElementById("averageStars").textContent =
-    makeStars(average);
-
-  document.getElementById("reviewCount").textContent =
-    `${data.reviews.length} รีวิว`;
-
-}
-
-
-/* =========================================================
-   STAR PICKER
-========================================================= */
-
-function selectStar(number){
-
-  selectedRating=number;
-
-  const buttons=
-    document.querySelectorAll("#starPicker button");
-
-  buttons.forEach((button,index)=>{
-
-    button.classList.toggle(
-      "active",
-      index < number
-    );
-
-  });
-
-}
-
-
-/* =========================================================
-   SUBMIT REVIEW
-========================================================= */
-
-function submitReview(){
-
-  const name=
-    document.getElementById("reviewName")
-      .value.trim();
-
-  const text=
-    document.getElementById("reviewText")
-      .value.trim();
-
-
-  if(!name){
-
-    showToast("กรุณาใส่ชื่อของคุณ");
-
-    return;
-
-  }
-
-
-  if(!selectedRating){
-
-    showToast("กรุณาเลือกจำนวนดาว");
-
-    return;
-
-  }
-
-
-  if(!text){
-
-    showToast("กรุณาเขียนความคิดเห็น");
-
-    return;
-
-  }
-
-
-  data.reviews.push({
-
-    name:name,
-
-    rating:selectedRating,
-
-    text:text,
-
-    date:new Date().toISOString()
-
-  });
-
-
-  saveData();
-
-  document.getElementById("reviewName").value="";
-  document.getElementById("reviewText").value="";
-
-  selectStar(0);
-
-  renderRating();
-  renderReviews();
-
-  showSavedPopup();
-
-}
-
-
-/* =========================================================
-   RENDER REVIEWS
-========================================================= */
-
-function renderReviews(){
-
-  const list=
-    document.getElementById("reviewsList");
-
-  if(!data.reviews.length){
-
-    list.innerHTML=`
-      <div class="empty-review">
-        ยังไม่มีรีวิว เป็นคนแรกที่รีวิวร้านนี้ได้นะ ♡
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  list.innerHTML=data.reviews.map(review=>`
-
-    <div class="review-item">
-
-      <div class="review-top">
-
-        <div class="review-name">
-          ${escapeHTML(review.name)}
-        </div>
-
-        <div class="review-stars">
-          ${makeStars(review.rating)}
-        </div>
-
-      </div>
-
-      <div class="review-text">
-        ${escapeHTML(review.text)}
-      </div>
-
-    </div>
-
-  `).join("");
-
-}
-
-
-/* =========================================================
-   PLUS
-========================================================= */
-
-function addPlus(){
-
-  data.plusVotes++;
-
-  saveData();
-
-  document.getElementById("plusCount").textContent =
-    data.plusVotes;
-
-}
-
-
-/* =========================================================
-   MINUS
-========================================================= */
-
-function openMinusModal(){
-
-  document.getElementById("minusModal")
-    .classList.add("show");
-
-}
-
-
-function openMinusLink(){
-
-  if(!data.minusLink){
-
-    showToast("ยังไม่ได้ใส่ลิงก์");
-
-    return;
-
-  }
-
-  window.open(
-    data.minusLink,
-    "_blank"
-  );
-
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-function closeModal(id){
-
-  document.getElementById(id)
-    .classList.remove("show");
-
-}
-
-
-function closeModalOutside(event,id){
-
-  if(event.target.id===id){
-
-    closeModal(id);
-
-  }
-
-}
-
-
-/* =========================================================
-   ADMIN LOGIN
-========================================================= */
-
-function openAdminLogin(){
-
-  const remembered=
-    localStorage.getItem(
-      ADMIN_SESSION_KEY
-    )==="true";
-
-
-  if(remembered){
-
-    openAdmin();
-
-    return;
-
-  }
-
-
-  document.getElementById("adminPasswordInput").value="";
-
-  document.getElementById("rememberAdmin").checked=false;
-
-  document.getElementById("loginModal")
-    .classList.add("show");
-
-}
-
-
-function adminLogin(){
-
-  const password=
-    document.getElementById("adminPasswordInput")
-      .value;
-
-  if(password !== data.adminPassword){
-
-    showToast("รหัสแอดมินไม่ถูกต้อง");
-
-    return;
-
-  }
-
-
-  if(
-    document.getElementById("rememberAdmin")
-      .checked
-  ){
-
-    localStorage.setItem(
-      ADMIN_SESSION_KEY,
-      "true"
-    );
-
-  }
-
-
-  closeModal("loginModal");
-
-  openAdmin();
-
-}
-
-
-/* =========================================================
-   OPEN ADMIN
-========================================================= */
-
-function openAdmin(){
-
-  loadAdminFields();
-
-  document.getElementById("adminModal")
-    .classList.add("show");
-
-}
-
-
-function showAdminTab(name,button){
-
-  document
-    .querySelectorAll(".admin-content")
-    .forEach(content=>{
-      content.classList.remove("active");
-    });
-
-
-  document
-    .querySelectorAll(".admin-tab")
-    .forEach(tab=>{
-      tab.classList.remove("active");
-    });
-
-
-  document
-    .getElementById("admin-"+name)
-    .classList.add("active");
-
-
-  if(button){
-
-    button.classList.add("active");
-
-  }
-
-
-  if(name==="reviews"){
-
-    renderAdminReviews();
-
-  }
-
-
-  if(name==="colors"){
-
-    loadColorInputs();
-
-  }
-
-}
-
-
-/* =========================================================
-   LOAD ADMIN FIELDS
-========================================================= */
-
-function loadAdminFields(){
-
-  document.getElementById("adminShopName").value =
-    data.shopName;
-
-  document.getElementById("adminShopDescription").value =
-    data.shopDescription;
-
-
-  document.getElementById("adminBannerUrl").value =
-    data.banner || "";
-
-
-  document.getElementById("adminMinusTitle").value =
-    data.minusTitle;
-
-  document.getElementById("adminMinusDescription").value =
-    data.minusDescription;
-
-  document.getElementById("adminMinusButton").value =
-    data.minusButton;
-
-  document.getElementById("adminMinusLink").value =
-    data.minusLink;
-
-
-  document.getElementById("adminPlusVotes").value =
-    data.plusVotes;
-
-  document.getElementById("adminMinusVotes").value =
-    data.minusVotes;
-
-
-  loadColorInputs();
-
-}
-
-
-/* =========================================================
-   LOGO
-========================================================= */
-
-function previewLogo(input){
-
-  const file=input.files[0];
-
-  if(!file) return;
-
-  const reader=new FileReader();
-
-  reader.onload=function(event){
-
-    data.logo=event.target.result;
-
-    document.getElementById("logoImage").src =
-      data.logo;
-
-  };
-
-  reader.readAsDataURL(file);
-
-}
-
-
-/* =========================================================
-   BANNER FROM MOBILE
-========================================================= */
-
-function previewBannerFile(input){
-
-  const file=input.files[0];
-
-  if(!file) return;
-
-  const reader=new FileReader();
-
-  reader.onload=function(event){
-
-    data.banner=event.target.result;
-
-    const preview=
-      document.getElementById("bannerPreview");
-
-    const image=
-      document.getElementById("bannerPreviewImage");
-
-    image.src=data.banner;
-
-    preview.style.display="block";
-
-  };
-
-  reader.readAsDataURL(file);
-
-}
-
-
-/* =========================================================
-   GOOGLE DRIVE GIF
-========================================================= */
-
-function convertGoogleDriveUrl(url){
-
-  if(!url) return "";
-
-  url=url.trim();
-
-
-  const fileMatch=
-    url.match(
-      /drive\.google\.com\/file\/d\/([^/]+)/
-    );
-
-
-  if(fileMatch){
-
-    const fileId=fileMatch[1];
-
-    return(
-      "https://drive.google.com/uc?export=view&id="
-      +
-      encodeURIComponent(fileId)
-    );
-
-  }
-
-
-  const idMatch=
-    url.match(/[?&]id=([^&]+)/);
-
-
-  if(
-    idMatch &&
-    url.includes("drive.google.com")
-  ){
-
-    return(
-      "https://drive.google.com/uc?export=view&id="
-      +
-      encodeURIComponent(idMatch[1])
-    );
-
-  }
-
-
-  return url;
-
-}
-
-
-function previewBannerFromDrive(){
-
-  const input=
-    document.getElementById("adminBannerUrl");
-
-  const originalUrl=
-    input.value.trim();
-
-
-  if(!originalUrl){
-
-    showToast("กรุณาวางลิงก์ GIF ก่อน");
-
-    return;
-
-  }
-
-
-  const imageUrl=
-    convertGoogleDriveUrl(originalUrl);
-
-
-  const preview=
-    document.getElementById("bannerPreview");
-
-  const image=
-    document.getElementById("bannerPreviewImage");
-
-
-  image.onerror=function(){
-
-    preview.style.display="none";
-
-    showToast(
-      "โหลด GIF ไม่ได้ ตรวจสอบสิทธิ์ไฟล์ใน Google Drive"
-    );
-
-  };
-
-
-  image.onload=function(){
-
-    preview.style.display="block";
-
-  };
-
-
-  image.src=imageUrl;
-
-}
-
-
-/* =========================================================
-   SAVE GENERAL
-========================================================= */
-
-function saveGeneral(){
-
-  data.shopName=
-    document.getElementById("adminShopName")
-      .value.trim()
-    ||
-    DEFAULT_DATA.shopName;
-
-
-  data.shopDescription=
-    document.getElementById("adminShopDescription")
-      .value.trim();
-
-
-  const bannerUrl=
-    document.getElementById("adminBannerUrl")
-      .value.trim();
-
-
-  if(bannerUrl){
-
-    data.banner=
-      convertGoogleDriveUrl(bannerUrl);
-
-  }
-
-
-  if(saveData()){
-
-    renderShop();
-
-    showSavedPopup();
-
-  }
-
-}
-
-
-/* =========================================================
-   SAVE MINUS
-========================================================= */
-
-function saveMinusSettings(){
-
-  data.minusTitle=
-    document.getElementById("adminMinusTitle")
-      .value.trim();
-
-
-  data.minusDescription=
-    document.getElementById("adminMinusDescription")
-      .value.trim();
-
-
-  data.minusButton=
-    document.getElementById("adminMinusButton")
-      .value.trim();
-
-
-  data.minusLink=
-    document.getElementById("adminMinusLink")
-      .value.trim();
-
-
-  if(saveData()){
-
-    renderShop();
-
-    showSavedPopup();
-
-  }
-
-}
-
-
-/* =========================================================
-   SAVE VOTES
-========================================================= */
-
-function saveVotes(){
-
-  data.plusVotes=
-    Math.max(
-      0,
-      Number(
-        document.getElementById("adminPlusVotes").value
-      ) || 0
-    );
-
-
-  data.minusVotes=
-    Math.max(
-      0,
-      Number(
-        document.getElementById("adminMinusVotes").value
-      ) || 0
-    );
-
-
-  if(saveData()){
-
-    renderShop();
-
-    showSavedPopup();
-
-  }
-
-}
-
-
-/* =========================================================
-   ADMIN REVIEWS
-========================================================= */
-
-function renderAdminReviews(){
-
-  const list=
-    document.getElementById("adminReviewsList");
-
-
-  if(!data.reviews.length){
-
-    list.innerHTML=`
-      <div class="empty-review">
-        ยังไม่มีรีวิว
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  list.innerHTML=data.reviews.map(
-    (review,index)=>`
-
-    <div class="admin-review">
-
-      <div class="admin-review-head">
-
-        <strong>
-          ${escapeHTML(review.name)}
-        </strong>
-
-        <div class="admin-review-stars">
-          ${makeStars(review.rating)}
-        </div>
-
-      </div>
-
-      <div class="admin-review-text">
-        ${escapeHTML(review.text)}
-      </div>
-
-      <div class="admin-review-actions">
-
-        <button
-          class="small-btn"
-          onclick="editReview(${index})"
-        >
-          แก้ไข
-        </button>
-
-        <button
-          class="small-btn danger-btn"
-          onclick="deleteReview(${index})"
-        >
-          ลบ
-        </button>
-
-      </div>
-
-    </div>
-
-  `).join("");
-
-}
-
-
-/* =========================================================
-   EDIT REVIEW
-========================================================= */
-
-function editReview(index){
-
-  const review=data.reviews[index];
-
-  if(!review) return;
-
-
-  const name=
-    prompt(
-      "แก้ชื่อรีวิว",
-      review.name
-    );
-
-
-  if(name===null) return;
-
-
-  const ratingInput=
-    prompt(
-      "แก้คะแนนดาว 1–5",
-      review.rating
-    );
-
-
-  if(ratingInput===null) return;
-
-
-  const rating=
-    Number(ratingInput);
-
-
-  if(
-    !Number.isInteger(rating) ||
-    rating<1 ||
-    rating>5
-  ){
-
-    showToast("คะแนนต้องเป็น 1–5 ดาว");
-
-    return;
-
-  }
-
-
-  const text=
-    prompt(
-      "แก้ข้อความรีวิว",
-      review.text
-    );
-
-
-  if(text===null) return;
-
-
-  if(!name.trim() || !text.trim()){
-
-    showToast("กรุณากรอกข้อมูลให้ครบ");
-
-    return;
-
-  }
-
-
-  data.reviews[index]={
-
-    ...review,
-
-    name:name.trim(),
-
-    rating:rating,
-
-    text:text.trim()
-
-  };
-
-
-  saveData();
-
-  renderRating();
-  renderReviews();
-  renderAdminReviews();
-
-  showSavedPopup();
-
-}
-
-
-/* =========================================================
-   DELETE REVIEW
-========================================================= */
-
-function deleteReview(index){
-
-  if(!confirm("ต้องการลบรีวิวนี้ใช่ไหม?")){
-
-    return;
-
-  }
-
-
-  data.reviews.splice(index,1);
-
-  saveData();
-
-  renderRating();
-  renderReviews();
-  renderAdminReviews();
-
-  showSavedPopup();
-
-}
-
-
-/* =========================================================
-   SAVE COLORS
-========================================================= */
-
-function getColor(id){
-
-  return document.getElementById(id).value;
-
-}
-
-
-function saveColors(){
-
-  data.colors.bg=getColor("colorBg");
-  data.colors.card=getColor("colorCard");
-  data.colors.text=getColor("colorText");
-  data.colors.main=getColor("colorMain");
-  data.colors.mainDark=getColor("colorMainDark");
-  data.colors.button=getColor("colorButton");
-  data.colors.buttonText=getColor("colorButtonText");
-  data.colors.plus=getColor("colorPlus");
-  data.colors.minus=getColor("colorMinus");
-  data.colors.border=getColor("colorBorder");
-  data.colors.star=getColor("colorStar");
-
-
-  applyColors();
-
-
-  if(saveData()){
-
-    renderShop();
-
-    showSavedPopup();
-
-  }
-
-}
-
-
-/* =========================================================
-   CHANGE PASSWORD
-========================================================= */
-
-function changeAdminPassword(){
-
-  const newPassword=
-    document.getElementById("newAdminPassword")
-      .value.trim();
-
-
-  if(newPassword.length<4){
-
-    showToast(
-      "รหัสใหม่ต้องมีอย่างน้อย 4 ตัว"
-    );
-
-    return;
-
-  }
-
-
-  data.adminPassword=newPassword;
-
-  saveData();
-
-  document.getElementById("newAdminPassword").value="";
-
-  showSavedPopup();
-
-}
-
-
-/* =========================================================
-   POPUPS
-========================================================= */
-
-let savedTimer=null;
-
-function showSavedPopup(){
-
-  const popup=
-    document.getElementById("savedPopup");
-
-  popup.classList.add("show");
-
-
-  clearTimeout(savedTimer);
-
-
-  savedTimer=setTimeout(()=>{
-
-    popup.classList.remove("show");
-
-  },1500);
-
-}
-
-
-let toastTimer=null;
-
-function showToast(message){
-
-  const toast=
-    document.getElementById("toast");
-
-  toast.textContent=message;
-
-  toast.classList.add("show");
-
-
-  clearTimeout(toastTimer);
-
-
-  toastTimer=setTimeout(()=>{
-
-    toast.classList.remove("show");
-
-  },2000);
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(value){
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-/* =========================================================
-   ESC KEY
-========================================================= */
-
-document.addEventListener(
-  "keydown",
-  function(event){
-
-    if(event.key==="Escape"){
-
-      document
-        .querySelectorAll(".modal.show")
-        .forEach(modal=>{
-
-          modal.classList.remove("show");
-
-        });
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-applyColors();
-renderShop();
-
-</script>
-
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'pink-blossom-store';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        
+        let app, db, auth;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+        } catch (e) {
+            console.error("Firebase init error:", e);
+        }
+
+        const state = {
+            user: null,
+            isAdmin: false,
+            currentView: 'home',
+            store: {
+                isOpen: true,
+                marqueeText: "ยินดีต้อนรับสู่ Pink Blossom 🌸 สมัครสมาชิกวันนี้รับแต้มสะสมทันที!"
+            },
+            queues: [],
+            cart: [],
+            pendingPayment: null,
+            userData: {
+                name: '',
+                lineId: '',
+                caption: 'ยินดีต้อนรับสู่ร้านค้าของเราค่ะ 🌸',
+                bannerUrl: '',
+                profileUrl: '',
+                outstandingBalance: 0,
+                points: 0,
+                history: [],
+                extraContacts: []
+            },
+            products: [
+                { id: 'p1', name: 'เซ็ตบำรุงผิวซากุระ', price: 1290, category: 'skincare', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Skincare' },
+                { id: 'p2', name: 'ลิปสติกสีพีช', price: 450, category: 'makeup', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Lipstick' },
+                { id: 'p3', name: 'น้ำหอมกลิ่นเชอร์รี่บลอสซั่ม', price: 2500, category: 'fragrance', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Perfume' },
+                { id: 'p4', name: 'พาเลทตาโทนหวาน', price: 890, category: 'makeup', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Palette' },
+                { id: 'p5', name: 'ครีมกันแดดเนื้อบางเบา', price: 690, category: 'skincare', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Sunscreen' },
+                { id: 'p6', name: 'บลัชออนเนื้อครีม', price: 350, category: 'makeup', image: 'https://placehold.co/300x300/fbcfe8/ec4899?text=Blush' }
+            ]
+        };
+
+        const getStoreRef = () => doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'main');
+        const getQueuesRef = () => collection(db, 'artifacts', appId, 'public', 'data', 'queues');
+        const getUserRef = (uid) => doc(db, 'artifacts', appId, 'users', uid, 'profile', 'main');
+
+        async function initApp() {
+            renderLoading();
+            try {
+                if (typeof __initial_auth_token !== 'undefined') {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        state.user = user;
+                        setupListeners();
+                    } else {
+                        state.user = null;
+                        renderView();
+                    }
+                });
+            } catch (error) {
+                console.error("Auth error:", error);
+                showToast("ไม่สามารถเชื่อมต่อระบบได้");
+                renderView();
+            }
+        }
+
+        function setupListeners() {
+            if (!state.user) return;
+
+            onSnapshot(getStoreRef(), (docSnapshot) => {
+                if (docSnapshot.exists()) {
+                    state.store = { ...state.store, ...docSnapshot.data() };
+                } else {
+                    setDoc(getStoreRef(), { isOpen: true, marqueeText: state.store.marqueeText });
+                }
+                if (['home', 'admin'].includes(state.currentView)) renderView();
+            }, (err) => console.error(err));
+
+            onSnapshot(query(getQueuesRef()), (snapshot) => {
+                state.queues = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                state.queues.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                if (['queue', 'admin'].includes(state.currentView)) renderView();
+            }, (err) => console.error(err));
+
+            if (!state.user.isAnonymous) {
+                onSnapshot(getUserRef(state.user.uid), (docSnapshot) => {
+                    if (docSnapshot.exists()) {
+                        state.userData = { ...state.userData, ...docSnapshot.data() };
+                    } else {
+                        setDoc(getUserRef(state.user.uid), state.userData);
+                    }
+                    if (['account', 'admin'].includes(state.currentView)) renderView();
+                }, (err) => console.error(err));
+            } else {
+                state.userData = { name: '', lineId: '', caption: '', outstandingBalance: 0, points: 0, history: [], extraContacts: [] };
+                if (state.currentView === 'account') renderView();
+            }
+        }
+
+        window.navigate = function(view) {
+            state.currentView = view;
+            updateNavUI();
+            renderView();
+        };
+
+        window.showToast = function(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 3000);
+        };
+
+        function updateNavUI() {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const icon = btn.querySelector('i');
+                const text = btn.querySelector('span');
+                if (btn.dataset.target === state.currentView) {
+                    icon.classList.remove('text-gray-400');
+                    icon.classList.add('text-theme-500');
+                    text.classList.remove('text-gray-500');
+                    text.classList.add('text-theme-600');
+                } else {
+                    icon.classList.add('text-gray-400');
+                    icon.classList.remove('text-theme-500');
+                    text.classList.add('text-gray-500');
+                    text.classList.remove('text-theme-600');
+                }
+            });
+        }
+
+        function renderLoading() {
+            document.getElementById('main-content').innerHTML = `
+                <div class="flex h-full items-center justify-center">
+                    <i class="fa-solid fa-circle-notch fa-spin text-4xl text-theme-300"></i>
+                </div>
+            `;
+        }
+
+        function renderView() {
+            const container = document.getElementById('main-content');
+            const adminBtn = document.getElementById('admin-menu-btn');
+            
+            if (['home', 'products', 'queue', 'account'].includes(state.currentView)) {
+                adminBtn.classList.remove('hidden');
+            } else {
+                adminBtn.classList.add('hidden');
+            }
+
+            container.innerHTML = '';
+            switch (state.currentView) {
+                case 'home': container.innerHTML = renderHomeView(); break;
+                case 'products': container.innerHTML = renderProductsView(); break;
+                case 'payment': container.innerHTML = renderPaymentView(); break;
+                case 'queue': container.innerHTML = renderQueueView(); break;
+                case 'account': container.innerHTML = renderAccountView(); break;
+                case 'admin-login': container.innerHTML = renderAdminLoginView(); break;
+                case 'admin': container.innerHTML = renderAdminView(); break;
+                default: container.innerHTML = renderHomeView();
+            }
+        }
+
+        function renderHomeView() {
+            const statusColor = state.store.isOpen ? 'bg-green-500' : 'bg-red-500';
+            const statusText = state.store.isOpen ? 'ร้านเปิดให้บริการ' : 'ร้านปิดชั่วคราว';
+
+            return `
+                <div class="pb-6">
+                    <!-- Banner & Profile matching image exactly -->
+                    <div class="px-4 pt-4">
+                        <div class="relative">
+                            <div class="h-44 w-full rounded-2xl border-2 border-purple-200 overflow-hidden shadow-sm bg-cover bg-center" style="background-image: url('https://placehold.co/600x250/fbcfe8/f9a8d4?text=Sakura+Blossom');"></div>
+                            
+                            <div class="absolute -bottom-8 left-6 w-20 h-20 rounded-full border-4 border-white bg-white shadow-md overflow-hidden z-10 flex items-center justify-center">
+                                <img src="https://placehold.co/200x200/fdf2f8/ec4899?text=Avatar" alt="Profile" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pt-10 flex flex-col items-start">
+                        <div class="flex items-center justify-between w-full">
+                            <h1 class="text-xl font-bold text-gray-800 tracking-wide">Pink Blossom Store</h1>
+                            <div class="flex items-center gap-1.5 bg-white px-3 py-1 rounded-full shadow-sm border border-gray-100">
+                                <span class="flex h-2.5 w-2.5 relative">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full ${statusColor} opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 ${statusColor}"></span>
+                                </span>
+                                <span class="text-xs font-semibold ${state.store.isOpen ? 'text-green-700' : 'text-red-600'}">${statusText}</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">ยินดีต้อนรับเข้าสู่ร้านค้าออนไลน์ บริการด้วยใจ 🌸</p>
+                    </div>
+
+                    <div class="bg-theme-100 py-2.5 px-4 my-4 text-theme-600 text-sm font-medium border-y border-theme-200">
+                        <div class="marquee-container">
+                            <div class="marquee-content">${state.store.marqueeText}</div>
+                        </div>
+                    </div>
+
+                    <div class="px-5 space-y-6">
+                        <section>
+                            <h2 class="text-lg font-bold text-gray-800 mb-3"><i class="fa-solid fa-calendar-check text-theme-400 mr-1.5"></i> จองคิวบริการ</h2>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="initiateQueuePayment('full')" class="bg-gradient-to-br from-theme-400 to-theme-600 text-white rounded-2xl py-5 shadow-md hover:shadow-lg transition-all active:scale-95 flex flex-col items-center gap-2" ${!state.store.isOpen ? 'disabled opacity-50' : ''}>
+                                    <i class="fa-solid fa-wallet text-2xl"></i>
+                                    <span class="font-medium text-sm">จอง & จ่ายเต็ม</span>
+                                </button>
+                                <button onclick="initiateQueuePayment('install')" class="bg-white text-theme-600 border border-theme-200 rounded-2xl py-5 shadow-sm hover:bg-theme-50 transition-all active:scale-95 flex flex-col items-center gap-2" ${!state.store.isOpen ? 'disabled opacity-50' : ''}>
+                                    <i class="fa-solid fa-file-invoice-dollar text-2xl"></i>
+                                    <span class="font-medium text-sm">ผ่อนจองคิว</span>
+                                </button>
+                            </div>
+                            ${!state.store.isOpen ? '<p class="text-xs text-red-500 text-center mt-2 font-medium">* ขออภัย ร้านปิดรับคิวชั่วคราว</p>' : ''}
+                        </section>
+
+                        <section>
+                            <div class="flex justify-between items-center mb-3">
+                                <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-star text-yellow-400 mr-1.5"></i> สินค้าแนะนำ</h2>
+                                <button onclick="navigate('products')" class="text-xs font-semibold text-theme-500 bg-theme-100 px-3 py-1 rounded-full">ดูทั้งหมด</button>
+                            </div>
+                            <div class="flex overflow-x-auto gap-4 pb-4 no-scrollbar">
+                                ${state.products.slice(0, 4).map(p => `
+                                    <div class="min-w-[140px] bg-white rounded-2xl shadow-sm border border-theme-100 overflow-hidden flex-shrink-0">
+                                        <div class="h-32 bg-gray-50 p-2">
+                                            <img src="${p.image}" class="w-full h-full object-cover rounded-xl">
+                                        </div>
+                                        <div class="p-3">
+                                            <h3 class="text-xs font-medium text-gray-700 truncate">${p.name}</h3>
+                                            <p class="text-theme-600 font-bold text-sm mt-1">฿${p.price}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProductsView() {
+            window.productFilter = window.productFilter || 'all';
+            const filtered = window.productFilter === 'all' 
+                ? state.products 
+                : state.products.filter(p => p.category === window.productFilter);
+            
+            const cartTotal = state.cart.reduce((sum, item) => sum + item.price, 0);
+
+            return `
+                <div class="h-full flex flex-col bg-white">
+                    <div class="p-5 border-b border-gray-100 sticky top-0 bg-white z-10 pb-3">
+                        <h1 class="text-2xl font-bold text-gray-800 mb-4">สินค้าทั้งหมด</h1>
+                        
+                        <div class="relative mb-4">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3 text-gray-400"></i>
+                            <input type="text" placeholder="ค้นหาสินค้า..." class="w-full bg-gray-50 border border-gray-200 rounded-2xl py-2.5 pl-11 pr-4 text-sm focus:outline-none focus:border-theme-400 transition">
+                        </div>
+
+                        <div class="flex gap-2 overflow-x-auto no-scrollbar">
+                            <button onclick="setProdFilter('all')" class="px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition ${window.productFilter === 'all' ? 'bg-theme-500 text-white' : 'bg-gray-100 text-gray-600'}">ทั้งหมด</button>
+                            <button onclick="setProdFilter('skincare')" class="px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition ${window.productFilter === 'skincare' ? 'bg-theme-500 text-white' : 'bg-gray-100 text-gray-600'}">สกินแคร์</button>
+                            <button onclick="setProdFilter('makeup')" class="px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition ${window.productFilter === 'makeup' ? 'bg-theme-500 text-white' : 'bg-gray-100 text-gray-600'}">เมคอัพ</button>
+                            <button onclick="setProdFilter('fragrance')" class="px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition ${window.productFilter === 'fragrance' ? 'bg-theme-500 text-white' : 'bg-gray-100 text-gray-600'}">น้ำหอม</button>
+                        </div>
+                    </div>
+
+                    <div class="p-5 grid grid-cols-2 gap-4 flex-1 overflow-y-auto no-scrollbar pb-[140px]">
+                        ${filtered.map(p => `
+                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col group">
+                                <div class="h-36 bg-theme-50 relative p-2">
+                                    <img src="${p.image}" class="w-full h-full object-cover rounded-xl transition transform group-hover:scale-105">
+                                </div>
+                                <div class="p-3 flex-1 flex flex-col justify-between">
+                                    <div>
+                                        <h3 class="text-xs font-medium text-gray-700 leading-tight mb-1">${p.name}</h3>
+                                        <p class="text-theme-600 font-bold text-sm">฿${p.price.toLocaleString()}</p>
+                                    </div>
+                                    <button onclick="addToCart('${p.id}')" class="mt-3 w-full bg-theme-50 hover:bg-theme-100 text-theme-600 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+                                        <i class="fa-solid fa-plus"></i> เพิ่มลงตะกร้า
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${state.cart.length > 0 ? `
+                        <div class="fixed bottom-[72px] left-4 right-4 max-w-[400px] mx-auto bg-gray-900 text-white rounded-2xl p-4 shadow-2xl flex justify-between items-center z-40 border border-gray-700">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-theme-500 w-10 h-10 rounded-full flex items-center justify-center relative shadow-inner">
+                                    <i class="fa-solid fa-basket-shopping"></i>
+                                    <span class="absolute -top-1 -right-1 bg-white text-theme-600 text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border border-gray-900">${state.cart.length}</span>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-medium">ยอดชำระรวม</p>
+                                    <p class="font-bold text-base leading-none">฿${cartTotal.toLocaleString()}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="initiateProductPayment('install', ${cartTotal})" class="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-xl text-[10px] font-bold transition">ผ่อนชำระ</button>
+                                <button onclick="initiateProductPayment('full', ${cartTotal})" class="px-3 py-2 bg-theme-500 hover:bg-theme-400 rounded-xl text-[10px] font-bold shadow-lg transition shadow-theme-500/50">จ่ายเต็ม</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        window.setProdFilter = (cat) => { window.productFilter = cat; renderView(); };
+        window.addToCart = (id) => { 
+            const p = state.products.find(x => x.id === id);
+            if(p) { state.cart.push(p); showToast(`เพิ่ม ${p.name} ลงตะกร้าแล้ว`); renderView(); }
+        };
+
+        window.initiateQueuePayment = (type) => {
+            state.pendingPayment = { type: type, amount: 500, context: 'queue', fullAmount: 1500 };
+            navigate('payment');
+        };
+        window.initiateProductPayment = (type, total) => {
+            const amountToPay = type === 'install' ? total * 0.4 : total;
+            state.pendingPayment = { type: type, amount: amountToPay, context: 'product', fullAmount: total };
+            navigate('payment');
+        };
+
+        function renderPaymentView() {
+            if (!state.pendingPayment) return `<div class="p-10 text-center"><p>ไม่มีรายการชำระเงิน</p><button onclick="navigate('home')" class="text-theme-500 mt-4 underline">กลับหน้าหลัก</button></div>`;
+            const { amount, type } = state.pendingPayment;
+            const subtitle = type === 'install' ? 'ยอดโอนเปิดบิล (ผ่อนชำระ)' : 'ยอดโอนชำระสุทธิ';
+
+            return `
+                <div class="bg-white min-h-screen relative pb-24">
+                    <div class="p-4 flex items-center border-b border-gray-100 bg-white sticky top-0 z-20">
+                        <button onclick="navigate(state.pendingPayment.context === 'queue' ? 'home' : 'products')" class="w-10 h-10 flex items-center justify-center text-gray-500 rounded-full hover:bg-gray-50">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <h1 class="flex-1 text-center font-bold text-gray-800 pr-10">ชำระเงิน</h1>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="flex justify-between items-end mb-6 border-b border-gray-100 pb-5">
+                            <span class="text-gray-500 font-medium text-sm">${subtitle}:</span>
+                            <span class="text-3xl font-bold text-theme-600">฿${amount.toLocaleString()}</span>
+                        </div>
+
+                        <h2 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">ช่องทางการชำระเงิน:</h2>
+                        <div class="space-y-3 mb-6">
+                            <div class="border border-gray-200 rounded-2xl p-4 flex justify-between items-center bg-gray-50">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-medium">K Bank</p>
+                                    <p class="font-bold text-gray-800 text-base">201-2-72112-1</p>
+                                    <p class="text-xs text-gray-500">Thipkamon D.</p>
+                                </div>
+                                <button onclick="navigator.clipboard.writeText('2012721121'); showToast('คัดลอกเลขบัญชีแล้ว')" class="text-xs font-medium text-theme-600 bg-theme-100 px-3 py-1.5 rounded-lg">คัดลอก</button>
+                            </div>
+                            <div class="border border-gray-200 rounded-2xl p-4 flex justify-between items-center bg-gray-50">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-medium">โน้ตสลิป</p>
+                                    <p class="font-bold text-gray-800 text-sm">ซื้อขายกับ @936cbpue</p>
+                                </div>
+                                <button onclick="navigator.clipboard.writeText('@936cbpue'); showToast('คัดลอกโน้ตแล้ว')" class="text-xs font-medium text-theme-600 bg-theme-100 px-3 py-1.5 rounded-lg">คัดลอก</button>
+                            </div>
+                            <div class="border border-gray-200 rounded-2xl p-4 flex justify-between items-center bg-gray-50">
+                                <div>
+                                    <p class="text-[10px] text-orange-500 font-medium">TrueMoney Wallet</p>
+                                    <p class="font-bold text-gray-800 text-sm">-</p>
+                                </div>
+                                <button onclick="showToast('พร้อมเพย์/วอเลท')" class="text-xs font-medium text-orange-600 bg-orange-100 px-3 py-1.5 rounded-lg">คัดลอก</button>
+                            </div>
+                        </div>
+
+                        <div class="text-center mb-6 bg-gray-50 py-5 rounded-2xl border border-gray-100">
+                            <p class="text-xs font-semibold text-gray-500 mb-3">หรือสแกน QR Code</p>
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=2012721121" class="w-32 h-32 mx-auto rounded-xl border-4 border-white shadow-sm">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">แนบสลิปโอนเงิน <span class="text-red-500">*</span></label>
+                            <label class="block w-full rounded-2xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer border border-gray-200 bg-gray-50 hover:bg-gray-100 transition">
+                                <span class="text-xs text-gray-500 slip-name">เลือกไฟล์ ไม่ได้เลือกไฟล์</span>
+                                <input type="file" class="hidden" accept="image/*" id="slipFileInput" onchange="handleSlipSelect(this)">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-4 bg-white/90 backdrop-blur-md border-t border-gray-100 z-30">
+                        <button id="sendSlipBtn" onclick="submitPayment()" class="w-full bg-gray-200 text-gray-400 font-bold py-4 rounded-2xl text-lg transition-all duration-300 flex justify-center items-center gap-2 pointer-events-none">
+                            กดส่งสลิป
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.handleSlipSelect = (input) => {
+            if(input.files && input.files[0]) {
+                document.querySelector('.slip-name').textContent = input.files[0].name;
+                const btn = document.getElementById('sendSlipBtn');
+                btn.classList.remove('bg-gray-200', 'text-gray-400', 'pointer-events-none');
+                btn.classList.add('bg-theme-500', 'text-white', 'shadow-lg', 'shadow-theme-500/30');
+            }
+        };
+
+        window.submitPayment = async () => {
+            renderLoading();
+            setTimeout(async () => {
+                const { type, context, amount, fullAmount } = state.pendingPayment;
+                
+                if (context === 'queue') {
+                    try {
+                        const newNum = state.queues.length > 0 ? Math.max(...state.queues.map(q => q.number)) + 1 : 1;
+                        await addDoc(getQueuesRef(), {
+                            name: (state.user && !state.user.isAnonymous) ? state.userData.name : 'ลูกค้าทั่วไป',
+                            number: newNum,
+                            service: 'บริการจองคิวออนไลน์',
+                            status: 'Waiting',
+                            timestamp: Date.now()
+                        });
+                    } catch(e) { console.error(e); }
+                }
+
+                if (type === 'install' && state.user && !state.user.isAnonymous) {
+                    const remaining = fullAmount - amount;
+                    try {
+                        await updateDoc(getUserRef(state.user.uid), {
+                            outstandingBalance: state.userData.outstandingBalance + remaining
+                        });
+                    } catch(e) { console.error(e); }
+                }
+
+                if (state.user && !state.user.isAnonymous) {
+                    const earned = Math.floor(amount / 500);
+                    if (earned > 0) {
+                        try {
+                            await updateDoc(getUserRef(state.user.uid), {
+                                points: state.userData.points + earned
+                            });
+                        } catch(e){}
+                    }
+                }
+
+                state.cart = [];
+                state.pendingPayment = null;
+                showToast("ส่งสลิปและยืนยันสำเร็จ!");
+                
+                if (type === 'install') navigate('account');
+                else if (context === 'queue') navigate('queue');
+                else navigate('home');
+            }, 1000);
+        };
+
+        function renderQueueView() {
+            window.queueTab = window.queueTab || 'ongoing';
+            const ongoing = state.queues.filter(q => q.status !== 'Finished');
+            const completed = state.queues.filter(q => q.status === 'Finished');
+            const displayList = window.queueTab === 'ongoing' ? ongoing : completed;
+
+            const getStatusHtml = (st) => {
+                const map = {
+                    'Waiting': { t: 'รับคิว', c: 'bg-yellow-100 text-yellow-700 border-yellow-200' },
+                    'Drafting': { t: 'รอบรีฟ', c: 'bg-purple-100 text-purple-700 border-purple-200' },
+                    'Doing': { t: 'กำลังทำ', c: 'bg-blue-100 text-blue-700 border-blue-200' },
+                    'Finished': { t: 'เสร็จสิ้น', c: 'bg-green-100 text-green-700 border-green-200' }
+                };
+                const s = map[st] || { t: st, c: 'bg-gray-100 text-gray-700' };
+                return `<span class="px-2.5 py-1 text-[10px] font-bold rounded-md border ${s.c}">${s.t}</span>`;
+            };
+
+            return `
+                <div class="h-full flex flex-col bg-gray-50">
+                    <div class="bg-white px-5 pt-6 pb-2 sticky top-0 z-10 border-b border-gray-100">
+                        <div class="h-32 rounded-2xl overflow-hidden mb-4 bg-cover bg-center border border-pink-200" style="background-image: url('https://placehold.co/600x200/fbcfe8/ec4899?text=Queue+Banner');"></div>
+                        
+                        <div class="flex items-center justify-between mb-3">
+                            <h1 class="text-xl font-bold text-gray-800">คิวทั้งหมดที่กำลังทำ: <span class="text-theme-600">${ongoing.length} คิว</span></h1>
+                        </div>
+                        
+                        <div class="flex">
+                            <button onclick="setQTab('ongoing')" class="flex-1 py-3 text-sm font-bold border-b-2 transition ${window.queueTab === 'ongoing' ? 'text-theme-500 border-theme-500' : 'text-gray-400 border-transparent'}">
+                                หน้าที่ 1 (กำลังทำ)
+                            </button>
+                            <button onclick="setQTab('completed')" class="flex-1 py-3 text-sm font-bold border-b-2 transition ${window.queueTab === 'completed' ? 'text-theme-500 border-theme-500' : 'text-gray-400 border-transparent'}">
+                                หน้าที่ 2 (เสร็จสิ้น)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 flex-1 overflow-y-auto no-scrollbar space-y-3">
+                        <div class="relative mb-2">
+                            <i class="fa-solid fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                            <input type="text" placeholder="ค้นหาคิว..." class="w-full bg-white border border-gray-200 rounded-xl py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-theme-300">
+                        </div>
+
+                        ${displayList.length === 0 ? `
+                            <div class="py-12 flex flex-col items-center justify-center text-gray-400">
+                                <i class="fa-regular fa-folder-open text-4xl mb-3 text-gray-300"></i>
+                                <p class="text-sm font-medium">ไม่มีรายการคิว</p>
+                            </div>
+                        ` : displayList.map(q => `
+                            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+                                <div class="w-12 h-12 bg-theme-50 rounded-full flex items-center justify-center border border-theme-100 flex-shrink-0 text-theme-600 font-bold text-lg">
+                                    ${q.number}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="font-bold text-gray-800 truncate">${q.name}</h3>
+                                    <p class="text-xs text-gray-500 truncate mt-0.5">บริการ: ${q.service}</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    ${getStatusHtml(q.status)}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        window.setQTab = (t) => { window.queueTab = t; renderView(); };
+
+        function renderAccountView() {
+            window.authMode = window.authMode || 'login';
+
+            if (!state.user || state.user.isAnonymous) {
+                if (window.authMode === 'login') {
+                    return `
+                        <div class="p-6 min-h-full flex flex-col justify-center bg-white">
+                            <div class="text-center mb-8">
+                                <div class="w-16 h-16 bg-theme-100 text-theme-500 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl shadow-sm rotate-3">
+                                    <i class="fa-solid fa-user-lock"></i>
+                                </div>
+                                <h1 class="text-2xl font-bold text-gray-800">เข้าสู่ระบบ</h1>
+                                <p class="text-sm text-gray-500 mt-1">กรุณาเข้าสู่ระบบเพื่อใช้งานแอคเคาท์สมาชิก</p>
+                            </div>
+                            
+                            <div class="space-y-4 mb-6">
+                                <div>
+                                    <label class="text-[11px] font-bold text-gray-500 uppercase tracking-wider block mb-1">อีเมล</label>
+                                    <input type="email" id="lEmail" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-theme-400" placeholder="อีเมลของคุณ">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-gray-500 uppercase tracking-wider block mb-1">รหัสผ่าน</label>
+                                    <input type="password" id="lPass" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-theme-400" placeholder="••••••••">
+                                </div>
+                            </div>
+                            
+                            <button onclick="doLogin()" class="w-full bg-theme-500 hover:bg-theme-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-theme-500/35 transition active:scale-95">เข้าสู่ระบบ</button>
+                            
+                            <div class="mt-8 text-center text-sm text-gray-500">
+                                ยังไม่มีบัญชี? <button onclick="setAuthMode('register')" class="text-theme-500 font-bold hover:underline">สมัครสมาชิก</button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="p-6 min-h-full flex flex-col pt-10 bg-white overflow-y-auto no-scrollbar">
+                            <div class="text-center mb-6">
+                                <h1 class="text-2xl font-bold text-gray-800">สมัครสมาชิก</h1>
+                                <p class="text-sm text-gray-500 mt-1">กรอกข้อมูลเพื่อสร้างบัญชีใหม่</p>
+                            </div>
+                            
+                            <div class="space-y-4 mb-8">
+                                <div>
+                                    <label class="text-[11px] font-bold text-gray-500 block mb-1">ชื่อ <span class="text-red-500">*</span></label>
+                                    <input type="text" id="rName" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-theme-400" placeholder="ชื่อของคุณ">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-gray-500 block mb-1">Line ID <span class="text-red-500">*</span></label>
+                                    <input type="text" id="rLine" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-theme-400" placeholder="บังคับใส่ไลน์">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-gray-500 block mb-1">อีเมล <span class="text-red-500">*</span></label>
+                                    <input type="email" id="rEmail" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-theme-400" placeholder="อีเมล">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-gray-500 block mb-1">รหัสล็อคอินแอคเคาท์ <span class="text-red-500">*</span></label>
+                                    <input type="password" id="rPass" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-theme-400" placeholder="รหัสผ่าน">
+                                </div>
+                            </div>
+                            
+                            <button onclick="doRegister()" class="w-full bg-gray-900 text-white font-bold py-3.5 rounded-xl shadow-lg transition active:scale-95 mb-6">สมัครสมาชิก</button>
+                            
+                            <div class="text-center text-sm text-gray-500 pb-10">
+                                มีบัญชีอยู่แล้ว? <button onclick="setAuthMode('login')" class="text-theme-500 font-bold hover:underline">เข้าสู่ระบบ</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            return `
+                <div class="bg-gray-50 min-h-full pb-10">
+                    <div class="relative h-44 bg-theme-200 overflow-hidden" style="background-image: url('${state.userData.bannerUrl || 'https://placehold.co/600x250/fbcfe8/f9a8d4?text=Banner'}'); background-size: cover; background-position: center;">
+                        <button onclick="doLogout()" class="absolute top-4 right-4 bg-black/30 backdrop-blur rounded-lg px-3 py-1.5 text-white flex items-center gap-1.5 text-[10px] font-bold transition z-10">
+                            <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
+                        </button>
+                    </div>
+
+                    <div class="px-5 relative mb-6">
+                        <div class="absolute -top-12 left-5 w-24 h-24 bg-white rounded-full p-1 shadow-lg z-10 border-2 border-theme-100">
+                            <img src="${state.userData.profileUrl || 'https://placehold.co/200x200/fdf2f8/ec4899?text=Profile'}" class="w-full h-full rounded-full object-cover">
+                        </div>
+                        
+                        <div class="pt-14 pb-2">
+                            <div class="flex items-center justify-between">
+                                <h1 class="text-xl font-bold text-gray-800">${state.userData.name || 'Member'}</h1>
+                                <button onclick="openEditProfileModal()" class="text-xs bg-theme-100 text-theme-600 px-3 py-1 rounded-full font-semibold">แก้ไขโปรไฟล์</button>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-0.5">${state.userData.caption || 'ยินดีต้อนรับสู่ร้านค้าของเราค่ะ 🌸'}</p>
+                        </div>
+                    </div>
+
+                    <div class="px-5 space-y-4">
+                        <!-- Balance Card -->
+                        <div class="bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-between shadow-sm">
+                            <div>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">ยอดค้างผ่อน</p>
+                                <p class="font-bold text-xl ${state.userData.outstandingBalance > 0 ? 'text-red-500' : 'text-gray-700'}">
+                                    ${state.userData.outstandingBalance > 0 ? `฿${state.userData.outstandingBalance.toLocaleString()}` : 'ไม่มี'}
+                                </p>
+                            </div>
+                            ${state.userData.outstandingBalance > 0 ? `<button onclick="navigate('payment')" class="bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold">จ่ายยอดค้าง</button>` : ''}
+                        </div>
+
+                        <!-- Points Card -->
+                        <div class="bg-gradient-to-br from-theme-400 to-theme-600 rounded-2xl p-5 flex items-center justify-between shadow-lg text-white">
+                            <div>
+                                <p class="text-[10px] font-medium text-theme-100 mb-1">แต้มสะสม</p>
+                                <p class="text-3xl font-bold">${state.userData.points} <span class="text-sm font-medium opacity-80">แต้ม</span></p>
+                            </div>
+                            <div class="bg-white/20 p-3 rounded-2xl backdrop-blur-sm">
+                                <i class="fa-solid fa-gift text-2xl"></i>
+                            </div>
+                        </div>
+
+                        <!-- Contacts Section -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-xs font-bold text-gray-800 mb-3 uppercase">ช่องทางการติดต่อ</h3>
+                            <div class="space-y-2 text-sm text-gray-600">
+                                <div class="flex items-center gap-2 bg-gray-50 p-2.5 rounded-xl">
+                                    <i class="fa-brands fa-line text-green-500 text-lg"></i>
+                                    <span class="font-medium">Line ID:</span> <span>${state.userData.lineId || '-'}</span>
+                                </div>
+                                ${state.userData.extraContacts?.map(c => `
+                                    <div class="flex items-center justify-between bg-gray-50 p-2.5 rounded-xl">
+                                        <div><span class="font-medium text-xs text-gray-500">${c.title}:</span> <span class="text-sm">${c.value}</span></div>
+                                    </div>
+                                `).join('') || ''}
+                            </div>
+                            <button onclick="openAddContactModal()" class="mt-3 w-full border border-dashed border-theme-300 text-theme-600 py-2 rounded-xl text-xs font-bold hover:bg-theme-50 transition">+ เพิ่มช่องทางติดต่ออื่นๆ</button>
+                        </div>
+
+                        <!-- Purchase History -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                            <h3 class="text-xs font-bold text-gray-800 mb-3 uppercase">ประวัติการซื้อ</h3>
+                            <div class="text-center py-6 text-gray-400 text-xs">
+                                <i class="fa-regular fa-clock text-2xl mb-1 text-gray-300"></i>
+                                <p>ยังไม่มีประวัติการซื้อ</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Profile Modal / Form Container -->
+                    <div id="profileModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+                        <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4 shadow-2xl">
+                            <h3 class="font-bold text-gray-800 text-lg">แก้ไขโปรไฟล์และแบนเนอร์</h3>
+                            <div>
+                                <label class="text-xs text-gray-500">ชื่อ</label>
+                                <input type="text" id="editName" value="${state.userData.name}" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 text-sm">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-500">แคปชั่น</label>
+                                <input type="text" id="editCaption" value="${state.userData.caption || ''}" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 text-sm">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-500">ลิงก์รูปแบนเนอร์ (URL)</label>
+                                <input type="text" id="editBanner" value="${state.userData.bannerUrl || ''}" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 text-sm" placeholder="https://...">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-500">ลิงก์รูปโปรไฟล์ (URL)</label>
+                                <input type="text" id="editProfile" value="${state.userData.profileUrl || ''}" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 text-sm" placeholder="https://...">
+                            </div>
+                            <div class="flex gap-2 pt-2">
+                                <button onclick="closeEditProfileModal()" class="flex-1 bg-gray-100 py-2.5 rounded-xl text-xs font-bold text-gray-600">ยกเลิก</button>
+                                <button onclick="saveProfile()" class="flex-1 bg-theme-500 text-white py-2.5 rounded-xl text-xs font-bold">บันทึก</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Contact Modal -->
+                    <div id="contactModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+                        <div class="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4 shadow-2xl">
+                            <h3 class="font-bold text-gray-800 text-lg">เพิ่มช่องทางติดต่อ</h3>
+                            <div>
+                                <label class="text-xs text-gray-500">ชื่อหัวข้อ (เช่น IG, Facebook, เบอร์โทร)</label>
+                                <input type="text" id="contactTitle" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 text-sm">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-500">ข้อมูลติดต่อ</label>
+                                <input type="text" id="contactValue" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-2.5 text-sm">
+                            </div>
+                            <div class="flex gap-2 pt-2">
+                                <button onclick="closeAddContactModal()" class="flex-1 bg-gray-100 py-2.5 rounded-xl text-xs font-bold text-gray-600">ยกเลิก</button>
+                                <button onclick="saveNewContact()" class="flex-1 bg-theme-500 text-white py-2.5 rounded-xl text-xs font-bold">เพิ่ม</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.setAuthMode = (m) => { window.authMode = m; renderView(); };
+        
+        window.doLogin = async () => {
+            const e = document.getElementById('lEmail').value;
+            const p = document.getElementById('lPass').value;
+            if(!e||!p) return showToast('กรุณากรอกให้ครบ');
+            renderLoading();
+            try {
+                await signInWithEmailAndPassword(auth, e, p);
+                showToast('เข้าสู่ระบบสำเร็จ');
+            } catch(err) {
+                showToast('อีเมลหรือรหัสผ่านผิด');
+                renderView();
+            }
+        };
+
+        window.doRegister = async () => {
+            const n = document.getElementById('rName').value;
+            const l = document.getElementById('rLine').value;
+            const e = document.getElementById('rEmail').value;
+            const p = document.getElementById('rPass').value;
+            if(!n||!l||!e||!p) return showToast('กรุณากรอกข้อมูลให้ครบ');
+            
+            renderLoading();
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, e, p);
+                await setDoc(getUserRef(cred.user.uid), {
+                    name: n, lineId: l, caption: '', bannerUrl: '', profileUrl: '', outstandingBalance: 0, points: 0, history: [], extraContacts: []
+                });
+                showToast('สมัครสมาชิกสำเร็จ!');
+            } catch(err) {
+                showToast('เกิดข้อผิดพลาด: ' + err.message);
+                renderView();
+            }
+        };
+
+        window.doLogout = async () => {
+            await signOut(auth);
+            await signInAnonymously(auth);
+            showToast('ออกจากระบบแล้ว');
+        };
+
+        window.openEditProfileModal = () => { document.getElementById('profileModal').classList.remove('hidden'); };
+        window.closeEditProfileModal = () => { document.getElementById('profileModal').classList.add('hidden'); };
+        window.saveProfile = async () => {
+            if(!state.user || state.user.isAnonymous) return;
+            const name = document.getElementById('editName').value;
+            const caption = document.getElementById('editCaption').value;
+            const bannerUrl = document.getElementById('editBanner').value;
+            const profileUrl = document.getElementById('editProfile').value;
+            try {
+                await updateDoc(getUserRef(state.user.uid), { name, caption, bannerUrl, profileUrl });
+                closeEditProfileModal();
+                showToast('บันทึกโปรไฟล์สำเร็จ');
+            } catch(e) { showToast('เกิดข้อผิดพลาด'); }
+        };
+
+        window.openAddContactModal = () => { document.getElementById('contactModal').classList.remove('hidden'); };
+        window.closeAddContactModal = () => { document.getElementById('contactModal').classList.add('hidden'); };
+        window.saveNewContact = async () => {
+            if(!state.user || state.user.isAnonymous) return;
+            const title = document.getElementById('contactTitle').value;
+            const value = document.getElementById('contactValue').value;
+            if(!title || !value) return showToast('กรุณากรอกให้ครบ');
+            const contacts = state.userData.extraContacts || [];
+            contacts.push({ title, value });
+            try {
+                await updateDoc(getUserRef(state.user.uid), { extraContacts: contacts });
+                closeAddContactModal();
+                showToast('เพิ่มช่องทางติดต่อสำเร็จ');
+            } catch(e) { showToast('เกิดข้อผิดพลาด'); }
+        };
+
+        function renderAdminLoginView() {
+            return `
+                <div class="h-full flex flex-col items-center justify-center bg-gray-900 text-white p-6 relative">
+                    <button onclick="navigate('home')" class="absolute top-4 left-4 w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    
+                    <div class="w-16 h-16 bg-gray-800 border border-gray-700 rounded-2xl flex items-center justify-center text-3xl text-theme-500 mb-6 shadow-xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold mb-2">Admin Login</h1>
+                    <p class="text-gray-400 text-xs mb-8">กรอกรหัสผ่านเพื่อเข้าสู่ระบบแอดมิน</p>
+                    
+                    <input type="password" id="adminPwd" placeholder="รหัสผ่าน" class="w-full max-w-[280px] bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-center text-white focus:outline-none focus:border-theme-500 mb-4 tracking-widest">
+                    
+                    <button onclick="checkAdmin()" class="w-full max-w-[280px] bg-theme-600 hover:bg-theme-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-theme-600/20 active:scale-95">เข้าสู่ระบบ</button>
+                </div>
+            `;
+        }
+
+        window.checkAdmin = () => {
+            const p = document.getElementById('adminPwd').value;
+            if(p === 'admin1234') {
+                state.isAdmin = true;
+                showToast('เข้าสู่โหมดแอดมิน');
+                navigate('admin');
+            } else {
+                showToast('รหัสผ่านไม่ถูกต้อง');
+            }
+        };
+
+        function renderAdminView() {
+            if(!state.isAdmin) return renderAdminLoginView();
+
+            return `
+                <div class="min-h-full bg-gray-900 text-white p-4 pb-24">
+                    <div class="flex justify-between items-center mb-6 sticky top-0 bg-gray-900/90 py-2 backdrop-blur z-10 border-b border-gray-800">
+                        <h1 class="text-lg font-bold text-theme-400"><i class="fa-solid fa-toolbox mr-2"></i>Admin Dashboard</h1>
+                        <button onclick="state.isAdmin=false; navigate('home')" class="bg-gray-800 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white">ออกจากระบบ</button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 rounded-2xl p-4 border border-gray-700">
+                            <h2 class="text-sm font-bold text-gray-300 mb-3 border-b border-gray-700 pb-2">ตั้งค่าร้านค้า</h2>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-sm">สถานะเปิด-ปิดร้าน</span>
+                                <button onclick="toggleStore()" class="w-12 h-6 rounded-full relative transition-colors ${state.store.isOpen ? 'bg-green-500' : 'bg-gray-600'}">
+                                    <div class="w-4 h-4 bg-white rounded-full absolute top-1 transition-transform ${state.store.isOpen ? 'right-1' : 'left-1'}"></div>
+                                </button>
+                            </div>
+                            <label class="text-[10px] text-gray-400 mb-1 block">ข้อความวิ่ง (Marquee)</label>
+                            <textarea id="adminMarquee" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-sm text-gray-200 focus:border-theme-500 outline-none" rows="2">${state.store.marqueeText}</textarea>
+                            <button onclick="saveStoreSettings()" class="w-full bg-gray-700 hover:bg-gray-600 mt-2 py-2 rounded-lg text-xs font-bold transition">บันทึกข้อความ</button>
+                        </div>
+
+                        <div class="bg-gray-800 rounded-2xl p-4 border border-gray-700">
+                            <h2 class="text-sm font-bold text-gray-300 mb-3 border-b border-gray-700 pb-2 flex justify-between">
+                                <span>จัดการคิวทั้งหมด</span>
+                                <button onclick="addNewQueueAdmin()" class="text-xs bg-theme-600 px-2 py-1 rounded">+ เพิ่มคิว</button>
+                            </h2>
+                            <div class="space-y-2 max-h-60 overflow-y-auto no-scrollbar">
+                                ${state.queues.length === 0 ? '<p class="text-xs text-gray-500 text-center py-4">ไม่มีคิว</p>' : ''}
+                                ${state.queues.map(q => `
+                                    <div class="bg-gray-900 border border-gray-700 p-3 rounded-xl flex flex-col gap-2">
+                                        <div class="flex justify-between items-center">
+                                            <div class="font-bold text-theme-400 text-sm">#${q.number} <span class="text-gray-300 text-xs font-normal ml-1">${q.name}</span></div>
+                                            <select onchange="updateQStatus('${q.id}', this.value)" class="bg-gray-800 text-white text-xs border border-gray-600 rounded-lg p-1 outline-none">
+                                                <option value="Waiting" ${q.status==='Waiting'?'selected':''}>รับคิว</option>
+                                                <option value="Drafting" ${q.status==='Drafting'?'selected':''}>รอบรีฟ</option>
+                                                <option value="Doing" ${q.status==='Doing'?'selected':''}>กำลังทำ</option>
+                                                <option value="Finished" ${q.status==='Finished'?'selected':''}>เสร็จสิ้น</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-800 rounded-2xl p-4 border border-gray-700">
+                            <h2 class="text-sm font-bold text-gray-300 mb-3 border-b border-gray-700 pb-2">จัดการยอดค้างผ่อน (ลูกค้าปัจจุบัน)</h2>
+                            ${(!state.user || state.user.isAnonymous) ? `
+                                <p class="text-xs text-yellow-500 bg-yellow-500/10 p-2 rounded">กรุณาเข้าสู่ระบบในแท็บบัญชีก่อน เพื่อจำลองการแก้ไขยอด</p>
+                            ` : `
+                                <div class="flex gap-2 items-center">
+                                    <input type="number" id="adminBal" value="${state.userData.outstandingBalance}" class="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white outline-none">
+                                    <button onclick="updateBal()" class="bg-theme-600 px-4 py-2 rounded-lg text-xs font-bold text-white">แก้ไขยอด</button>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.toggleStore = async () => {
+            try { await updateDoc(getStoreRef(), { isOpen: !state.store.isOpen }); } catch(e){}
+        };
+        window.saveStoreSettings = async () => {
+            const m = document.getElementById('adminMarquee').value;
+            try {
+                await updateDoc(getStoreRef(), { marqueeText: m });
+                showToast('บันทึกสำเร็จ');
+            } catch(e){}
+        };
+        window.updateQStatus = async (id, st) => {
+            try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'queues', id), { status: st }); } catch(e){}
+        };
+        window.addNewQueueAdmin = async () => {
+            const name = prompt("ชื่อลูกค้าสำหรับคิวใหม่:");
+            if(!name) return;
+            const newNum = state.queues.length > 0 ? Math.max(...state.queues.map(q => q.number)) + 1 : 1;
+            try {
+                await addDoc(getQueuesRef(), { name, number: newNum, service: 'บริการพิเศษ', status: 'Waiting', timestamp: Date.now() });
+                showToast('เพิ่มคิวสำเร็จ');
+            } catch(e){}
+        };
+        window.updateBal = async () => {
+            if(!state.user || state.user.isAnonymous) return;
+            const b = parseInt(document.getElementById('adminBal').value) || 0;
+            try {
+                await updateDoc(getUserRef(state.user.uid), { outstandingBalance: b });
+                showToast('อัพเดทยอดค้างผ่อนสำเร็จ');
+            } catch(e){}
+        };
+
+        updateNavUI();
+        initApp();
+    </script>
 </body>
 </html>
