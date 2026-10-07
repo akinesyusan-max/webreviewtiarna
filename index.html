@@ -93,16 +93,25 @@
                 </div>
             </section>
 
-            <!-- TAB 2: PRODUCTS (Updated as requested matching Image 38) -->
+            <!-- TAB 2: PRODUCTS (Updated with Cat Paw Filter & Square Image Grid) -->
             <section id="view-products" class="view-section hidden space-y-4">
                 <h2 class="font-bold text-lg text-gray-800"><i class="fa-solid fa-bag-shopping text-pink-500 mr-2"></i>สินค้าทั้งหมด</h2>
-                <div class="space-y-2">
-                    <div class="relative flex items-center bg-white border border-pink-200 rounded-full shadow-2xs px-3.5 py-2.5">
+                
+                <!-- Search Bar & Cat Paw Filter Button Side-by-Side -->
+                <div class="flex items-center space-x-2">
+                    <div class="relative flex items-center bg-white border border-pink-200 rounded-full shadow-2xs px-3.5 py-2.5 flex-1">
                         <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm mr-2.5"></i>
                         <input type="text" id="product-search-input" oninput="filterProducts()" placeholder="ค้นหาสินค้า..." class="w-full text-sm focus:outline-none bg-transparent">
                     </div>
+                    <button onclick="openCatFilterModal()" class="w-11 h-11 bg-white border border-pink-200 rounded-full shadow-2xs flex items-center justify-center text-pink-500 hover:bg-pink-50 transition shrink-0" title="ตัวกรองอุ้มเท้าแมว">
+                        <i class="fa-solid fa-paw text-base"></i>
+                    </button>
                 </div>
+
+                <!-- Categories Scroll Bar (Matching Image 43 style) -->
                 <div id="categories-tabs-container" class="flex space-x-2 overflow-x-auto pb-1 scrollbar-none"></div>
+                
+                <!-- Products Grid (Square Aspect Ratio) -->
                 <div id="products-grid" class="grid grid-cols-2 gap-3"></div>
             </section>
 
@@ -226,14 +235,39 @@
         </div>
     </div>
 
-    <!-- ==================== PRODUCT DETAIL MODAL (Matching Image 39) ==================== -->
+    <!-- ==================== CAT PAW FILTER MODAL ==================== -->
+    <div id="cat-filter-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-5 relative shadow-2xl border border-pink-100 space-y-4 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-gray-800 text-sm flex items-center gap-1.5"><i class="fa-solid fa-paw text-pink-500"></i> ตัวกรองสินค้า</h3>
+                <button onclick="closeCatFilterModal()" class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="space-y-2">
+                <p class="font-bold text-gray-700">ประเภทสินค้า</p>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="setFilterType('โปรโมชั่น')" id="type-btn-โปรโมชั่น" class="py-2 bg-pink-50 text-pink-600 rounded-xl font-bold border border-pink-200">โปรโมชั่น</button>
+                    <button onclick="setFilterType('สิทธิ์ขาด')" id="type-btn-สิทธิ์ขาด" class="py-2 bg-gray-50 text-gray-600 rounded-xl font-medium border">สิทธิ์ขาด</button>
+                    <button onclick="setFilterType('เฉพาะ')" id="type-btn-เฉพาะ" class="py-2 bg-gray-50 text-gray-600 rounded-xl font-medium border">เฉพาะ</button>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <div class="flex justify-between">
+                    <p class="font-bold text-gray-700">ช่วงราคา (฿)</p>
+                    <span id="price-range-val" class="font-bold text-pink-600">10,000 ฿</span>
+                </div>
+                <input type="range" id="price-range-input" min="0" max="10000" value="10000" oninput="document.getElementById('price-range-val').innerText = Number(this.value).toLocaleString() + ' ฿'" class="w-full accent-pink-500">
+            </div>
+            <button onclick="applyCatFilter()" class="w-full py-2.5 bg-pink-500 text-white rounded-xl font-bold shadow-sm">ยืนยันตัวกรอง</button>
+        </div>
+    </div>
+
+    <!-- ==================== PRODUCT DETAIL MODAL (Matching Image 41) ==================== -->
     <div id="product-detail-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-xs w-full p-5 relative shadow-2xl border border-pink-100 space-y-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeProductModal()" class="absolute right-4 top-4 w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 z-10">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             
-            <!-- Product Image Box with Translucent Important Message Tag -->
             <div class="relative h-48 w-full rounded-2xl bg-pink-50 overflow-hidden shadow-inner">
                 <div class="absolute top-3 left-3 px-3 py-1 bg-white/70 backdrop-blur-md rounded-full text-[10px] font-bold text-gray-700 shadow-xs border border-white/40">
                     ข้อความสำคัญ
@@ -241,8 +275,11 @@
                 <img id="modal-product-img" src="" alt="" class="w-full h-full object-cover">
             </div>
 
-            <div class="bg-gray-800 text-white py-1.5 px-3 rounded-full text-center text-xs font-medium shadow-2xs">
-                ข้อความวิ่งๆ เป็นหมวดหมู่
+            <!-- Scrollable Categories Swiper for Title -->
+            <div class="flex space-x-2 overflow-x-auto pb-1 scrollbar-none text-center">
+                <div class="px-4 py-1.5 bg-gray-800 text-white rounded-full text-xs font-medium shrink-0">หมวดหมู่สกินแคร์</div>
+                <div class="px-4 py-1.5 bg-gray-100 text-gray-600 rounded-full text-xs font-medium shrink-0">หมวดหมู่เมคอัพ</div>
+                <div class="px-4 py-1.5 bg-gray-100 text-gray-600 rounded-full text-xs font-medium shrink-0">หมวดหมู่น้ำหอม</div>
             </div>
 
             <div class="flex justify-between items-center px-1">
@@ -257,12 +294,12 @@
                 <p id="modal-product-desc" class="text-xs text-gray-600">รายละเอียดต่างๆ...</p>
             </div>
 
-            <!-- Buttons: Ex (Open Link) & Add to Cart -->
-            <div class="grid grid-cols-2 gap-2 pt-2">
-                <a id="modal-ex-link" href="#" target="_blank" class="py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-2xl text-xs font-bold text-center shadow-md transition">
+            <!-- Buttons: Ex is shorter than Add to Cart as requested -->
+            <div class="grid grid-cols-3 gap-2 pt-2">
+                <a id="modal-ex-link" href="#" target="_blank" class="col-span-1 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-2xl text-xs font-bold text-center shadow-md transition flex items-center justify-center">
                     Ex
                 </a>
-                <button onclick="confirmAddToCart()" class="py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-2xl text-xs font-bold text-center shadow-md transition">
+                <button onclick="confirmAddToCart()" class="col-span-2 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-2xl text-xs font-bold text-center shadow-md transition">
                     Add to Cart
                 </button>
             </div>
@@ -314,14 +351,6 @@
                     <label class="font-bold text-gray-700">ข้อความวิ่งประกาศ</label>
                     <input type="text" id="admin-marquee-input" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl">
                 </div>
-                <div class="border-t pt-3 space-y-3">
-                    <h4 class="font-bold text-pink-600">ลิ้งค์โซเชียลมีเดีย (ปุ่มรูปแมว)</h4>
-                    <div><label class="text-gray-500">Line Official Link</label><input type="text" id="adm-link-line" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://line.me"></div>
-                    <div><label class="text-gray-500">Instagram Link</label><input type="text" id="adm-link-ig" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://instagram.com"></div>
-                    <div><label class="text-gray-500">Facebook Link</label><input type="text" id="adm-link-fb" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://facebook.com"></div>
-                    <div><label class="text-gray-500">Discord Link</label><input type="text" id="adm-link-disc" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://discord.com"></div>
-                    <div><label class="text-gray-500">X (Twitter) Link</label><input type="text" id="adm-link-x" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://twitter.com"></div>
-                </div>
                 <button onclick="saveShopThemeSettings()" class="w-full py-3 bg-pink-500 text-white rounded-xl font-bold text-sm">บันทึกการตั้งค่า</button>
             </div>
 
@@ -335,7 +364,7 @@
                         <input type="number" id="new-prod-price" placeholder="ราคาขาย (฿)" class="w-full px-3 py-2 bg-white border rounded-xl">
                         <input type="number" id="new-prod-cost" placeholder="ต้นทุน (฿)" class="w-full px-3 py-2 bg-white border rounded-xl">
                     </div>
-                    <input type="text" id="new-prod-img" placeholder="ลิงก์รูปภาพ https://..." class="w-full px-3 py-2 bg-white border rounded-xl">
+                    <input type="text" id="new-prod-img" placeholder="ลิงก์รูปภาพสี่เหลี่ยมจัตุรัส https://..." class="w-full px-3 py-2 bg-white border rounded-xl">
                     <input type="text" id="new-prod-ex" placeholder="ลิงก์ตัวอย่างงาน (Ex Link) https://..." class="w-full px-3 py-2 bg-white border rounded-xl">
                     <button onclick="addNewProduct()" class="w-full py-2.5 bg-pink-500 text-white rounded-xl font-bold">อัปโหลดสินค้าเข้าคลัง</button>
                 </div>
@@ -414,6 +443,7 @@
         let currentQueueSub = 1;
         let currentUser = null;
         let currentSelectedProduct = null;
+        let selectedFilterType = 'โปรโมชั่น';
 
         let appMembers = [
             { id: 1, name: "คุณมายด์", email: "mind@email.com", line: "@mind_line", points: 150, debt: 500 }
@@ -426,21 +456,15 @@
         let appState = {
             shopName: "Sakura Boutique",
             announcement: "🎉 โปรโมชั่นพิเศษต้อนรับเดือนนี้! ซื้อครบ 500 บาทสะสมแต้มฟรี!",
-            links: {
-                line: "https://line.me",
-                ig: "https://instagram.com",
-                fb: "https://facebook.com",
-                disc: "https://discord.com",
-                x: "https://twitter.com"
-            },
+            links: { line: "https://line.me", ig: "https://instagram.com", fb: "https://facebook.com", disc: "https://discord.com", x: "https://twitter.com" },
             products: [
-                { id: 1, name: "ชุดเดรสคุณหนูสไตล์เกาหลี", price: 500, cost: 200, category: "skincare", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80", exLink: "https://example.com" }
+                { id: 1, name: "ชุดเดรสคุณหนูสไตล์เกาหลี", price: 500, cost: 200, category: "สกินแคร์", type: "โปรโมชั่น", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=500", exLink: "https://example.com" }
             ],
             categories: [
-                { id: 'all', name: 'ทั้งหมด' },
-                { id: 'skincare', name: 'สกินแคร์' },
-                { id: 'makeup', name: 'เมคอัพ' },
-                { id: 'perfume', name: 'น้ำหอม' }
+                { id: 'all', name: 'All (130)' },
+                { id: 'สกินแคร์', name: 'สกินแคร์ (56)' },
+                { id: 'เมคอัพ', name: 'เมคอัพ (34)' },
+                { id: 'น้ำหอม', name: 'น้ำหอม (40)' }
             ],
             queues: [
                 { id: 101, name: "คุณมายด์", service: "บริการแต่งหน้าเกาหลี", price: 600, status: "กำลังทำ", seq: 1 }
@@ -496,12 +520,37 @@
         function renderCategoriesTabs() {
             const container = document.getElementById('categories-tabs-container');
             if(!container) return;
-            container.innerHTML = appState.categories.map(c => `
-                <button onclick="setCategory('${c.id}')" class="px-4 py-1.5 rounded-full text-xs font-medium bg-white text-gray-600 border shrink-0">${c.name}</button>
+            container.innerHTML = appState.categories.map((c, idx) => `
+                <button onclick="setCategory('${c.id}')" class="px-5 py-2 rounded-full text-xs font-bold ${idx===0 ? 'bg-blue-100 text-blue-800 shadow-2xs' : 'bg-white text-gray-600 border border-pink-100'} shrink-0">${c.name}</button>
             `).join('');
         }
 
         function setCategory(cat) {
+            renderProducts();
+        }
+
+        function openCatFilterModal() {
+            document.getElementById('cat-filter-modal').classList.remove('hidden');
+        }
+
+        function closeCatFilterModal() {
+            document.getElementById('cat-filter-modal').classList.add('hidden');
+        }
+
+        function setFilterType(type) {
+            selectedFilterType = type;
+            ['โปรโมชั่น', 'สิทธิ์ขาด', 'เฉพาะ'].forEach(t => {
+                const btn = document.getElementById(`type-btn-${t}`);
+                if(t === type) {
+                    btn.className = "py-2 bg-pink-50 text-pink-600 rounded-xl font-bold border border-pink-200";
+                } else {
+                    btn.className = "py-2 bg-gray-50 text-gray-600 rounded-xl font-medium border";
+                }
+            });
+        }
+
+        function applyCatFilter() {
+            closeCatFilterModal();
             renderProducts();
         }
 
@@ -511,7 +560,7 @@
             container.innerHTML = appState.products.slice(0, 4).map(p => `
                 <div onclick="openProductModal(${p.id})" class="bg-white rounded-3xl p-3 border border-pink-100 shadow-2xs hover:shadow-md transition cursor-pointer flex flex-col justify-between relative">
                     <div class="absolute top-5 left-5 bg-amber-200 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-2xs">Featured</div>
-                    <div class="h-32 w-full rounded-2xl bg-pink-50 overflow-hidden mb-2">
+                    <div class="aspect-square w-full rounded-2xl bg-pink-50 overflow-hidden mb-2">
                         <img src="${p.img}" class="w-full h-full object-cover rounded-xl">
                     </div>
                     <h4 class="font-bold text-xs text-gray-800 line-clamp-1 mt-1">${p.name}</h4>
@@ -526,7 +575,7 @@
             grid.innerHTML = appState.products.map(p => `
                 <div onclick="openProductModal(${p.id})" class="bg-white rounded-3xl p-3 border border-pink-100 shadow-2xs hover:shadow-md transition cursor-pointer flex flex-col justify-between relative">
                     <div class="absolute top-5 left-5 bg-amber-200 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-2xs">Featured</div>
-                    <div class="h-32 w-full rounded-2xl bg-pink-50 overflow-hidden mb-2">
+                    <div class="aspect-square w-full rounded-2xl bg-pink-50 overflow-hidden mb-2">
                         <img src="${p.img}" class="w-full h-full object-cover rounded-xl">
                     </div>
                     <h4 class="font-bold text-xs text-gray-800 line-clamp-1 mt-1">${p.name}</h4>
@@ -662,16 +711,9 @@
         function saveShopThemeSettings() {
             appState.shopName = document.getElementById('adm-shop-name-input').value;
             appState.announcement = document.getElementById('admin-marquee-input').value;
-            appState.links.line = document.getElementById('adm-link-line').value;
-            appState.links.ig = document.getElementById('adm-link-ig').value;
-            appState.links.fb = document.getElementById('adm-link-fb').value;
-            appState.links.disc = document.getElementById('adm-link-disc').value;
-            appState.links.x = document.getElementById('adm-link-x').value;
-
             document.getElementById('home-shop-name').innerText = appState.shopName;
             document.getElementById('shop-title-header').innerText = appState.shopName;
             document.getElementById('announcement-text').innerText = appState.announcement;
-            updateSocialLinks();
             alert("บันทึกการตั้งค่าเรียบร้อย!");
         }
 
@@ -679,7 +721,7 @@
             const name = document.getElementById('new-prod-name').value;
             const price = Number(document.getElementById('new-prod-price').value);
             const cost = Number(document.getElementById('new-prod-cost').value);
-            const img = document.getElementById('new-prod-img').value || "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80";
+            const img = document.getElementById('new-prod-img').value || "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=500";
             const exLink = document.getElementById('new-prod-ex').value || "https://example.com";
             if(!name || !price) { alert("กรุณากรอกชื่อกลุ่มและราคา"); return; }
             appState.products.push({ id: Date.now(), name, price, cost, img, exLink });
