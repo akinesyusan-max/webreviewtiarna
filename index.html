@@ -93,7 +93,7 @@
                 </div>
             </section>
 
-            <!-- TAB 2: PRODUCTS -->
+            <!-- TAB 2: PRODUCTS (Updated as requested matching Image 38) -->
             <section id="view-products" class="view-section hidden space-y-4">
                 <h2 class="font-bold text-lg text-gray-800"><i class="fa-solid fa-bag-shopping text-pink-500 mr-2"></i>สินค้าทั้งหมด</h2>
                 <div class="space-y-2">
@@ -211,7 +211,7 @@
             </nav>
         </div>
 
-        <!-- Floating Cat Button & Soft Pill Social Links (Matching Image 35) -->
+        <!-- Floating Cat Button & Soft Pill Social Links -->
         <div class="fixed bottom-20 right-5 z-40">
             <div id="social-menu-popup" class="absolute bottom-16 right-0 space-y-2 hidden w-48">
                 <a id="social-link-line" href="https://line.me" target="_blank" class="flex items-center justify-between px-4 py-2.5 bg-white/95 backdrop-blur-md rounded-full shadow-md hover:bg-pink-50 text-xs font-bold text-gray-700 transition"><span>Line Official</span><i class="fa-brands fa-line text-green-500 text-sm"></i></a>
@@ -223,6 +223,49 @@
             <button onclick="toggleSocialMenu()" class="w-12 h-12 rounded-full bg-cyan-100 hover:bg-cyan-200 text-gray-700 shadow-xl flex items-center justify-center text-lg transition transform hover:scale-105">
                 <i class="fa-solid fa-cat"></i>
             </button>
+        </div>
+    </div>
+
+    <!-- ==================== PRODUCT DETAIL MODAL (Matching Image 39) ==================== -->
+    <div id="product-detail-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-5 relative shadow-2xl border border-pink-100 space-y-4 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeProductModal()" class="absolute right-4 top-4 w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <!-- Product Image Box with Translucent Important Message Tag -->
+            <div class="relative h-48 w-full rounded-2xl bg-pink-50 overflow-hidden shadow-inner">
+                <div class="absolute top-3 left-3 px-3 py-1 bg-white/70 backdrop-blur-md rounded-full text-[10px] font-bold text-gray-700 shadow-xs border border-white/40">
+                    ข้อความสำคัญ
+                </div>
+                <img id="modal-product-img" src="" alt="" class="w-full h-full object-cover">
+            </div>
+
+            <div class="bg-gray-800 text-white py-1.5 px-3 rounded-full text-center text-xs font-medium shadow-2xs">
+                ข้อความวิ่งๆ เป็นหมวดหมู่
+            </div>
+
+            <div class="flex justify-between items-center px-1">
+                <h3 id="modal-product-name" class="font-bold text-gray-800 text-base">ชื่อกลุ่ม</h3>
+                <div class="flex items-center space-x-1.5 bg-gray-800 text-white px-3 py-1 rounded-full text-xs font-bold">
+                    <span id="modal-product-price">600</span>
+                    <span>฿</span>
+                </div>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-2xl border border-pink-100 text-center">
+                <p id="modal-product-desc" class="text-xs text-gray-600">รายละเอียดต่างๆ...</p>
+            </div>
+
+            <!-- Buttons: Ex (Open Link) & Add to Cart -->
+            <div class="grid grid-cols-2 gap-2 pt-2">
+                <a id="modal-ex-link" href="#" target="_blank" class="py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-2xl text-xs font-bold text-center shadow-md transition">
+                    Ex
+                </a>
+                <button onclick="confirmAddToCart()" class="py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-2xl text-xs font-bold text-center shadow-md transition">
+                    Add to Cart
+                </button>
+            </div>
         </div>
     </div>
 
@@ -255,7 +298,7 @@
         </div>
 
         <main class="max-w-4xl mx-auto p-4 space-y-4">
-            <!-- 1. Shop / Theme (Added Social Links Inputs as requested) -->
+            <!-- 1. Shop / Theme -->
             <div id="adm-content-shop" class="adm-content space-y-4 text-xs bg-white p-5 rounded-3xl shadow-sm border">
                 <h3 class="font-bold text-sm text-gray-800"><i class="fa-solid fa-store text-pink-500 mr-2"></i>ตั้งค่าร้านและธีม</h3>
                 <div class="grid grid-cols-3 gap-2">
@@ -273,26 +316,11 @@
                 </div>
                 <div class="border-t pt-3 space-y-3">
                     <h4 class="font-bold text-pink-600">ลิ้งค์โซเชียลมีเดีย (ปุ่มรูปแมว)</h4>
-                    <div>
-                        <label class="text-gray-500">Line Official Link</label>
-                        <input type="text" id="adm-link-line" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://line.me">
-                    </div>
-                    <div>
-                        <label class="text-gray-500">Instagram Link</label>
-                        <input type="text" id="adm-link-ig" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://instagram.com">
-                    </div>
-                    <div>
-                        <label class="text-gray-500">Facebook Link</label>
-                        <input type="text" id="adm-link-fb" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://facebook.com">
-                    </div>
-                    <div>
-                        <label class="text-gray-500">Discord Link</label>
-                        <input type="text" id="adm-link-disc" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://discord.com">
-                    </div>
-                    <div>
-                        <label class="text-gray-500">X (Twitter) Link</label>
-                        <input type="text" id="adm-link-x" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://twitter.com">
-                    </div>
+                    <div><label class="text-gray-500">Line Official Link</label><input type="text" id="adm-link-line" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://line.me"></div>
+                    <div><label class="text-gray-500">Instagram Link</label><input type="text" id="adm-link-ig" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://instagram.com"></div>
+                    <div><label class="text-gray-500">Facebook Link</label><input type="text" id="adm-link-fb" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://facebook.com"></div>
+                    <div><label class="text-gray-500">Discord Link</label><input type="text" id="adm-link-disc" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://discord.com"></div>
+                    <div><label class="text-gray-500">X (Twitter) Link</label><input type="text" id="adm-link-x" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="https://twitter.com"></div>
                 </div>
                 <button onclick="saveShopThemeSettings()" class="w-full py-3 bg-pink-500 text-white rounded-xl font-bold text-sm">บันทึกการตั้งค่า</button>
             </div>
@@ -302,12 +330,13 @@
                 <h3 class="font-bold text-sm text-gray-800"><i class="fa-solid fa-box text-pink-500 mr-2"></i>จัดการสินค้า</h3>
                 <div class="p-4 bg-pink-50 rounded-2xl border border-pink-200 space-y-3">
                     <h4 class="font-bold text-pink-700">เพิ่มสินค้าใหม่</h4>
-                    <input type="text" id="new-prod-name" placeholder="ชื่อสินค้า/กลุ่มสินค้า" class="w-full px-3 py-2 bg-white border rounded-xl">
+                    <input type="text" id="new-prod-name" placeholder="ชื่อกลุ่มสินค้า" class="w-full px-3 py-2 bg-white border rounded-xl">
                     <div class="grid grid-cols-2 gap-2">
                         <input type="number" id="new-prod-price" placeholder="ราคาขาย (฿)" class="w-full px-3 py-2 bg-white border rounded-xl">
                         <input type="number" id="new-prod-cost" placeholder="ต้นทุน (฿)" class="w-full px-3 py-2 bg-white border rounded-xl">
                     </div>
                     <input type="text" id="new-prod-img" placeholder="ลิงก์รูปภาพ https://..." class="w-full px-3 py-2 bg-white border rounded-xl">
+                    <input type="text" id="new-prod-ex" placeholder="ลิงก์ตัวอย่างงาน (Ex Link) https://..." class="w-full px-3 py-2 bg-white border rounded-xl">
                     <button onclick="addNewProduct()" class="w-full py-2.5 bg-pink-500 text-white rounded-xl font-bold">อัปโหลดสินค้าเข้าคลัง</button>
                 </div>
                 <div id="admin-products-cloud-list" class="space-y-2"></div>
@@ -384,6 +413,7 @@
         let currentTab = 'home';
         let currentQueueSub = 1;
         let currentUser = null;
+        let currentSelectedProduct = null;
 
         let appMembers = [
             { id: 1, name: "คุณมายด์", email: "mind@email.com", line: "@mind_line", points: 150, debt: 500 }
@@ -404,7 +434,7 @@
                 x: "https://twitter.com"
             },
             products: [
-                { id: 1, name: "ชุดเดรสคุณหนูสไตล์เกาหลี", price: 500, cost: 200, category: "skincare", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80" }
+                { id: 1, name: "ชุดเดรสคุณหนูสไตล์เกาหลี", price: 500, cost: 200, category: "skincare", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80", exLink: "https://example.com" }
             ],
             categories: [
                 { id: 'all', name: 'ทั้งหมด' },
@@ -414,7 +444,8 @@
             ],
             queues: [
                 { id: 101, name: "คุณมายด์", service: "บริการแต่งหน้าเกาหลี", price: 600, status: "กำลังทำ", seq: 1 }
-            ]
+            ],
+            cart: []
         };
 
         function switchTab(tabId) {
@@ -477,13 +508,14 @@
         function renderRecommendedProducts() {
             const container = document.getElementById('recommended-products-list');
             if(!container) return;
-            container.innerHTML = appState.products.map(p => `
-                <div class="bg-white rounded-3xl p-3 border shadow-2xs flex flex-col justify-between">
+            container.innerHTML = appState.products.slice(0, 4).map(p => `
+                <div onclick="openProductModal(${p.id})" class="bg-white rounded-3xl p-3 border border-pink-100 shadow-2xs hover:shadow-md transition cursor-pointer flex flex-col justify-between relative">
+                    <div class="absolute top-5 left-5 bg-amber-200 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-2xs">Featured</div>
                     <div class="h-32 w-full rounded-2xl bg-pink-50 overflow-hidden mb-2">
                         <img src="${p.img}" class="w-full h-full object-cover rounded-xl">
                     </div>
-                    <h4 class="font-bold text-xs text-gray-800 line-clamp-1">${p.name}</h4>
-                    <span class="font-extrabold text-pink-600 text-xs mt-2">฿${p.price.toLocaleString()}</span>
+                    <h4 class="font-bold text-xs text-gray-800 line-clamp-1 mt-1">${p.name}</h4>
+                    <span class="font-extrabold text-pink-600 text-xs mt-1">฿${p.price.toLocaleString()}</span>
                 </div>
             `).join('');
         }
@@ -492,14 +524,39 @@
             const grid = document.getElementById('products-grid');
             if(!grid) return;
             grid.innerHTML = appState.products.map(p => `
-                <div class="bg-white rounded-3xl p-3 border shadow-2xs flex flex-col justify-between">
+                <div onclick="openProductModal(${p.id})" class="bg-white rounded-3xl p-3 border border-pink-100 shadow-2xs hover:shadow-md transition cursor-pointer flex flex-col justify-between relative">
+                    <div class="absolute top-5 left-5 bg-amber-200 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-2xs">Featured</div>
                     <div class="h-32 w-full rounded-2xl bg-pink-50 overflow-hidden mb-2">
                         <img src="${p.img}" class="w-full h-full object-cover rounded-xl">
                     </div>
-                    <h4 class="font-bold text-xs text-gray-800 line-clamp-1">${p.name}</h4>
-                    <span class="font-extrabold text-pink-600 text-xs mt-2">฿${p.price.toLocaleString()}</span>
+                    <h4 class="font-bold text-xs text-gray-800 line-clamp-1 mt-1">${p.name}</h4>
+                    <span class="font-extrabold text-pink-600 text-xs mt-1">฿${p.price.toLocaleString()}</span>
                 </div>
             `).join('');
+        }
+
+        function openProductModal(productId) {
+            currentSelectedProduct = appState.products.find(p => p.id === productId);
+            if(!currentSelectedProduct) return;
+
+            document.getElementById('modal-product-img').src = currentSelectedProduct.img;
+            document.getElementById('modal-product-name').innerText = currentSelectedProduct.name;
+            document.getElementById('modal-product-price').innerText = currentSelectedProduct.price.toLocaleString();
+            document.getElementById('modal-product-desc').innerText = currentSelectedProduct.desc || "รายละเอียดสินค้าและกลุ่มสินค้าในระบบ";
+            document.getElementById('modal-ex-link').href = currentSelectedProduct.exLink || "https://example.com";
+
+            document.getElementById('product-detail-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-detail-modal').classList.add('hidden');
+        }
+
+        function confirmAddToCart() {
+            if(!currentSelectedProduct) return;
+            appState.cart.push(currentSelectedProduct);
+            alert(`เพิ่ม "${currentSelectedProduct.name}" ลงในตะกร้าเรียบร้อยแล้ว!`);
+            closeProductModal();
         }
 
         function switchQueueSubTab(subNum) {
@@ -623,11 +680,13 @@
             const price = Number(document.getElementById('new-prod-price').value);
             const cost = Number(document.getElementById('new-prod-cost').value);
             const img = document.getElementById('new-prod-img').value || "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80";
-            if(!name || !price) { alert("กรุณากรอกชื่อและราคา"); return; }
-            appState.products.push({ id: Date.now(), name, price, cost, img });
+            const exLink = document.getElementById('new-prod-ex').value || "https://example.com";
+            if(!name || !price) { alert("กรุณากรอกชื่อกลุ่มและราคา"); return; }
+            appState.products.push({ id: Date.now(), name, price, cost, img, exLink });
             alert("เพิ่มสินค้าสำเร็จ!");
             renderAdminProducts();
             renderRecommendedProducts();
+            renderProducts();
         }
 
         function renderAdminProducts() {
