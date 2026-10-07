@@ -16,7 +16,6 @@
             background-color: #fff5f7;
             color: #4a4a4a;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -33,7 +32,7 @@
 <body class="min-h-screen pb-24 relative">
 
     <!-- Top Bar with Admin Hamburger Icon -->
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md shadow-xs px-4 py-3 flex justify-between items-center border-b border-pink-100">
+    <header class="sticky top-0 z-40 bg-white/85 backdrop-blur-md shadow-xs px-4 py-3 flex justify-between items-center border-b border-pink-100">
         <div class="flex items-center space-x-2">
             <span class="text-pink-600 font-bold text-lg"><i class="fa-solid fa-store mr-2"></i>My Shop</span>
         </div>
@@ -74,7 +73,7 @@
             <div class="bg-pink-50 border border-pink-200 rounded-2xl p-3 flex items-center space-x-3 overflow-hidden shadow-2xs">
                 <i class="fa-solid fa-bullhorn text-pink-500 animate-bounce"></i>
                 <div class="whitespace-nowrap overflow-hidden w-full">
-                    <p id="announcement-text" class="text-xs text-pink-700 font-medium inline-block animate-marquee">
+                    <p id="announcement-text" class="text-xs text-pink-700 font-medium inline-block">
                         🎉 โปรโมชั่นพิเศษต้อนรับเดือนนี้! ซื้อครบ 500 บาทสะสมแต้มฟรี หรือเลือกผ่อนชำระสินค้าได้แล้ววันนี้!
                     </p>
                 </div>
@@ -113,14 +112,18 @@
         <section id="view-products" class="view-section hidden space-y-4">
             <h2 class="font-bold text-lg text-gray-800"><i class="fa-solid fa-bag-shopping text-pink-500 mr-2"></i>สินค้าทั้งหมด</h2>
             
-            <!-- Search & Price Filter -->
+            <!-- Search Bar with Heart Filter Button on the right -->
             <div class="space-y-2">
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
-                    <input type="text" id="product-search-input" oninput="filterProducts()" placeholder="ค้นหาสินค้า..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-pink-200 rounded-full text-sm focus:outline-none focus:border-pink-400 shadow-2xs">
+                <div class="relative flex items-center bg-white border border-pink-200 rounded-full shadow-2xs px-3.5 py-2.5">
+                    <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm mr-2.5"></i>
+                    <input type="text" id="product-search-input" oninput="filterProducts()" placeholder="ค้นหาสินค้า..." class="w-full text-sm focus:outline-none bg-transparent">
+                    <button onclick="togglePriceFilterBox()" id="heart-filter-btn" class="w-8 h-8 rounded-full bg-pink-50 hover:bg-pink-100 text-pink-500 flex items-center justify-center transition shrink-0 ml-1" title="ตัวกรองราคา">
+                        <i class="fa-solid fa-heart text-sm"></i>
+                    </button>
                 </div>
-                <!-- Price Range Filter (0 - 10,000 THB) -->
-                <div class="bg-white p-3 rounded-2xl border border-pink-100 shadow-2xs space-y-1">
+
+                <!-- Price Range Filter Box (Hidden by default, toggled via Heart Button) -->
+                <div id="price-filter-box" class="bg-white p-3 rounded-2xl border border-pink-100 shadow-2xs space-y-1 hidden">
                     <div class="flex justify-between text-xs font-medium text-gray-600">
                         <span>กรองราคา: <span id="price-val-label" class="text-pink-600 font-bold">10,000</span> บาท</span>
                         <span class="text-gray-400">สูงสุด ฿10,000</span>
@@ -137,7 +140,7 @@
                 <button onclick="setCategory('perfume')" id="cat-btn-perfume" class="cat-btn px-4 py-1.5 rounded-full text-xs font-medium bg-white text-gray-600 border border-pink-200 shrink-0 transition">น้ำหอม</button>
             </div>
 
-            <!-- Product Grid (Exact Card View Matching Reference) -->
+            <!-- Product Grid -->
             <div id="products-grid" class="grid grid-cols-2 gap-3">
                 <!-- Dynamic Products -->
             </div>
@@ -145,29 +148,25 @@
 
         <!-- ==================== TAB 3: QUEUE CHECK ==================== -->
         <section id="view-queue" class="view-section hidden space-y-4">
-            <div class="bg-white rounded-3xl p-4 shadow-sm border border-pink-100 relative overflow-hidden">
-                <div class="h-28 w-full rounded-2xl overflow-hidden mb-3">
-                    <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80" alt="Queue Banner" class="w-full h-full object-cover">
+            <div class="bg-white rounded-3xl p-4 shadow-sm border border-pink-100 space-y-3">
+                <div class="h-28 w-full rounded-2xl bg-pink-100 flex items-center justify-center overflow-hidden border border-pink-200">
+                    <span class="text-pink-600 font-bold text-xl tracking-wider">Queue Banner</span>
                 </div>
-                <div class="flex justify-between items-center bg-pink-50 p-3 rounded-2xl border border-pink-200">
-                    <div>
-                        <p class="text-xs text-gray-500 font-medium">คิวที่กำลังทำอยู่ทั้งหมด</p>
-                        <h3 id="active-queue-count" class="text-xl font-bold text-pink-600">0 คิว</h3>
-                    </div>
-                    <i class="fa-solid fa-clock-rotate-left text-pink-400 text-2xl"></i>
+                <div class="inline-block border-b-2 border-pink-500 pb-1">
+                    <h3 id="active-queue-count" class="font-bold text-gray-800 text-sm">คิวทั้งหมดที่กำลังทำ: 0 คิว</h3>
                 </div>
             </div>
 
             <!-- Queue Sub-Tabs -->
-            <div class="flex bg-pink-100/60 p-1 rounded-2xl">
-                <button onclick="switchQueueSubTab(1)" id="queue-sub-btn-1" class="flex-1 py-2 text-xs font-bold rounded-xl bg-white text-pink-600 shadow-xs transition">หน้าที่ 1: กำลังดำเนิน/รอคิว</button>
-                <button onclick="switchQueueSubTab(2)" id="queue-sub-btn-2" class="flex-1 py-2 text-xs font-bold rounded-xl text-gray-500 transition">หน้าที่ 2: เสร็จสิ้นแล้ว</button>
+            <div class="flex border-b border-pink-100">
+                <button onclick="switchQueueSubTab(1)" id="queue-sub-btn-1" class="flex-1 py-2 text-xs font-bold text-pink-600 border-b-2 border-pink-500 transition">หน้าที่ 1 (กำลังทำ)</button>
+                <button onclick="switchQueueSubTab(2)" id="queue-sub-btn-2" class="flex-1 py-2 text-xs font-bold text-gray-400 border-b-2 border-transparent transition">หน้าที่ 2 (เสร็จสิ้น)</button>
             </div>
 
             <!-- Queue Search -->
             <div class="relative">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
-                <input type="text" id="queue-search-input" oninput="renderQueues()" placeholder="ค้นหาชื่อคิว หรือบริการ..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-pink-200 rounded-full text-sm focus:outline-none focus:border-pink-400 shadow-2xs">
+                <input type="text" id="queue-search-input" oninput="renderQueues()" placeholder="ค้นหาคิว..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-pink-200 rounded-full text-sm focus:outline-none focus:border-pink-400 shadow-2xs">
             </div>
 
             <!-- Queue Lists Container -->
@@ -234,7 +233,7 @@
                         </div>
                         <div class="pt-6">
                             <h3 id="acc-name-display" class="font-bold text-gray-800 text-base">ชื่อสมาชิก</h3>
-                            <p id="acc-caption-display" class="text-xs text-gray-500">แคปชั่นส਼ก</p>
+                            <p id="acc-caption-display" class="text-xs text-gray-500">แคปชั่นสเตตัส</p>
                         </div>
                     </div>
                     <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
@@ -250,7 +249,7 @@
                 <div class="bg-gradient-to-r from-pink-500 to-rose-400 text-white rounded-2xl p-4 shadow-sm space-y-2">
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-medium opacity-90"><i class="fa-solid fa-credit-card mr-1.5"></i>ยอดค้างผ่อนชำระ</span>
-                        <span id="debt-status-badge" class="px-2 py-0.5 bg-white/20 rounded-full text-[10px] font-bold">มีverwยอดค้าง</span>
+                        <span id="debt-status-badge" class="px-2 py-0.5 bg-white/20 rounded-full text-[10px] font-bold">มีหนี้ค้าง</span>
                     </div>
                     <div class="flex justify-between items-end">
                         <div>
@@ -293,7 +292,6 @@
         <button onclick="switchTab('products')" id="nav-btn-products" class="nav-btn flex flex-col items-center text-gray-400 hover:text-pink-600 transition relative">
             <i class="fa-solid fa-bag-shopping text-lg"></i>
             <span class="text-[10px] mt-1 font-semibold">สินค้า</span>
-            <!-- Cart Badge Counter -->
             <span id="cart-counter-badge" class="absolute -top-1 -right-2 bg-pink-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold hidden">0</span>
         </button>
         <button onclick="switchTab('queue')" id="nav-btn-queue" class="nav-btn flex flex-col items-center text-gray-400 hover:text-pink-600 transition">
@@ -308,9 +306,9 @@
 
     <!-- ==================== MODALS ==================== -->
 
-    <!-- Product Detail Modal (Image 2 -> Image 3 flow) -->
+    <!-- Product Detail Modal -->
     <div id="product-detail-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-2xs flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-xs w-full p-4 relative shadow-xl border border-pink-100 space-y-3 animate-scaleUp">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-4 relative shadow-xl border border-pink-100 space-y-3">
             <button onclick="closeProductModal()" class="absolute right-3 top-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -326,7 +324,6 @@
                 <p id="modal-product-desc" class="text-xs text-gray-500 mt-2">รายละเอียดสินค้าเพิ่มเติมตรงนี้...</p>
             </div>
             
-            <!-- Add to Cart or Buy Options -->
             <div class="space-y-2 pt-2">
                 <div class="grid grid-cols-2 gap-2">
                     <button onclick="selectPaymentType('full')" id="pay-type-full" class="py-2 px-3 border-2 border-pink-500 bg-pink-50 text-pink-600 rounded-xl text-xs font-bold transition text-center">จ่ายเต็ม</button>
@@ -339,7 +336,7 @@
         </div>
     </div>
 
-    <!-- Payment Modal (Image 2 style) -->
+    <!-- Payment Modal -->
     <div id="payment-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-2xs flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-sm w-full p-5 relative shadow-2xl border border-pink-100 space-y-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closePaymentModal()" class="absolute right-4 top-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
@@ -391,7 +388,7 @@
         </div>
     </div>
 
-    <!-- Admin Login Modal (Triggered by Hamburger Top Right) -->
+    <!-- Admin Login Modal -->
     <div id="admin-login-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-2xs flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-xs w-full p-5 relative shadow-2xl border border-pink-100 space-y-4">
             <button onclick="closeAdminLoginModal()" class="absolute right-3 top-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
@@ -402,7 +399,7 @@
                     <i class="fa-solid fa-lock"></i>
                 </div>
                 <h3 class="font-bold text-gray-800 text-sm">เข้าสู่ระบบแอดมิน</h3>
-                <p class="text-[10px] text-gray-400">กรอกรหัสผ่านเพื่อจัดการหลังบ้าน</p>
+                <p class="text-[10px] text-gray-400">กรอกรหัสผ่านเพื่อจัดการหลังบ้าน (รหัส: admin1234)</p>
             </div>
             <div>
                 <label class="text-xs text-gray-600 font-medium">รหัสผ่าน</label>
@@ -422,9 +419,7 @@
                 </button>
             </div>
 
-            <!-- Admin Tabs Control -->
             <div class="space-y-4 text-xs">
-                <!-- 1. Store Status Settings -->
                 <div class="bg-pink-50 p-3 rounded-2xl border border-pink-200 space-y-2">
                     <h4 class="font-bold text-pink-700">1. ตั้งค่าเปิด-ปิดร้าน</h4>
                     <div class="flex items-center justify-between">
@@ -433,14 +428,12 @@
                     </div>
                 </div>
 
-                <!-- 2. Marquee Text Settings -->
                 <div class="bg-gray-50 p-3 rounded-2xl border border-gray-200 space-y-2">
                     <h4 class="font-bold text-gray-700">2. แก้ไขข้อความวิ่งประกาศ</h4>
                     <input type="text" id="admin-marquee-input" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-xl text-xs" placeholder="พิมพ์ข้อความประกาศ...">
                     <button onclick="adminSaveMarquee()" class="px-4 py-1.5 bg-pink-500 text-white rounded-xl font-bold">บันทึกข้อความ</button>
                 </div>
 
-                <!-- 3. Manage Customer Debt (Installment) -->
                 <div class="bg-gray-50 p-3 rounded-2xl border border-gray-200 space-y-2">
                     <h4 class="font-bold text-gray-700">3. จัดการยอดค้างผ่อนชำระลูกค้า</h4>
                     <div class="space-y-2">
@@ -452,12 +445,9 @@
                     </div>
                 </div>
 
-                <!-- 4. Manage Queues -->
                 <div class="bg-gray-50 p-3 rounded-2xl border border-gray-200 space-y-2">
                     <h4 class="font-bold text-gray-700">4. จัดการสถานะคิวบริการ</h4>
-                    <div id="admin-queue-list" class="space-y-2 max-h-40 overflow-y-auto">
-                        <!-- Dynamic Queue list for admin -->
-                    </div>
+                    <div id="admin-queue-list" class="space-y-2 max-h-40 overflow-y-auto"></div>
                 </div>
             </div>
         </div>
@@ -490,14 +480,12 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // --- Application State ---
         let currentTab = 'home';
         let currentQueueSub = 1;
-        let currentUser = null; // null or customer object
-        let selectedPaymentType = 'full'; // 'full' or 'installment'
+        let currentUser = null;
+        let selectedPaymentType = 'full';
         let currentSelectedProduct = null;
 
-        // Mock Database
         let appState = {
             storeOpen: true,
             announcement: "🎉 โปรโมชั่นพิเศษต้อนรับเดือนนี้! ซื้อครบ 500 บาทสะสมแต้มฟรี หรือเลือกผ่อนชำระสินค้าได้แล้ววันนี้!",
@@ -518,7 +506,6 @@
             cart: []
         };
 
-        // --- Navigation ---
         function switchTab(tabId) {
             currentTab = tabId;
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
@@ -537,7 +524,6 @@
             if(tabId === 'account') updateAccountViewUI();
         }
 
-        // --- Home & Marquee ---
         function initApp() {
             document.getElementById('announcement-text').innerText = appState.announcement;
             renderRecommendedProducts();
@@ -548,17 +534,17 @@
             const container = document.getElementById('recommended-products-list');
             const recs = appState.products.slice(0, 4);
             container.innerHTML = recs.map(p => `
-                <div onclick="openProductModal(${p.id})" class="bg-white rounded-2xl p-3 border border-pink-100 shadow-2xs hover:shadow-md transition cursor-pointer flex flex-col justify-between">
+                <div onclick="openProductModal(${p.id})" class="bg-white rounded-3xl p-3 border border-pink-100 shadow-2xs hover:shadow-md transition cursor-pointer flex flex-col justify-between">
                     <div>
-                        <div class="h-28 w-full rounded-xl bg-pink-50 overflow-hidden mb-2">
-                            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover">
+                        <div class="h-32 w-full rounded-2xl bg-pink-50 overflow-hidden mb-2 p-2">
+                            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover rounded-xl">
                         </div>
-                        <h4 class="font-bold text-xs text-gray-800 line-clamp-1">${p.name}</h4>
+                        <h4 class="font-bold text-xs text-gray-800 line-clamp-1 mt-1">${p.name}</h4>
                         <p class="text-[10px] text-gray-400 line-clamp-1">${p.desc}</p>
                     </div>
-                    <div class="flex justify-between items-center mt-3 pt-2 border-t border-gray-50">
+                    <div class="flex justify-between items-center mt-3 pt-2 border-t border-gray-100">
                         <span class="font-extrabold text-pink-600 text-xs">฿${p.price.toLocaleString()}</span>
-                        <div class="w-6 h-6 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center text-xs font-bold hover:bg-pink-500 hover:text-white transition">
+                        <div class="w-7 h-7 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center text-xs font-bold hover:bg-pink-500 hover:text-white transition">
                             <i class="fa-solid fa-plus"></i>
                         </div>
                     </div>
@@ -566,7 +552,6 @@
             `).join('');
         }
 
-        // --- Products & Filter ---
         let activeCategory = 'all';
 
         function setCategory(cat) {
@@ -579,6 +564,20 @@
             activeBtn.classList.remove('bg-white', 'text-gray-600', 'border', 'border-pink-200');
             activeBtn.classList.add('bg-pink-500', 'text-white', 'shadow-xs');
             renderProducts();
+        }
+
+        // Toggle Price Filter Box with Heart Button
+        function togglePriceFilterBox() {
+            const filterBox = document.getElementById('price-filter-box');
+            const heartBtn = document.getElementById('heart-filter-btn');
+            filterBox.classList.toggle('hidden');
+            if (!filterBox.classList.contains('hidden')) {
+                heartBtn.classList.remove('bg-pink-50', 'text-pink-500');
+                heartBtn.classList.add('bg-pink-500', 'text-white');
+            } else {
+                heartBtn.classList.remove('bg-pink-500', 'text-white');
+                heartBtn.classList.add('bg-pink-50', 'text-pink-500');
+            }
         }
 
         function filterProducts() {
@@ -604,17 +603,17 @@
             }
 
             grid.innerHTML = filtered.map(p => `
-                <div onclick="openProductModal(${p.id})" class="bg-white rounded-2xl p-3 border border-pink-100 shadow-2xs hover:shadow-md transition cursor-pointer flex flex-col justify-between">
+                <div onclick="openProductModal(${p.id})" class="bg-white rounded-3xl p-3 border border-pink-100 shadow-2xs hover:shadow-md transition cursor-pointer flex flex-col justify-between">
                     <div>
-                        <div class="h-28 w-full rounded-xl bg-pink-50 overflow-hidden mb-2">
-                            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover">
+                        <div class="h-32 w-full rounded-2xl bg-pink-50 overflow-hidden mb-2 p-2">
+                            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover rounded-xl">
                         </div>
-                        <h4 class="font-bold text-xs text-gray-800 line-clamp-1">${p.name}</h4>
+                        <h4 class="font-bold text-xs text-gray-800 line-clamp-1 mt-1">${p.name}</h4>
                         <p class="text-[10px] text-gray-400 line-clamp-1">${p.desc}</p>
                     </div>
-                    <div class="flex justify-between items-center mt-3 pt-2 border-t border-gray-50">
+                    <div class="flex justify-between items-center mt-3 pt-2 border-t border-gray-100">
                         <span class="font-extrabold text-pink-600 text-xs">฿${p.price.toLocaleString()}</span>
-                        <div class="w-6 h-6 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center text-xs font-bold hover:bg-pink-500 hover:text-white transition">
+                        <div class="w-7 h-7 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center text-xs font-bold hover:bg-pink-500 hover:text-white transition">
                             <i class="fa-solid fa-plus"></i>
                         </div>
                     </div>
@@ -622,7 +621,6 @@
             `).join('');
         }
 
-        // --- Product Detail Modal ---
         function openProductModal(productId) {
             currentSelectedProduct = appState.products.find(p => p.id === productId);
             if (!currentSelectedProduct) return;
@@ -659,8 +657,6 @@
             appState.cart.push({ ...currentSelectedProduct, paymentMethod: selectedPaymentType });
             updateCartBadge();
             closeProductModal();
-
-            // Open payment modal directly as requested
             openPaymentModal(currentSelectedProduct.price, selectedPaymentType);
         }
 
@@ -674,7 +670,6 @@
             }
         }
 
-        // --- Payment Modal ---
         function openPaymentModal(amount, type) {
             document.getElementById('pay-net-amount').innerText = `฿${amount.toLocaleString()}`;
             document.getElementById('slip-file-input').value = "";
@@ -721,17 +716,16 @@
             switchTab('account');
         }
 
-        // --- Queue System ---
         function switchQueueSubTab(subNum) {
             currentQueueSub = subNum;
             const btn1 = document.getElementById('queue-sub-btn-1');
             const btn2 = document.getElementById('queue-sub-btn-2');
             if (subNum === 1) {
-                btn1.className = "flex-1 py-2 text-xs font-bold rounded-xl bg-white text-pink-600 shadow-xs transition";
-                btn2.className = "flex-1 py-2 text-xs font-bold rounded-xl text-gray-500 transition";
+                btn1.className = "flex-1 py-2 text-xs font-bold text-pink-600 border-b-2 border-pink-500 transition";
+                btn2.className = "flex-1 py-2 text-xs font-bold text-gray-400 border-b-2 border-transparent transition";
             } else {
-                btn2.className = "flex-1 py-2 text-xs font-bold rounded-xl bg-white text-pink-600 shadow-xs transition";
-                btn1.className = "flex-1 py-2 text-xs font-bold rounded-xl text-gray-500 transition";
+                btn2.className = "flex-1 py-2 text-xs font-bold text-pink-600 border-b-2 border-pink-500 transition";
+                btn1.className = "flex-1 py-2 text-xs font-bold text-gray-400 border-b-2 border-transparent transition";
             }
             renderQueues();
         }
@@ -741,7 +735,7 @@
             const query = document.getElementById('queue-search-input').value.toLowerCase();
             
             const activeCount = appState.queues.filter(q => q.status !== 'เสร็จสิ้น').length;
-            document.getElementById('active-queue-count').innerText = `${activeCount} คิว`;
+            document.getElementById('active-queue-count').innerText = `คิวทั้งหมดที่กำลังทำ: ${activeCount} คิว`;
 
             const filtered = appState.queues.filter(q => {
                 const isFinishedSub = (currentQueueSub === 2 ? q.status === 'เสร็จสิ้น' : q.status !== 'เสร็จสิ้น');
@@ -750,7 +744,12 @@
             });
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="text-center py-8 text-gray-400 text-xs">ไม่มีรายการคิวในหมวดนี้</div>`;
+                container.innerHTML = `
+                    <div class="text-center py-10 space-y-2">
+                        <i class="fa-solid fa-folder-open text-3xl text-gray-300"></i>
+                        <p class="text-gray-400 text-xs">ไม่มีรายการคิว</p>
+                    </div>
+                `;
                 return;
             }
 
@@ -792,7 +791,6 @@
             openPaymentModal(price, 'full');
         }
 
-        // --- Account & Auth ---
         function switchAuthMode(mode) {
             const btnLogin = document.getElementById('auth-mode-login');
             const btnReg = document.getElementById('auth-mode-register');
@@ -888,7 +886,7 @@
                 const payDebtBtn = document.getElementById('pay-debt-btn');
                 const debtBadge = document.getElementById('debt-status-badge');
                 if (currentUser.debt > 0) {
-                    debtBadge.innerText = "มีمยอดค้างผ่อน";
+                    debtBadge.innerText = "มียอดค้างผ่อน";
                     payDebtBtn.classList.remove('hidden');
                 } else {
                     debtBadge.innerText = "ไม่มีหนี้ค้างชำระ";
@@ -939,7 +937,6 @@
             alert("บันทึกข้อมูลโปรไฟล์เรียบร้อยแล้ว");
         }
 
-        // --- Admin Controls ---
         function openAdminLoginModal() {
             document.getElementById('admin-pass-input').value = "";
             document.getElementById('admin-login-modal').classList.remove('hidden');
@@ -1030,7 +1027,6 @@
             renderQueues();
         }
 
-        // Initialize on load
         window.onload = initApp;
     </script>
 </body>
