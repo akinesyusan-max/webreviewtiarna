@@ -13,7 +13,7 @@
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #fff5f7;
+            background-color: var(--bg-main, #fff5f7);
             color: #4a4a4a;
         }
         ::-webkit-scrollbar {
@@ -29,12 +29,12 @@
         }
     </style>
 </head>
-<body class="min-h-screen pb-24 relative">
+<body id="app-body" class="min-h-screen pb-24 relative" style="--bg-main: #fff5f7;">
 
     <!-- Top Bar with Admin Hamburger Icon -->
     <header class="sticky top-0 z-40 bg-white/85 backdrop-blur-md shadow-xs px-4 py-3 flex justify-between items-center border-b border-pink-100">
         <div class="flex items-center space-x-2">
-            <span class="text-pink-600 font-bold text-lg"><i class="fa-solid fa-store mr-2"></i>My Shop</span>
+            <span id="shop-title-header" class="text-pink-600 font-bold text-lg"><i class="fa-solid fa-store mr-2"></i>My Shop</span>
         </div>
         <button onclick="openAdminLoginModal()" class="w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center text-pink-600 hover:bg-pink-100 transition shadow-xs">
             <i class="fa-solid fa-bars text-lg"></i>
@@ -123,11 +123,8 @@
                 </div>
             </div>
 
-            <div class="flex space-x-2 overflow-x-auto pb-1 scrollbar-none">
-                <button onclick="setCategory('all')" id="cat-btn-all" class="cat-btn px-4 py-1.5 rounded-full text-xs font-medium bg-pink-500 text-white shadow-xs shrink-0 transition">ทั้งหมด</button>
-                <button onclick="setCategory('skincare')" id="cat-btn-skincare" class="cat-btn px-4 py-1.5 rounded-full text-xs font-medium bg-white text-gray-600 border border-pink-200 shrink-0 transition">สกินแคร์</button>
-                <button onclick="setCategory('makeup')" id="cat-btn-makeup" class="cat-btn px-4 py-1.5 rounded-full text-xs font-medium bg-white text-gray-600 border border-pink-200 shrink-0 transition">เมคอัพ</button>
-                <button onclick="setCategory('perfume')" id="cat-btn-perfume" class="cat-btn px-4 py-1.5 rounded-full text-xs font-medium bg-white text-gray-600 border border-pink-200 shrink-0 transition">น้ำหอม</button>
+            <div id="categories-tabs-container" class="flex space-x-2 overflow-x-auto pb-1 scrollbar-none">
+                <!-- Rendered dynamically -->
             </div>
 
             <div id="products-grid" class="grid grid-cols-2 gap-3"></div>
@@ -137,7 +134,7 @@
         <section id="view-queue" class="view-section hidden space-y-4">
             <div class="bg-white rounded-3xl p-4 shadow-sm border border-pink-100 space-y-3">
                 <div class="h-28 w-full rounded-2xl bg-pink-100 flex items-center justify-center overflow-hidden border border-pink-200">
-                    <span class="text-pink-600 font-bold text-xl tracking-wider">Queue Banner</span>
+                    <img id="queue-banner-display" src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80" alt="Queue Banner" class="w-full h-full object-cover">
                 </div>
                 <div class="inline-block border-b-2 border-pink-500 pb-1">
                     <h3 id="active-queue-count" class="font-bold text-gray-800 text-sm">คิวทั้งหมดที่กำลังทำ: 0 คิว</h3>
@@ -373,7 +370,7 @@
                     <i class="fa-solid fa-lock"></i>
                 </div>
                 <h3 class="font-bold text-gray-800 text-sm">เข้าสู่ระบบแอดมิน</h3>
-                <p class="text-[10px] text-gray-400">กรอกรหัสผ่านเพื่อจัดการหลังบ้าน (รหัส: admin1234)</p>
+                <p class="text-[10px] text-gray-400">รหัสผ่าน: admin1234</p>
             </div>
             <div>
                 <label class="text-xs text-gray-600 font-medium">รหัสผ่าน</label>
@@ -383,11 +380,11 @@
         </div>
     </div>
 
-    <!-- Admin Panel Modal (Cloud Backoffice with Tabs as requested) -->
+    <!-- Admin Panel Modal (Full Backoffice System with all categories) -->
     <div id="admin-panel-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-2xs flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-md w-full p-5 relative shadow-2xl border border-pink-100 space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="font-bold text-gray-800 text-base"><i class="fa-solid fa-cloud text-pink-500 mr-2"></i>ระบบหลังบ้าน (Cloud)</h3>
+                <h3 class="font-bold text-gray-800 text-base"><i class="fa-solid fa-cloud text-pink-500 mr-2"></i>ระบบหลังบ้าน (Admin Cloud)</h3>
                 <button onclick="closeAdminPanelModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -395,52 +392,139 @@
 
             <!-- Admin Category Sub-Tabs -->
             <div class="flex space-x-2 overflow-x-auto pb-2 scrollbar-none border-b border-gray-100 text-xs">
-                <button onclick="switchAdminSubTab('shop')" id="adm-tab-shop" class="adm-tab px-4 py-2 rounded-xl font-bold bg-pink-500 text-white shrink-0 shadow-xs">ร้าน/ธีม</button>
-                <button onclick="switchAdminSubTab('products')" id="adm-tab-products" class="adm-tab px-4 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 shrink-0">สินค้า</button>
-                <button onclick="switchAdminSubTab('queue')" id="adm-tab-queue" class="adm-tab px-4 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 shrink-0">คิว</button>
-                <button onclick="switchAdminSubTab('members')" id="adm-tab-members" class="adm-tab px-4 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 shrink-0">สมาชิก</button>
+                <button onclick="switchAdminSubTab('shop')" id="adm-tab-shop" class="adm-tab px-3 py-2 rounded-xl font-bold bg-pink-500 text-white shrink-0 shadow-xs">ร้าน/ธีม</button>
+                <button onclick="switchAdminSubTab('products')" id="adm-tab-products" class="adm-tab px-3 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 shrink-0">สินค้า</button>
+                <button onclick="switchAdminSubTab('queue')" id="adm-tab-queue" class="adm-tab px-3 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 shrink-0">คิว</button>
+                <button onclick="switchAdminSubTab('members')" id="adm-tab-members" class="adm-tab px-3 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 shrink-0">สมาชิก</button>
+                <button onclick="switchAdminSubTab('orders')" id="adm-tab-orders" class="adm-tab px-3 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 shrink-0">ออเดอร์</button>
+                <button onclick="switchAdminSubTab('revenue')" id="adm-tab-revenue" class="adm-tab px-3 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 shrink-0">รายรับ</button>
             </div>
 
-            <!-- 1. Shop / Theme Tab Content -->
+            <!-- 1. ร้าน/ธีม -->
             <div id="adm-content-shop" class="adm-content space-y-3 text-xs">
                 <div class="bg-pink-50 p-3 rounded-2xl border border-pink-200 space-y-2">
-                    <h4 class="font-bold text-pink-700">สถานะร้านค้า</h4>
+                    <h4 class="font-bold text-pink-700">สถานะเปิด-ปิดร้าน</h4>
                     <div class="flex items-center justify-between">
-                        <span class="text-gray-600">สถานะเปิดรับออเดอร์:</span>
+                        <span class="text-gray-600">เปิดรับออเดอร์ทันที:</span>
                         <button onclick="adminToggleStoreStatus()" id="admin-store-toggle-btn" class="px-3 py-1.5 bg-green-500 text-white rounded-lg font-bold">เปิดร้านอยู่</button>
                     </div>
                 </div>
 
                 <div class="space-y-2">
-                    <label class="font-bold text-gray-700">ข้อความต้อนรับ (ข้อความวิ่ง)</label>
+                    <label class="font-bold text-gray-700">เลือกสีธีมพาสเทลสำเร็จรูป</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setThemeColor('#fff5f7', '#ff6584')" class="p-2 bg-pink-100 text-pink-700 rounded-xl font-bold border border-pink-300">ชมพูพาสเทล</button>
+                        <button onclick="setThemeColor('#f0f8ff', '#4682b4')" class="p-2 bg-blue-100 text-blue-700 rounded-xl font-bold border border-blue-300">ฟ้า - ขาว</button>
+                        <button onclick="setThemeColor('#f5f5f5', '#696969')" class="p-2 bg-gray-200 text-gray-700 rounded-xl font-bold border border-gray-300">ขาวเทา</button>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="font-bold text-gray-700">ชื่อร้าน</label>
+                    <input type="text" id="adm-shop-name-input" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl" value="Sakura Boutique">
+                </div>
+                <div class="space-y-2">
+                    <label class="font-bold text-gray-700">ข้อความวิ่งประกาศ</label>
                     <input type="text" id="admin-marquee-input" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl">
-                    <button onclick="adminSaveMarquee()" class="px-4 py-2 bg-pink-500 text-white rounded-xl font-bold">บันทึกข้อความ</button>
+                </div>
+                <div class="space-y-2">
+                    <label class="font-bold text-gray-700">ลิ้งค์ Webhook แจ้งเตือนออเดอร์</label>
+                    <input type="text" id="adm-webhook-input" placeholder="https://discord.com/api/webhooks/..." class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl">
+                </div>
+                <div class="space-y-2">
+                    <label class="font-bold text-gray-700">แบนเนอร์รูป (ลิงก์รูปภาพ หรือ GIF ไดรฟ์)</label>
+                    <input type="text" id="adm-banner-url-input" placeholder="https://..." class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl">
+                </div>
+                <button onclick="saveShopThemeSettings()" class="w-full py-2.5 bg-pink-500 text-white rounded-xl font-bold">บันทึกการตั้งค่าร้าน/ธีม</button>
+            </div>
+
+            <!-- 2. สินค้า (Add & Cloud Inventory Matching Image 20-24) -->
+            <div id="adm-content-products" class="adm-content space-y-3 text-xs hidden">
+                <div class="bg-pink-50 p-3 rounded-2xl border border-pink-200 space-y-3">
+                    <h4 class="font-bold text-pink-700"><i class="fa-solid fa-plus-circle mr-1"></i>เพิ่มสินค้าเข้าคลาวด์</h4>
+                    <input type="text" id="new-prod-name" placeholder="ชื่อกลุ่มสินค้า / ชื่อสินค้า" class="w-full px-3 py-2 bg-white border rounded-xl">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="new-prod-price" placeholder="ราคา (฿)" class="w-full px-3 py-2 bg-white border rounded-xl">
+                        <input type="number" id="new-prod-cost" placeholder="เรท / ต้นทุน (฿)" class="w-full px-3 py-2 bg-white border rounded-xl">
+                    </div>
+                    <textarea id="new-prod-desc" placeholder="รายละเอียด..." class="w-full px-3 py-2 bg-white border rounded-xl h-16"></textarea>
+                    <select id="new-prod-cat" class="w-full px-3 py-2 bg-white border rounded-xl">
+                        <option value="skincare">สกินแคร์</option>
+                        <option value="makeup">เมคอัพ</option>
+                        <option value="perfume">น้ำหอม</option>
+                    </select>
+                    <input type="text" id="new-prod-img" placeholder="วางลิงก์รูปภาพ https://..." class="w-full px-3 py-2 bg-white border rounded-xl">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="new-prod-rec" class="accent-pink-500">
+                        <label for="new-prod-rec">แสดงเป็น "สินค้าแนะนำ"</label>
+                    </div>
+                    <button onclick="addNewProduct()" class="w-full py-2 bg-pink-500 text-white rounded-xl font-bold">อัปโหลดสินค้าเข้าคลาวด์ ☁️</button>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-gray-700">คลังสินค้าคลาวด์ (<span id="prod-count-label">0</span>)</h4>
+                    <input type="text" id="admin-prod-search" oninput="renderAdminProductsList()" placeholder="ค้นหาชื่อสินค้าที่ต้องการ..." class="w-full px-3 py-2 bg-gray-50 border rounded-xl">
+                    <div id="admin-products-cloud-list" class="space-y-2 max-h-48 overflow-y-auto"></div>
                 </div>
             </div>
 
-            <!-- 2. Products Tab Content -->
-            <div id="adm-content-products" class="adm-content space-y-3 text-xs hidden">
-                <p class="font-bold text-gray-700">จัดการรายการสินค้าในระบบ</p>
-                <div id="admin-products-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
-            </div>
-
-            <!-- 3. Queue Tab Content -->
+            <!-- 3. คิว -->
             <div id="adm-content-queue" class="adm-content space-y-3 text-xs hidden">
-                <p class="font-bold text-gray-700">จัดการสถานะคิวบริการ</p>
+                <p class="font-bold text-gray-700">จัดการสถานะคิวบริการ (เชื่อมโยงเรียลไทม์)</p>
                 <div id="admin-queue-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
             </div>
 
-            <!-- 4. Members Tab Content (NEW FEATURE) -->
+            <!-- 4. สมาชิก -->
             <div id="adm-content-members" class="adm-content space-y-3 text-xs hidden">
-                <p class="font-bold text-gray-700"><i class="fa-solid fa-users text-pink-500 mr-1.5"></i>รายชื่อสมาชิกทั้งหมด</p>
+                <p class="font-bold text-gray-700"><i class="fa-solid fa-users text-pink-500 mr-1.5"></i>รายชื่อสมาชิกและจัดการยอดค้างผ่อน</p>
                 <div id="admin-members-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+            </div>
+
+            <!-- 5. ออเดอร์ -->
+            <div id="adm-content-orders" class="adm-content space-y-3 text-xs hidden">
+                <div class="flex justify-between items-center">
+                    <p class="font-bold text-gray-700">ออเดอร์ลูกค้า (Real-time)</p>
+                    <span class="px-2 py-0.5 bg-green-100 text-green-700 font-bold text-[10px] rounded-full">● Live</span>
+                </div>
+                <div id="admin-orders-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+            </div>
+
+            <!-- 6. รายรับ -->
+            <div id="adm-content-revenue" class="adm-content space-y-3 text-xs hidden">
+                <div class="bg-gradient-to-r from-pink-500 to-rose-400 text-white p-4 rounded-2xl shadow-sm space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="opacity-90">ยอดขายทั้งหมด</span>
+                        <h2 id="rev-total-sales" class="text-xl font-extrabold">฿0</h2>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-white/20 pt-2">
+                        <span class="opacity-90">ต้นทุนสินค้า</span>
+                        <h3 id="rev-total-cost" class="font-bold">฿0</h3>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-white/20 pt-2">
+                        <span class="opacity-90">กำไรสุทธิ</span>
+                        <h2 id="rev-net-profit" class="text-lg font-extrabold text-yellow-200">฿0</h2>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="font-bold text-gray-700">กราฟกำไรต่อประเภทที่เลือก</label>
+                    <div class="flex bg-gray-100 p-1 rounded-xl">
+                        <button onclick="setRevenueFilter('day')" id="rev-btn-day" class="flex-1 py-1 font-bold bg-white text-pink-600 rounded-lg shadow-2xs">วัน</button>
+                        <button onclick="setRevenueFilter('month')" id="rev-btn-month" class="flex-1 py-1 font-medium text-gray-500 rounded-lg">เดือน</button>
+                        <button onclick="setRevenueFilter('year')" id="rev-btn-year" class="flex-1 py-1 font-medium text-gray-500 rounded-lg">ปี</button>
+                    </div>
+                    <div id="revenue-chart-box" class="p-4 bg-gray-50 border rounded-2xl text-center space-y-1">
+                        <p class="text-gray-400 text-[11px]" id="rev-chart-subtitle">แสดงผลกำไรสุทธิประจำวัน</p>
+                        <h3 id="rev-chart-amount" class="text-xl font-bold text-pink-600">฿0</h3>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Admin Member Detail Popup Modal -->
+    <!-- Admin Member Detail Popup (Account View Modal matching Image 8) -->
     <div id="admin-member-detail-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-2xs flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-xs w-full p-5 relative shadow-2xl border border-pink-100 space-y-4">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-5 relative shadow-2xl border border-pink-100 space-y-4 max-h-[85vh] overflow-y-auto">
             <button onclick="closeAdminMemberDetailModal()" class="absolute right-3 top-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -453,29 +537,112 @@
             </div>
 
             <div class="bg-pink-50 p-3 rounded-2xl border border-pink-200 space-y-2 text-xs">
-                <p><strong>ชื่อจริง-นามสกุล:</strong> <span id="adm-popup-fullname">-</span></p>
-                <p><strong>ชื่อบัญชี:</strong> <span id="adm-popup-account-name">-</span></p>
+                <p><strong>ชื่อจริง-นามสกุล:</strong> <span id="adm-popup-fullname" class="text-gray-600">-</span> <span class="text-[9px] text-pink-500 block">(ส่งคำขอแก้ผ่านไลน์เท่านั้น)</span></p>
+                <p><strong>ชื่อบัญชี:</strong> <span id="adm-popup-account-name" class="text-gray-600">-</span></p>
                 <p><strong>แต้มสะสม:</strong> <span id="adm-popup-points" class="text-pink-600 font-bold">0 แต้ม</span></p>
-                <p><strong>ยอดค้างผ่อน:</strong> <span id="adm-popup-debt" class="text-red-500 font-bold">฿0</span></p>
+                <div>
+                    <label class="font-bold text-gray-700">ยอดค้างผ่อน (แก้ไขได้):</label>
+                    <div class="flex space-x-2 mt-1">
+                        <input type="number" id="adm-popup-debt-input" class="w-full px-2 py-1 bg-white border rounded-lg text-xs font-bold text-red-500">
+                        <button onclick="saveMemberDebtByAdmin()" class="px-3 py-1 bg-pink-500 text-white rounded-lg font-bold text-[10px]">บันทึก</button>
+                    </div>
+                </div>
             </div>
 
-            <!-- Contact & Chat Button -->
-            <div class="space-y-2 pt-1">
-                <a id="adm-popup-line-link" href="#" target="_blank" class="w-full py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2">
+            <div class="space-y-2">
+                <h4 class="font-bold text-xs text-gray-700">ช่องทางการติดต่อ</h4>
+                <div id="adm-popup-contacts" class="text-xs space-y-1 text-gray-600 bg-gray-50 p-2.5 rounded-xl border"></div>
+                <a id="adm-popup-line-link" href="#" target="_blank" class="w-full py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2">
                     <i class="fa-brands fa-line text-base"></i> ทักไลน์หาลูกค้า
                 </a>
+            </div>
+
+            <div class="space-y-2">
+                <h4 class="font-bold text-xs text-gray-700">ประวัติการซื้อขาย</h4>
+                <div id="adm-popup-history" class="space-y-1.5 text-xs max-h-28 overflow-y-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal (Matching Image 23-24) -->
+    <div id="admin-edit-product-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-2xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-5 relative shadow-2xl border border-pink-100 space-y-3 max-h-[85vh] overflow-y-auto text-xs">
+            <h3 class="font-bold text-gray-800 text-sm"><i class="fa-solid fa-pen mr-1"></i>แก้ไขสินค้า</h3>
+            <input type="hidden" id="edit-prod-id">
+            <div>
+                <label class="text-gray-500">ชื่อสินค้า</label>
+                <input type="text" id="edit-prod-name" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="text-gray-500">ราคา (฿)</label>
+                    <input type="number" id="edit-prod-price" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl">
+                </div>
+                <div>
+                    <label class="text-gray-500">เรท/ต้นทุน (฿)</label>
+                    <input type="number" id="edit-prod-cost" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl">
+                </div>
+            </div>
+            <div>
+                <label class="text-gray-500">รายละเอียด</label>
+                <textarea id="edit-prod-desc" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl h-16"></textarea>
+            </div>
+            <div>
+                <label class="text-gray-500">หมวดหมู่</label>
+                <select id="edit-prod-cat" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl">
+                    <option value="skincare">สกินแคร์</option>
+                    <option value="makeup">เมคอัพ</option>
+                    <option value="perfume">น้ำหอม</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-gray-500">ลิงก์รูปภาพ</label>
+                <input type="text" id="edit-prod-img" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl">
+            </div>
+            <div class="flex items-center space-x-2 pt-1">
+                <input type="checkbox" id="edit-prod-rec" class="accent-pink-500">
+                <label for="edit-prod-rec">แสดงเป็น "สินค้าแนะนำ"</label>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeEditProductModal()" class="flex-1 py-2 bg-gray-100 text-gray-600 rounded-xl font-bold">ยกเลิก</button>
+                <button onclick="saveEditedProduct()" class="flex-1 py-2 bg-pink-500 text-white rounded-xl font-bold">บันทึกการแก้ไข</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Bill Receipt Modal -->
+    <div id="order-bill-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-2xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-5 relative shadow-2xl border border-pink-100 space-y-3 text-xs">
+            <button onclick="closeOrderBillModal()" class="absolute right-3 top-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center pb-2 border-b">
+                <h3 class="font-bold text-gray-800 text-sm"><i class="fa-solid fa-receipt text-pink-500 mr-1"></i>ใบเสร็จออเดอร์สินค้า</h3>
+                <p id="bill-orderno" class="text-[10px] text-pink-600 font-bold">TN-0170926080</p>
+            </div>
+            <div class="space-y-1 text-gray-600">
+                <p><strong>ชื่อลูกค้า:</strong> <span id="bill-customer">-</span></p>
+                <p><strong>เวลาสั่งซื้อ:</strong> <span id="bill-time">-</span></p>
+                <p><strong>รายการสินค้า:</strong> <span id="bill-items">-</span></p>
+            </div>
+            <div class="pt-2 border-t flex justify-between items-center text-sm font-extrabold text-pink-600">
+                <span>ยอดรวมสุทธิ:</span>
+                <span id="bill-total">฿0</span>
+            </div>
+            <div class="pt-2">
+                <button onclick="alert('แสดงสลิปโอนเงินยืนยันเรียบร้อย')" class="w-full py-2 bg-pink-50 text-pink-600 rounded-xl font-bold"><i class="fa-solid fa-image mr-1"></i>ดูสลิปการโอนเงิน</button>
             </div>
         </div>
     </div>
 
     <!-- Edit Profile Modal -->
     <div id="edit-profile-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-2xs flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-xs w-full p-5 relative shadow-2xl border border-pink-100 space-y-3">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-5 relative shadow-2xl border border-pink-100 space-y-3 text-xs">
             <button onclick="closeEditProfileModal()" class="absolute right-3 top-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             <h3 class="font-bold text-gray-800 text-sm">แก้ไขโปรไฟล์ลูกค้า</h3>
-            <div class="space-y-2 text-xs">
+            <div class="space-y-2">
                 <div>
                     <label class="text-gray-500">ชื่อโปรไฟล์</label>
                     <input type="text" id="edit-prof-name" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl">
@@ -487,6 +654,9 @@
                 <div>
                     <label class="text-gray-500">ไลน์ไอดี</label>
                     <input type="text" id="edit-prof-line" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl">
+                </div>
+                <div class="p-2 bg-yellow-50 text-yellow-700 rounded-xl text-[10px]">
+                    * ชื่อจริง-นามสกุล และชื่อบัญชี ไม่สามารถแก้ไขเองได้ ต้องส่งคำขอผ่าน Line Official เท่านั้น
                 </div>
                 <button onclick="saveProfileChanges()" class="w-full py-2 bg-pink-500 text-white rounded-xl font-bold mt-2">บันทึกข้อมูล</button>
             </div>
@@ -500,30 +670,40 @@
         let currentUser = null;
         let selectedPaymentType = 'full';
         let currentSelectedProduct = null;
+        let revenueFilterMode = 'day';
 
-        // Mock Members Database for Admin View
+        // Mock Members Database for Admin
         let appMembers = [
-            { id: 1, name: "คุณมายด์", fullname: "มายด์ นารีรัตน์", email: "mind@email.com", line: "@mind_line", points: 150, debt: 500, img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" },
-            { id: 2, name: "คุณฟ้าใส", fullname: "ฟ้าใส ใจดี", email: "fah@email.com", line: "@fah_line", points: 300, debt: 0, img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" },
-            { id: 3, name: "คุณพลอย", fullname: "พลอย ไพลิน", email: "ploy@email.com", line: "@ploy_line", points: 50, debt: 1200, img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" }
+            { id: 1, name: "คุณมายด์", fullname: "มายด์ นารีรัตน์", email: "mind@email.com", line: "@mind_line", points: 150, debt: 500, img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80", history: [{name: "ชุดเดรสคุณหนู", price: 500, date: "17/9/2569"}] },
+            { id: 2, name: "คุณฟ้าใส", fullname: "ฟ้าใส ใจดี", email: "fah@email.com", line: "@fah_line", points: 300, debt: 0, img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80", history: [] }
+        ];
+
+        let appOrders = [
+            { id: "TN-0170926080", customer: "คุณหนูคนสวย", time: "17/9/2569 18:58:41", items: "Sweet bunny ♡(x1), Tiexas Demo(x1)", total: 84, cost: 30, status: "สำเร็จสิ้น" },
+            { id: "TN-0130926079", customer: "ริม่อน", time: "13/9/2569 15:34:25", items: "rosybunnie ver. 1 ♡-(x1)", total: 500, cost: 200, status: "รอตรวจสอบ" }
         ];
 
         let appState = {
             storeOpen: true,
+            shopName: "Sakura Boutique",
             announcement: "🎉 โปรโมชั่นพิเศษต้อนรับเดือนนี้! ซื้อครบ 500 บาทสะสมแต้มฟรี หรือเลือกผ่อนชำระสินค้าได้แล้ววันนี้!",
+            webhookUrl: "",
+            bannerUrl: "https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=800&q=80",
+            queueBannerUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
             products: [
-                { id: 1, name: "ชุดเดรสคุณหนูสไตล์เกาหลี", category: "skincare", price: 500, desc: "เดรสผ้าลินินสีชมพูพาสเทล ดีไซน์น่ารักละมุน", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80" },
-                { id: 2, name: "เซรั่มซากุระบำรุงผิว", category: "skincare", price: 890, desc: "ผิวฉ่ำวาว อิ่มน้ำ ดูสุขภาพดี", img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=500&q=80" },
-                { id: 3, name: "ลิปสติกโทนพีชละมุน", category: "makeup", price: 350, desc: "ติดทนนานตลอดวัน ไม่ตกร่อง", img: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=500&q=80" },
-                { id: 4, name: "พาเลทท์อายแชโดว์ 9 สี", category: "makeup", price: 650, desc: "โทนชมพูน้ำตาลแต่งได้ทุกวัน", img: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=500&q=80" },
-                { id: 5, name: "น้ำหอมกลิ่นดอกไม้ขาว", category: "perfume", price: 1200, desc: "หอมหวานละมุน ลูกคุณหนูสุดๆ", img: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=500&q=80" },
-                { id: 6, name: "บลัชออนเนื้อคุชชั่น", category: "makeup", price: 420, desc: "แก้มระเรื่อเป็นธรรมชาติ", img: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?auto=format&fit=crop&w=500&q=80" }
+                { id: 1, name: "ชุดเดรสคุณหนูสไตล์เกาหลี", category: "skincare", price: 500, cost: 200, desc: "เดรสผ้าลินินสีชมพูพาสเทล ดีไซน์น่ารักละมุน", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80", isRec: true },
+                { id: 2, name: "เซรั่มซากุระบำรุงผิว", category: "skincare", price: 890, cost: 350, desc: "ผิวฉ่ำวาว อิ่มน้ำ ดูสุขภาพดี", img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=500&q=80", isRec: true },
+                { id: 3, name: "ลิปสติกโทนพีชละมุน", category: "makeup", price: 350, cost: 120, desc: "ติดทนนานตลอดวัน ไม่ตกร่อง", img: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=500&q=80", isRec: true }
+            ],
+            categories: [
+                { id: 'all', name: 'ทั้งหมด' },
+                { id: 'skincare', name: 'สกินแคร์' },
+                { id: 'makeup', name: 'เมคอัพ' },
+                { id: 'perfume', name: 'น้ำหอม' }
             ],
             queues: [
-                { id: 101, name: "คุณมายด์", service: "บริการแต่งหน้าโทนเกาหลี", seq: 1, status: "กำลังทำ" },
-                { id: 102, name: "คุณฟ้าใส", service: "บริการทำเล็บเจลสไตล์ญี่ปุ่น", seq: 2, status: "รอบรีฟ" },
-                { id: 103, name: "คุณพลอย", service: "ชุดเดรสคุณหนู (จัดส่ง)", seq: 3, status: "รับคิว" },
-                { id: 104, name: "คุณโบว์", service: "บริการแต่งหน้าเจ้าสาว", seq: 4, status: "เสร็จสิ้น" }
+                { id: 101, name: "คุณมายด์", service: "บริการแต่งหน้าโทนเกาหลี", price: 600, qty: 1, seq: 1, status: "กำลังทำ", line: "@mind_line" },
+                { id: 102, name: "คุณฟ้าใส", service: "บริการทำเล็บเจลสไตล์ญี่ปุ่น", price: 450, qty: 1, seq: 2, status: "รอบรีฟ", line: "@fah_line" }
             ],
             cart: []
         };
@@ -548,13 +728,28 @@
 
         function initApp() {
             document.getElementById('announcement-text').innerText = appState.announcement;
+            document.getElementById('home-shop-name').innerText = appState.shopName;
+            document.getElementById('shop-title-header').innerHTML = `<i class="fa-solid fa-store mr-2"></i>${appState.shopName}`;
+            renderCategoriesTabs();
             renderRecommendedProducts();
             updateCartBadge();
         }
 
+        function setThemeColor(bgColor, accentColor) {
+            document.getElementById('app-body').style.setProperty('--bg-main', bgColor);
+            alert("เปลี่ยนธีมสีเรียบร้อยแล้ว!");
+        }
+
+        function renderCategoriesTabs() {
+            const container = document.getElementById('categories-tabs-container');
+            container.innerHTML = appState.categories.map(c => `
+                <button onclick="setCategory('${c.id}')" id="cat-btn-${c.id}" class="cat-btn px-4 py-1.5 rounded-full text-xs font-medium ${c.id === activeCategory ? 'bg-pink-500 text-white shadow-xs' : 'bg-white text-gray-600 border border-pink-200'} shrink-0 transition">${c.name}</button>
+            `).join('');
+        }
+
         function renderRecommendedProducts() {
             const container = document.getElementById('recommended-products-list');
-            const recs = appState.products.slice(0, 4);
+            const recs = appState.products.filter(p => p.isRec).slice(0, 4);
             container.innerHTML = recs.map(p => `
                 <div onclick="openProductModal(${p.id})" class="bg-white rounded-3xl p-3 border border-pink-100 shadow-2xs hover:shadow-md transition cursor-pointer flex flex-col justify-between">
                     <div>
@@ -578,13 +773,7 @@
 
         function setCategory(cat) {
             activeCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.classList.remove('bg-pink-500', 'text-white', 'shadow-xs');
-                btn.classList.add('bg-white', 'text-gray-600', 'border', 'border-pink-200');
-            });
-            const activeBtn = document.getElementById(`cat-btn-${cat}`);
-            activeBtn.classList.remove('bg-white', 'text-gray-600', 'border', 'border-pink-200');
-            activeBtn.classList.add('bg-pink-500', 'text-white', 'shadow-xs');
+            renderCategoriesTabs();
             renderProducts();
         }
 
@@ -719,15 +908,28 @@
         }
 
         function submitPaymentOrder() {
-            alert("ส่งสลิปโอนเงินสำเร็จ! ข้อมูลถูกบันทึกเรียบร้อยแล้ว");
+            alert("ส่งสลิปโอนเงินสำเร็จ! ระบบบันทึกออเดอร์และส่ง Webhook แจ้งเตือนเรียบร้อย");
             closePaymentModal();
+            
+            // Push to Orders
+            const newOrder = {
+                id: "TN-" + Math.floor(100000000 + Math.random() * 900000000),
+                customer: currentUser ? currentUser.name : "ลูกค้าทั่วไป",
+                time: new Date().toLocaleDateString('th-TH') + " " + new Date().toLocaleTimeString('th-TH'),
+                items: currentSelectedProduct ? `${currentSelectedProduct.name} (x1)` : "บริการด่วน (x1)",
+                total: currentSelectedProduct ? currentSelectedProduct.price : 500,
+                cost: currentSelectedProduct ? currentSelectedProduct.cost : 100,
+                status: "สำเร็จสิ้น"
+            };
+            appOrders.unshift(newOrder);
+
             if (selectedPaymentType === 'installment' && currentUser) {
-                currentUser.debt += (currentSelectedProduct ? currentSelectedProduct.price / 2 : 500);
+                currentUser.debt += (currentSelectedProduct ? currentSelectedProduct.price / 2 : 250);
             }
             if (currentUser) {
                 currentUser.points += 50;
                 currentUser.history.push({
-                    name: currentSelectedProduct ? currentSelectedProduct.name : "สินค้าทั่วไป",
+                    name: currentSelectedProduct ? currentSelectedProduct.name : "บริการด่วน",
                     price: currentSelectedProduct ? currentSelectedProduct.price : 500,
                     date: new Date().toLocaleDateString('th-TH')
                 });
@@ -781,14 +983,17 @@
                             <span class="w-6 h-6 rounded-full bg-pink-100 text-pink-600 font-bold text-xs flex items-center justify-center">#${q.seq}</span>
                             <h4 class="font-bold text-gray-800 text-xs">${q.name}</h4>
                         </div>
-                        <p class="text-[11px] text-gray-500 pl-8">${q.service}</p>
+                        <p class="text-[11px] text-gray-500 pl-8">${q.service} - ฿${q.price.toLocaleString()}</p>
                     </div>
-                    <div>
+                    <div class="flex items-center space-x-2">
                         <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${
                             q.status === 'กำลังทำ' ? 'bg-amber-100 text-amber-700' :
                             q.status === 'รอบรีฟ' ? 'bg-purple-100 text-purple-700' :
-                            q.status === 'รับคิว' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
+                            q.status === 'รอคิว' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
                         }">${q.status}</span>
+                        <a href="https://line.me/ti/p/~${(q.line || 'contact').replace('@','')}" target="_blank" class="w-7 h-7 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs" title="ทักไลน์ลูกค้า">
+                            <i class="fa-brands fa-line"></i>
+                        </a>
                     </div>
                 </div>
             `).join('');
@@ -804,11 +1009,14 @@
                 id: Date.now(),
                 name: currentUser.name,
                 service: serviceName,
+                price: price,
+                qty: 1,
                 seq: appState.queues.length + 1,
-                status: "รับคิว"
+                status: "รอคิว",
+                line: currentUser.line
             };
             appState.queues.push(newQueue);
-            alert(`จองคิว "${serviceName}" สำเร็จ! คิวของคุณถูกเพิ่มในระบบแล้ว`);
+            alert(`จองคิว "${serviceName}" สำเร็จ! คิวถูกเพิ่มในระบบแล้ว`);
             openPaymentModal(price, 'full');
         }
 
@@ -958,7 +1166,7 @@
             currentUser.line = document.getElementById('edit-prof-line').value;
             closeEditProfileModal();
             updateAccountViewUI();
-            alert("บันทึกข้อมูลโปรไฟล์เรียบร้อยแล้ว");
+            alert("บันทึกข้อมูลเรียบร้อย (ชื่อจริง/บัญชี แก้ไขผ่านทาง Line Official เท่านั้น)");
         }
 
         // --- Admin Controls ---
@@ -977,12 +1185,15 @@
                 closeAdminLoginModal();
                 openAdminPanelModal();
             } else {
-                alert("รหัสผ่านแอดมินไม่ถูกต้อง! (รหัสทดสอบ: admin1234)");
+                alert("รหัสผ่านแอดมินไม่ถูกต้อง! (รหัส: admin1234)");
             }
         }
 
         function openAdminPanelModal() {
             document.getElementById('admin-marquee-input').value = appState.announcement;
+            document.getElementById('adm-shop-name-input').value = appState.shopName;
+            document.getElementById('adm-webhook-input').value = appState.webhookUrl;
+            document.getElementById('adm-banner-url-input').value = appState.bannerUrl;
             switchAdminSubTab('shop');
             document.getElementById('admin-panel-modal').classList.remove('hidden');
         }
@@ -991,19 +1202,20 @@
             document.getElementById('admin-panel-modal').classList.add('hidden');
         }
 
-        // Admin Sub-Tab Switcher
         function switchAdminSubTab(tabName) {
             document.querySelectorAll('.adm-tab').forEach(btn => {
-                btn.className = "adm-tab px-4 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 shrink-0";
+                btn.className = "adm-tab px-3 py-2 rounded-xl font-medium bg-gray-100 text-gray-600 shrink-0";
             });
             document.querySelectorAll('.adm-content').forEach(el => el.classList.add('hidden'));
 
-            document.getElementById(`adm-tab-${tabName}`).className = "adm-tab px-4 py-2 rounded-xl font-bold bg-pink-500 text-white shrink-0 shadow-xs";
+            document.getElementById(`adm-tab-${tabName}`).className = "adm-tab px-3 py-2 rounded-xl font-bold bg-pink-500 text-white shrink-0 shadow-xs";
             document.getElementById(`adm-content-${tabName}`).classList.remove('hidden');
 
-            if (tabName === 'products') renderAdminProducts();
+            if (tabName === 'products') renderAdminProductsList();
             if (tabName === 'queue') renderAdminQueues();
             if (tabName === 'members') renderAdminMembers();
+            if (tabName === 'orders') renderAdminOrders();
+            if (tabName === 'revenue') renderAdminRevenue();
         }
 
         function adminToggleStoreStatus() {
@@ -1025,39 +1237,130 @@
             }
         }
 
-        function adminSaveMarquee() {
-            const val = document.getElementById('admin-marquee-input').value;
-            appState.announcement = val;
-            document.getElementById('announcement-text').innerText = val;
-            alert("บันทึกข้อความประกาศเรียบร้อย");
+        function saveShopThemeSettings() {
+            appState.shopName = document.getElementById('adm-shop-name-input').value;
+            appState.announcement = document.getElementById('admin-marquee-input').value;
+            appState.webhookUrl = document.getElementById('adm-webhook-input').value;
+            appState.bannerUrl = document.getElementById('adm-banner-url-input').value;
+
+            document.getElementById('home-shop-name').innerText = appState.shopName;
+            document.getElementById('shop-title-header').innerHTML = `<i class="fa-solid fa-store mr-2"></i>${appState.shopName}`;
+            document.getElementById('announcement-text').innerText = appState.announcement;
+            if(appState.bannerUrl) document.getElementById('home-banner-img').src = appState.bannerUrl;
+
+            alert("บันทึกการตั้งค่าร้าน/ธีมเรียบร้อย!");
         }
 
-        function renderAdminProducts() {
-            const container = document.getElementById('admin-products-list');
-            container.innerHTML = appState.products.map(p => `
-                <div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border border-gray-200">
+        // --- Products Management in Admin ---
+        function addNewProduct() {
+            const name = document.getElementById('new-prod-name').value.trim();
+            const price = Number(document.getElementById('new-prod-price').value);
+            const cost = Number(document.getElementById('new-prod-cost').value);
+            const desc = document.getElementById('new-prod-desc').value.trim();
+            const cat = document.getElementById('new-prod-cat').value;
+            const img = document.getElementById('new-prod-img').value.trim() || "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80";
+            const isRec = document.getElementById('new-prod-rec').checked;
+
+            if(!name || !price) {
+                alert("กรุณากรอกชื่อและราคาสินค้า");
+                return;
+            }
+
+            const newProd = {
+                id: Date.now(),
+                name, price, cost, desc, category: cat, img, isRec
+            };
+            appState.products.push(newProd);
+            alert("อัปโหลดสินค้าเข้าคลาวด์สำเร็จ!");
+            document.getElementById('new-prod-name').value = "";
+            document.getElementById('new-prod-price').value = "";
+            document.getElementById('new-prod-cost').value = "";
+            document.getElementById('new-prod-desc').value = "";
+            renderAdminProductsList();
+            renderRecommendedProducts();
+        }
+
+        function renderAdminProductsList() {
+            const container = document.getElementById('admin-products-cloud-list');
+            const query = document.getElementById('admin-prod-search').value.toLowerCase();
+            document.getElementById('prod-count-label').innerText = appState.products.length;
+
+            const filtered = appState.products.filter(p => p.name.toLowerCase().includes(query));
+
+            container.innerHTML = filtered.map(p => `
+                <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border">
                     <div class="flex items-center space-x-2">
                         <img src="${p.img}" class="w-10 h-10 rounded-lg object-cover">
                         <div>
                             <p class="font-bold text-gray-800">${p.name}</p>
-                            <p class="text-[10px] text-pink-600 font-bold">฿${p.price.toLocaleString()}</p>
+                            <p class="text-[10px] text-pink-600 font-bold">฿${p.price.toLocaleString()} | ทุน ฿${(p.cost||0).toLocaleString()}</p>
                         </div>
                     </div>
-                    <span class="px-2 py-0.5 bg-pink-100 text-pink-600 rounded-md font-semibold text-[10px]">${p.category}</span>
+                    <div class="flex items-center space-x-1">
+                        ${p.isRec ? '<span class="px-2 py-0.5 bg-pink-100 text-pink-600 rounded-md font-bold text-[9px]">แนะนำ</span>' : ''}
+                        <button onclick="openEditProductModal(${p.id})" class="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteProduct(${p.id})" class="w-7 h-7 bg-red-50 text-red-600 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 </div>
             `).join('');
         }
 
+        function openEditProductModal(id) {
+            const p = appState.products.find(item => item.id === id);
+            if(!p) return;
+            document.getElementById('edit-prod-id').value = p.id;
+            document.getElementById('edit-prod-name').value = p.name;
+            document.getElementById('edit-prod-price').value = p.price;
+            document.getElementById('edit-prod-cost').value = p.cost || 0;
+            document.getElementById('edit-prod-desc').value = p.desc;
+            document.getElementById('edit-prod-cat').value = p.category;
+            document.getElementById('edit-prod-img').value = p.img;
+            document.getElementById('edit-prod-rec').checked = p.isRec;
+            document.getElementById('admin-edit-product-modal').classList.remove('hidden');
+        }
+
+        function closeEditProductModal() {
+            document.getElementById('admin-edit-product-modal').classList.add('hidden');
+        }
+
+        function saveEditedProduct() {
+            const id = Number(document.getElementById('edit-prod-id').value);
+            const p = appState.products.find(item => item.id === id);
+            if(!p) return;
+
+            p.name = document.getElementById('edit-prod-name').value;
+            p.price = Number(document.getElementById('edit-prod-price').value);
+            p.cost = Number(document.getElementById('edit-prod-cost').value);
+            p.desc = document.getElementById('edit-prod-desc').value;
+            p.category = document.getElementById('edit-prod-cat').value;
+            p.img = document.getElementById('edit-prod-img').value;
+            p.isRec = document.getElementById('edit-prod-rec').checked;
+
+            closeEditProductModal();
+            renderAdminProductsList();
+            renderRecommendedProducts();
+            alert("บันทึกการแก้ไขสินค้าเรียบร้อย!");
+        }
+
+        function deleteProduct(id) {
+            if(confirm("ต้องการลบสินค้านี้ใช่หรือไม่?")) {
+                appState.products = appState.products.filter(p => p.id !== id);
+                renderAdminProductsList();
+                renderRecommendedProducts();
+            }
+        }
+
+        // --- Queues Management in Admin ---
         function renderAdminQueues() {
             const container = document.getElementById('admin-queue-list');
             container.innerHTML = appState.queues.map((q, idx) => `
-                <div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border border-gray-200">
+                <div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border">
                     <div>
                         <p class="font-bold">${q.name} - ${q.service}</p>
-                        <p class="text-[10px] text-gray-400">สถานะ: ${q.status}</p>
+                        <p class="text-[10px] text-gray-400">ราคา: ฿${q.price} | สถานะ: ${q.status}</p>
                     </div>
                     <select onchange="adminUpdateQueueStatus(${idx}, this.value)" class="text-[10px] bg-white border border-pink-200 rounded-lg p-1">
-                        <option value="รับคิว" ${q.status==='รับคิว'?'selected':''}>รับคิว</option>
+                        <option value="รอคิว" ${q.status==='รอคิว'?'selected':''}>รอคิว</option>
                         <option value="รอบรีฟ" ${q.status==='รอบรีฟ'?'selected':''}>รอบรีฟ</option>
                         <option value="กำลังทำ" ${q.status==='กำลังทำ'?'selected':''}>กำลังทำ</option>
                         <option value="เสร็จสิ้น" ${q.status==='เสร็จสิ้น'?'selected':''}>เสร็จสิ้น</option>
@@ -1069,9 +1372,10 @@
         function adminUpdateQueueStatus(index, newStatus) {
             appState.queues[index].status = newStatus;
             renderQueues();
+            renderQueues();
         }
 
-        // Render Members list in Admin Panel
+        // --- Members Management in Admin ---
         function renderAdminMembers() {
             const container = document.getElementById('admin-members-list');
             if (currentUser && !appMembers.some(m => m.email === currentUser.email)) {
@@ -1079,7 +1383,7 @@
             }
 
             container.innerHTML = appMembers.map(m => `
-                <div onclick="openAdminMemberPopup('${m.email}')" class="flex justify-between items-center bg-gray-50 hover:bg-pink-50 p-3 rounded-2xl border border-gray-200 cursor-pointer transition">
+                <div onclick="openAdminMemberPopup('${m.email}')" class="flex justify-between items-center bg-gray-50 hover:bg-pink-50 p-3 rounded-2xl border cursor-pointer transition">
                     <div class="flex items-center space-x-3">
                         <img src="${m.img || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'}" class="w-10 h-10 rounded-full object-cover border border-pink-200">
                         <div>
@@ -1095,10 +1399,12 @@
             `).join('');
         }
 
-        // Open Member Popup from Admin
+        let currentActiveMemberEmail = null;
+
         function openAdminMemberPopup(email) {
             const member = appMembers.find(m => m.email === email);
             if (!member) return;
+            currentActiveMemberEmail = email;
 
             document.getElementById('adm-popup-prof-img').src = member.img || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
             document.getElementById('adm-popup-name').innerText = member.name;
@@ -1106,18 +1412,121 @@
             document.getElementById('adm-popup-fullname').innerText = member.fullname || member.name;
             document.getElementById('adm-popup-account-name').innerText = member.name;
             document.getElementById('adm-popup-points').innerText = `${member.points} แต้ม`;
-            document.getElementById('adm-popup-debt').innerText = `฿${(member.debt || 0).toLocaleString()}`;
-            
-            // Set Line Chat Link Button
-            const lineId = member.line || '@line_contact';
-            const cleanLine = lineId.replace('@', '');
+            document.getElementById('adm-popup-debt-input').value = member.debt || 0;
+
+            document.getElementById('adm-popup-contacts').innerHTML = `
+                <p><strong>Line ID:</strong> ${member.line || '-'}</p>
+                <p><strong>Email:</strong> ${member.email}</p>
+            `;
+
+            const cleanLine = (member.line || '').replace('@','');
             document.getElementById('adm-popup-line-link').href = `https://line.me/ti/p/~${cleanLine}`;
+
+            const historyBox = document.getElementById('adm-popup-history');
+            if(!member.history || member.history.length === 0) {
+                historyBox.innerHTML = `<p class="text-gray-400">ยังไม่มีประวัติการซื้อ</p>`;
+            } else {
+                historyBox.innerHTML = member.history.map(h => `
+                    <div class="flex justify-between bg-gray-50 p-2 rounded-lg">
+                        <span>${h.name}</span>
+                        <span class="font-bold text-pink-600">฿${h.price}</span>
+                    </div>
+                `).join('');
+            }
 
             document.getElementById('admin-member-detail-modal').classList.remove('hidden');
         }
 
         function closeAdminMemberDetailModal() {
             document.getElementById('admin-member-detail-modal').classList.add('hidden');
+        }
+
+        function saveMemberDebtByAdmin() {
+            const member = appMembers.find(m => m.email === currentActiveMemberEmail);
+            if(!member) return;
+            const newDebt = Number(document.getElementById('adm-popup-debt-input').value);
+            member.debt = newDebt;
+            if(currentUser && currentUser.email === member.email) {
+                currentUser.debt = newDebt;
+                updateAccountViewUI();
+            }
+            alert("อัปเดตยอดค้างผ่อนเรียบร้อย!");
+            renderAdminMembers();
+        }
+
+        // --- Orders Management in Admin ---
+        function renderAdminOrders() {
+            const container = document.getElementById('admin-orders-list');
+            container.innerHTML = appOrders.map(o => `
+                <div class="bg-gray-50 p-3 rounded-2xl border space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-pink-600">${o.id}</span>
+                        <span class="text-[10px] text-gray-400">${o.time}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-700">
+                        <span>ลูกค้า: <strong>${o.customer}</strong></span>
+                        <span class="font-extrabold text-green-600">฿${o.total}</span>
+                    </div>
+                    <p class="text-[11px] text-gray-500">${o.items}</p>
+                    <div class="flex space-x-2 pt-1">
+                        <button onclick="openOrderBillModal('${o.id}')" class="flex-1 py-1.5 bg-pink-100 text-pink-600 rounded-lg font-bold text-[10px]"><i class="fa-solid fa-receipt mr-1"></i>ดูออเดอร์/สลิป</button>
+                        <button onclick="deleteOrder('${o.id}')" class="px-3 py-1.5 bg-red-100 text-red-600 rounded-lg font-bold text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openOrderBillModal(orderId) {
+            const o = appOrders.find(item => item.id === orderId);
+            if(!o) return;
+            document.getElementById('bill-orderno').innerText = o.id;
+            document.getElementById('bill-customer').innerText = o.customer;
+            document.getElementById('bill-time').innerText = o.time;
+            document.getElementById('bill-items').innerText = o.items;
+            document.getElementById('bill-total').innerText = `฿${o.total}`;
+            document.getElementById('order-bill-modal').classList.remove('hidden');
+        }
+
+        function closeOrderBillModal() {
+            document.getElementById('order-bill-modal').classList.add('hidden');
+        }
+
+        function deleteOrder(orderId) {
+            if(confirm("ต้องการลบออเดอร์นี้ใช่หรือไม่?")) {
+                appOrders = appOrders.filter(o => o.id !== orderId);
+                renderAdminOrders();
+            }
+        }
+
+        // --- Revenue Management in Admin ---
+        function setRevenueFilter(mode) {
+            revenueFilterMode = mode;
+            ['day', 'month', 'year'].forEach(m => {
+                const btn = document.getElementById(`rev-btn-${m}`);
+                if(m === mode) {
+                    btn.className = "flex-1 py-1 font-bold bg-white text-pink-600 rounded-lg shadow-2xs";
+                } else {
+                    btn.className = "flex-1 py-1 font-medium text-gray-500 rounded-lg";
+                }
+            });
+            renderAdminRevenue();
+        }
+
+        function renderAdminRevenue() {
+            let totalSales = 0;
+            let totalCost = 0;
+            appOrders.forEach(o => {
+                totalSales += o.total;
+                totalCost += (o.cost || 0);
+            });
+            let netProfit = totalSales - totalCost;
+
+            document.getElementById('rev-total-sales').innerText = `฿${totalSales.toLocaleString()}`;
+            document.getElementById('rev-total-cost').innerText = `฿${totalCost.toLocaleString()}`;
+            document.getElementById('rev-net-profit').innerText = `฿${netProfit.toLocaleString()}`;
+
+            document.getElementById('rev-chart-subtitle').innerText = `แสดงผลกำไรสุทธิประจำ${revenueFilterMode === 'day' ? 'วัน' : revenueFilterMode === 'month' ? 'เดือน' : 'ปี'}`;
+            document.getElementById('rev-chart-amount').innerText = `฿${netProfit.toLocaleString()}`;
         }
 
         window.onload = initApp;
