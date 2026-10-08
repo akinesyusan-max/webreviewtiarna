@@ -27,9 +27,24 @@
             background: #ffb3c1;
             border-radius: 10px;
         }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -20px) scale(0.9); }
+            15% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            85% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -10px) scale(0.9); }
+        }
+        .toast-animate {
+            animation: fadeInOut 2s ease-in-out forwards;
+        }
     </style>
 </head>
 <body id="app-body" class="min-h-screen pb-32 relative" style="--bg-main: #fff5f7;">
+
+    <!-- ==================== MINI TOAST NOTIFICATION (Image 48 Style) ==================== -->
+    <div id="mini-toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#c5b7b8]/95 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-3 text-xs font-medium tracking-wide hidden toast-animate pointer-events-none">
+        <i class="fa-solid fa-bag-shopping text-pink-200 text-sm"></i>
+        <span>ใส่ตะกร้าแล้วค่ะ</span>
+    </div>
 
     <!-- ==================== MAIN SHOP VIEW ==================== -->
     <div id="main-shop-container">
@@ -580,6 +595,19 @@
             renderProducts();
         }
 
+        function showMiniToast() {
+            const toast = document.getElementById('mini-toast');
+            toast.classList.remove('hidden');
+            // Restart animation
+            toast.style.animation = 'none';
+            toast.offsetHeight;
+            toast.style.animation = null;
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2000);
+        }
+
         function renderRecommendedProducts() {
             const container = document.getElementById('recommended-products-list');
             if(!container) return;
@@ -654,15 +682,15 @@
             if(!prod) return;
             appState.cart.push(prod);
             updateCartBadge();
-            alert("เพิ่มเข้าตะกร้าแล้วค่าา 🌸✨");
+            showMiniToast();
         }
 
         function confirmAddToCart() {
             if(!currentSelectedProduct) return;
             appState.cart.push(currentSelectedProduct);
             updateCartBadge();
-            alert("เพิ่มเข้าตะกร้าแล้วค่าา 🌸✨");
             closeProductModal();
+            showMiniToast();
         }
 
         function updateCartBadge() {
