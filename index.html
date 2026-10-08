@@ -27,21 +27,21 @@
             background: #ffb3c1;
             border-radius: 10px;
         }
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translate(-50%, -20px) scale(0.9); }
-            15% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            85% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -10px) scale(0.9); }
+        @keyframes fadeInOutCenter {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
         }
-        .toast-animate {
-            animation: fadeInOut 2s ease-in-out forwards;
+        .toast-center-animate {
+            animation: fadeInOutCenter 2s ease-in-out forwards;
         }
     </style>
 </head>
 <body id="app-body" class="min-h-screen pb-32 relative" style="--bg-main: #fff5f7;">
 
-    <!-- ==================== MINI TOAST NOTIFICATION (Image 48 Style) ==================== -->
-    <div id="mini-toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#c5b7b8]/95 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-3 text-xs font-medium tracking-wide hidden toast-animate pointer-events-none">
+    <!-- ==================== CENTER MINI TOAST NOTIFICATION ==================== -->
+    <div id="mini-toast" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-[#c5b7b8]/95 backdrop-blur-md text-white px-6 py-3.5 rounded-full shadow-xl flex items-center space-x-3 text-xs font-medium tracking-wide hidden toast-center-animate pointer-events-none">
         <i class="fa-solid fa-bag-shopping text-pink-200 text-sm"></i>
         <span>ใส่ตะกร้าแล้วค่ะ</span>
     </div>
@@ -54,7 +54,7 @@
                 <button onclick="openAdminLoginModal()" class="w-8 h-8 rounded-full bg-pink-50 flex items-center justify-center text-pink-600 hover:bg-pink-100 transition shadow-xs" title="เข้าสู่ระบบแอดมิน">
                     <i class="fa-solid fa-chess-rook text-sm"></i>
                 </button>
-                <span id="shop-title-header" class="text-pink-600 font-bold text-lg">Sakura Boutique</span>
+                <span id="shop-title-header" class="text-pink-600 font-bold text-lg">ชื่่อร้าน</span>
             </div>
             
             <div class="flex items-center space-x-3">
@@ -76,7 +76,7 @@
         <!-- Main Container Views -->
         <main class="max-w-md mx-auto p-4 space-y-5">
 
-            <!-- TAB 1: HOME -->
+            <!-- TAB 1: HOME (Matching Image 51 Style) -->
             <section id="view-home" class="view-section space-y-5">
                 <div class="relative bg-white rounded-3xl p-3 shadow-sm border border-pink-100">
                     <div class="h-44 w-full rounded-2xl overflow-hidden relative shadow-inner">
@@ -89,12 +89,12 @@
                     </div>
                     <div class="pt-6 px-3 flex justify-between items-center">
                         <div>
-                            <h2 id="home-shop-name" class="font-bold text-lg text-gray-800">Sakura Boutique</h2>
-                            <p id="home-shop-caption" class="text-xs text-gray-500">ยินดีต้อนรับสู่ร้านค้าน่ารักๆ สไตล์คุณหนู ✨</p>
+                            <h2 id="home-shop-name" class="font-bold text-lg text-gray-800">ชื่อร้าน</h2>
+                            <p id="home-shop-caption" class="text-xs text-gray-500">แคปชั่น</p>
                         </div>
-                        <div id="store-status-badge" class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 flex items-center gap-1.5 shadow-2xs">
+                        <div id="store-status-badge" class="px-4 py-1.5 rounded-full text-xs font-bold bg-green-100 text-green-700 flex items-center gap-1.5 shadow-2xs">
                             <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                            <span id="store-status-text">เปิดร้านอยู่</span>
+                            <span id="store-status-text">Open</span>
                         </div>
                     </div>
                 </div>
@@ -382,7 +382,7 @@
                 </div>
                 <div>
                     <label class="font-bold text-gray-700">ชื่อร้าน</label>
-                    <input type="text" id="adm-shop-name-input" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="Sakura Boutique">
+                    <input type="text" id="adm-shop-name-input" class="w-full mt-1 px-3 py-2 bg-gray-50 border rounded-xl" value="ชื่อร้าน">
                 </div>
                 <div>
                     <label class="font-bold text-gray-700">ข้อความวิ่งประกาศ</label>
@@ -492,7 +492,7 @@
         ];
 
         let appState = {
-            shopName: "Sakura Boutique",
+            shopName: "ชื่อร้าน",
             announcement: "🎉 โปรโมชั่นพิเศษต้อนรับเดือนนี้! ซื้อครบ 500 บาทสะสมแต้มฟรี!",
             links: { line: "https://line.me", ig: "https://instagram.com", fb: "https://facebook.com", disc: "https://discord.com", x: "https://twitter.com" },
             products: [
@@ -533,6 +533,10 @@
             document.getElementById('announcement-text').innerText = appState.announcement;
             document.getElementById('home-shop-name').innerText = appState.shopName;
             document.getElementById('shop-title-header').innerText = appState.shopName;
+            document.getElementById('home-banner-img').src = "https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=800&q=80";
+            document.getElementById('home-profile-img').src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80";
+            document.getElementById('home-shop-caption').innerText = "แคปชั่น";
+            document.getElementById('store-status-text').innerText = "Open";
             updateSocialLinks();
             renderCategoriesTabs();
             renderRecommendedProducts();
@@ -598,7 +602,6 @@
         function showMiniToast() {
             const toast = document.getElementById('mini-toast');
             toast.classList.remove('hidden');
-            // Restart animation
             toast.style.animation = 'none';
             toast.offsetHeight;
             toast.style.animation = null;
