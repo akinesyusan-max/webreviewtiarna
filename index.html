@@ -133,32 +133,37 @@
                 <div id="products-grid" class="grid grid-cols-2 gap-3"></div>
             </section>
 
-            <!-- TAB 3: QUEUE CHECK (Updated to Image 64 & 65 Style) -->
+            <!-- TAB 3: QUEUE CHECK (Updated to match Image 66 Style) -->
             <section id="view-queue" class="view-section hidden space-y-4">
                 <div class="bg-white rounded-3xl p-4 shadow-sm border border-pink-100 space-y-4">
                     <div class="h-32 w-full rounded-2xl overflow-hidden relative shadow-inner border border-pink-100">
                         <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80" alt="Queue Cake Banner" class="w-full h-full object-cover">
                     </div>
-                    
-                    <!-- 3 Stats Boxes -->
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="bg-white border border-pink-100 rounded-2xl p-3 text-center shadow-2xs">
-                            <span class="text-[11px] text-gray-400 font-medium">รอคิว</span>
-                            <h4 id="stat-waiting-count" class="font-bold text-gray-400 text-base mt-1">01</h4>
-                        </div>
-                        <div class="bg-white border border-pink-100 rounded-2xl p-3 text-center shadow-2xs">
-                            <span class="text-[11px] text-gray-400 font-medium">กำลังทำ</span>
-                            <h4 id="stat-active-count" class="font-bold text-orange-500 text-base mt-1">01</h4>
-                        </div>
-                        <div class="bg-white border border-pink-100 rounded-2xl p-3 text-center shadow-2xs">
-                            <span class="text-[11px] text-gray-400 font-medium">เสร็จแล้ว</span>
-                            <h4 id="stat-done-count" class="font-bold text-emerald-500 text-base mt-1">00</h4>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- Queue List Container matching Image 64 Style -->
-                <div id="queue-list-container" class="space-y-3 pt-2"></div>
+                <!-- Search Queue Bar -->
+                <div class="relative flex items-center bg-white border border-pink-200 rounded-full shadow-2xs px-4 py-2.5">
+                    <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm mr-2.5"></i>
+                    <input type="text" id="queue-search-input" oninput="renderQueues()" placeholder="ค้นหาคิวงาน..." class="w-full text-xs focus:outline-none bg-transparent">
+                </div>
+
+                <!-- Status Filter Pills & Calendar Toggle -->
+                <div class="flex justify-between items-center overflow-x-auto pb-1">
+                    <div class="flex space-x-1.5 bg-white p-1 rounded-2xl border border-pink-100 shadow-2xs">
+                        <button onclick="setQueueFilter('ทั้งหมด')" id="q-filter-ทั้งหมด" class="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-pink-500 text-white transition">ทั้งหมด</button>
+                        <button onclick="setQueueFilter('ยังไม่ได้เริ่ม')" id="q-filter-ยังไม่ได้เริ่ม" class="px-3 py-1.5 rounded-xl text-[11px] font-medium text-gray-500 transition">ยังไม่ได้เริ่ม</button>
+                        <button onclick="setQueueFilter('กำลังทำ')" id="q-filter-กำลังทำ" class="px-3 py-1.5 rounded-xl text-[11px] font-medium text-gray-500 transition">กำลังทำ</button>
+                        <button onclick="setQueueFilter('เสร็จแล้ว')" id="q-filter-เสร็จแล้ว" class="px-3 py-1.5 rounded-xl text-[11px] font-medium text-gray-500 transition">เสร็จแล้ว</button>
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button class="px-3 py-1.5 bg-white border border-pink-200 rounded-xl text-[11px] font-medium text-gray-600 shadow-2xs flex items-center gap-1.5">
+                        <i class="fa-regular fa-calendar"></i> รูปแบบปฏิทิน
+                    </button>
+                </div>
+
+                <!-- Queue List Container matching Image 66 -->
+                <div id="queue-list-container" class="space-y-4 pt-1"></div>
             </section>
 
             <!-- TAB 4: DETAIL -->
@@ -487,6 +492,7 @@
         let currentSelectedProduct = null;
         let selectedFilterType = 'โปรโมชั่น';
         let activeCategoryFilter = 'all';
+        let currentQueueFilter = 'ทั้งหมด';
 
         let appState = {
             shopName: "ชื่อร้าน",
@@ -501,7 +507,8 @@
                 { id: 2, name: "Salee Gaming", price: 199, cost: 50, desc: "เกมมิ่ง", category: "เมคอัพ", type: "สิทธิ์ขาด", featured: false, img: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=500&q=500" }
             ],
             queues: [
-                { id: 101, name: "ไม่ทราบ", service: "Sign", price: 600, status: "กำลังทำ", seq: 2 }
+                { id: 101, name: "k'sobell", service: "ปกกลุ่มแนวเจ้าหญิง", date: "11/09/69", status: "เสร็จแล้ว", seq: 1 },
+                { id: 102, name: "ไม่ทราบ", service: "Sign", date: "15/09/69", status: "กำลังทำ", seq: 2 }
             ],
             cart: []
         };
@@ -650,7 +657,7 @@
         function closeCartModal() { document.getElementById('cart-modal').classList.add('hidden'); }
         function checkoutCart() { alert("สั่งซื้อสำเร็จ!"); appState.cart = []; updateCartBadge(); closeCartModal(); }
 
-        // Auth & Queue (Image 64 Style matching)
+        // Auth & Queue (Image 66 Style matching)
         function switchAuthMode(m) {
             if(m === 'login') { document.getElementById('form-login').classList.remove('hidden'); document.getElementById('form-register').classList.add('hidden'); }
             else { document.getElementById('form-register').classList.remove('hidden'); document.getElementById('form-login').classList.add('hidden'); }
@@ -662,37 +669,72 @@
             if(!currentUser) { document.getElementById('auth-container').classList.remove('hidden'); document.getElementById('customer-profile-view').classList.add('hidden'); }
             else { document.getElementById('auth-container').classList.add('hidden'); document.getElementById('customer-profile-view').classList.remove('hidden'); document.getElementById('acc-name-display').innerText = currentUser.name; }
         }
+
+        function setQueueFilter(filter) {
+            currentQueueFilter = filter;
+            ['ทั้งหมด', 'ยังไม่ได้เริ่ม', 'กำลังทำ', 'เสร็จแล้ว'].forEach(f => {
+                const btn = document.getElementById(`q-filter-${f}`);
+                if(btn) {
+                    if(f === filter) {
+                        btn.className = "px-3 py-1.5 rounded-xl text-[11px] font-bold bg-pink-500 text-white transition";
+                    } else {
+                        btn.className = "px-3 py-1.5 rounded-xl text-[11px] font-medium text-gray-500 transition";
+                    }
+                }
+            });
+            renderQueues();
+        }
         
         function renderQueues() {
             const container = document.getElementById('queue-list-container');
-            container.innerHTML = appState.queues.map(q => `
-                <div class="bg-white rounded-3xl p-5 border border-[#d8c5c7] shadow-xs relative mt-4">
-                    <div class="absolute -top-3.5 left-5 w-10 h-10 rounded-full bg-white border border-[#d8c5c7] shadow-xs flex items-center justify-center text-[#7a5e62] font-bold text-xs">
-                        Q${q.seq || 2}
-                    </div>
-                    <div class="absolute -top-2 left-[39px] w-0.5 h-3 bg-[#a88288] rounded-full"></div>
-                    <div class="pl-2 pt-1 flex justify-between items-center">
-                        <div class="space-y-1">
-                            <div class="flex items-center space-x-2">
-                                <span class="font-bold text-[#6e5357] text-base">${q.name}</span>
-                                <span class="px-2.5 py-0.5 bg-white border border-[#d8c5c7] rounded-full text-[10px] font-bold text-[#8c6b70] tracking-wider">LINE</span>
+            const searchVal = document.getElementById('queue-search-input').value.toLowerCase();
+
+            const filtered = appState.queues.filter(q => {
+                const matchFilter = currentQueueFilter === 'ทั้งหมด' || q.status === currentQueueFilter;
+                const matchSearch = q.name.toLowerCase().includes(searchVal) || q.service.toLowerCase().includes(searchVal);
+                return matchFilter && matchSearch;
+            });
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 py-8 text-xs">ไม่พบรายการคิว</p>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(q => {
+                let statusBadge = '';
+                if(q.status === 'เสร็จแล้ว') {
+                    statusBadge = `<div class="px-3 py-1 bg-white border border-pink-200 rounded-xl text-[11px] font-medium text-emerald-600 flex items-center gap-1.5 shadow-2xs"><i class="fa-solid fa-check text-[10px]"></i> เสร็จแล้ว</div>`;
+                } else if(q.status === 'กำลังทำ') {
+                    statusBadge = `<div class="px-3 py-1 bg-white border border-pink-200 rounded-xl text-[11px] font-medium text-gray-600 flex items-center gap-1.5 shadow-2xs"><i class="fa-solid fa-spinner animate-spin text-[10px]"></i> กำลังทำ</div>`;
+                } else {
+                    statusBadge = `<div class="px-3 py-1 bg-white border border-pink-200 rounded-xl text-[11px] font-medium text-gray-400 shadow-2xs">ยังไม่ได้เริ่ม</div>`;
+                }
+
+                return `
+                    <div class="bg-white rounded-3xl p-5 border border-[#d8c5c7] shadow-xs relative mt-4">
+                        <div class="absolute -top-3.5 left-5 w-10 h-10 rounded-full bg-white border border-[#d8c5c7] shadow-xs flex items-center justify-center text-[#7a5e62] font-bold text-xs">
+                            Q${q.seq || 2}
+                        </div>
+                        <div class="absolute -top-2 left-[39px] w-0.5 h-3 bg-[#a88288] rounded-full"></div>
+                        <div class="pl-2 pt-1 flex justify-between items-start">
+                            <div class="space-y-1">
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-bold text-[#6e5357] text-base">${q.name}</span>
+                                    <span class="px-2.5 py-0.5 bg-white border border-[#d8c5c7] rounded-full text-[10px] font-bold text-[#8c6b70] tracking-wider">LINE</span>
+                                </div>
+                                <p class="text-xs text-[#8c6b70] font-medium">${q.service}</p>
                             </div>
-                            <p class="text-xs text-[#8c6b70] font-medium">${q.service}</p>
+                            <div class="flex items-center space-x-1.5 text-[11px] text-[#8c6b70] bg-white border border-[#d8c5c7] px-2.5 py-1 rounded-xl shadow-2xs">
+                                <i class="fa-regular fa-calendar"></i>
+                                <span>${q.date || '15/09/69'}</span>
+                            </div>
                         </div>
-                        <div class="px-3.5 py-1.5 bg-[#fdf8f8] border border-[#ebd8dc] rounded-full text-[11px] font-medium text-[#7a5e62] flex items-center gap-1.5 shadow-2xs">
-                            <i class="fa-solid fa-spinner animate-spin text-[10px]"></i> กำลังทำ
+                        <div class="flex justify-end mt-3">
+                            ${statusBadge}
                         </div>
                     </div>
-                </div>
-            `).join('');
-
-            const waitingCount = appState.queues.filter(q => q.status === 'รอคิว' || q.status !== 'เสร็จสิ้น').length;
-            const activeCount = appState.queues.filter(q => q.status === 'กำลังทำ').length;
-            const doneCount = appState.queues.filter(q => q.status === 'เสร็จสิ้น').length;
-
-            document.getElementById('stat-waiting-count').innerText = String(waitingCount).padStart(2, '0');
-            document.getElementById('stat-active-count').innerText = String(activeCount).padStart(2, '0');
-            document.getElementById('stat-done-count').innerText = String(doneCount).padStart(2, '0');
+                `;
+            }).join('');
         }
 
         // Admin
