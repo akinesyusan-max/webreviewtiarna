@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANTERz Cosshop - Cosplay Rental & Service</title>
+    <title>PANTERz Cosshop - Cosplay Rental & More!</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Prompt & Kanit) -->
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Prompt & Kanit) -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -19,16 +19,17 @@
                 extend: {
                     colors: {
                         brand: {
-                            pink: '#ff69b4',
-                            deepPink: '#ff1493',
-                            lightPink: '#fff0f6',
-                            softPink: '#ffdeeb',
-                            dark: '#2b1b24',
-                            accent: '#ff85c0'
+                            pink: '#ffb6c1',
+                            darkpink: '#ff69b4',
+                            deep: '#e05297',
+                            lightpink: '#fff0f5',
+                            bg: '#fcf0f5',
+                            dark: '#1e1a1d',
+                            accent: '#ff8da1'
                         }
                     },
                     fontFamily: {
-                        sans: ['Prompt', 'sans-serif'],
+                        sans: ['Prompt', 'Kanit', 'sans-serif'],
                     }
                 }
             }
@@ -37,876 +38,958 @@
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #fcf4f8;
-            color: #2b1b24;
-            -webkit-tap-highlight-color: transparent;
+            background-color: #121212;
         }
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
+        .paw-print {
+            background-image: radial-gradient(#ff69b4 15%, transparent 16%), radial-gradient(#ff69b4 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            opacity: 0.05;
         }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 105, 180, 0.2);
-        }
-        .paw-bg {
-            background-image: radial-gradient(#ff69b4 0.75px, transparent 0.75px), radial-gradient(#ff69b4 0.75px, #fcf4f8 0.75px);
-            background-size: 30px 30px;
-            background-position: 0 0, 15px 15px;
-            background-opacity: 0.1;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ffb6c1;
+            border-radius: 10px;
         }
     </style>
 </head>
-<body x-data="cosplayApp()" x-init="initApp()" class="min-h-screen pb-24 max-w-md mx-auto shadow-2xl bg-white relative">
+<body class="flex justify-center items-center min-h-screen p-0 sm:p-4 text-slate-800">
 
-    <!-- Top Header Header Banner -->
-    <header class="relative bg-gradient-to-b from-brand-deepPink via-brand-pink to-pink-400 text-white rounded-b-3xl p-5 pt-8 shadow-md overflow-hidden">
-        <!-- Background Paw Pattern & Accents -->
-        <div class="absolute inset-0 opacity-15 pointer-events-none">
-            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <pattern id="paws" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <circle cx="20" cy="20" r="4" fill="#fff"/>
-                        <circle cx="14" cy="12" r="2" fill="#fff"/>
-                        <circle cx="26" cy="12" r="2" fill="#fff"/>
-                        <circle cx="10" cy="18" r="2" fill="#fff"/>
-                        <circle cx="30" cy="18" r="2" fill="#fff"/>
-                    </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#paws)" />
-            </svg>
-        </div>
-
-        <!-- Header Controls -->
-        <div class="flex justify-between items-center relative z-10 mb-2">
-            <button @click="showMobileMenu = true" class="p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
-            <div class="flex items-center space-x-2">
-                <button @click="activeTab = 'stamps'" class="relative p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition">
-                    <i data-lucide="award" class="w-5 h-5"></i>
-                    <span class="absolute -top-1 -right-1 bg-yellow-400 text-brand-dark text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow" x-text="userPoints"></span>
-                </button>
-                <button @click="shareShop()" class="p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition">
-                    <i data-lucide="share-2" class="w-5 h-5"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Avatar & Shop Logo Header -->
-        <div class="flex flex-col items-center justify-center text-center relative z-10 my-2">
-            <div class="relative mb-2">
-                <!-- Husky Logo Frame -->
-                <div class="w-24 h-24 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white p-1 flex items-center justify-center relative">
-                    <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&q=80&w=250" alt="PANTERz Mascot" class="w-full h-full object-cover rounded-full">
-                    <div class="absolute -bottom-1 bg-brand-deepPink text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
-                        🐾 Official
+    <!-- Mobile Frame Container -->
+    <div x-data="cosplayApp()" class="w-full max-w-[430px] h-[100vh] sm:h-[912px] bg-brand-bg relative overflow-hidden sm:rounded-[40px] shadow-2xl flex flex-col border-0 sm:border-8 border-slate-900">
+        
+        <!-- ========================================== -->
+        <!-- USER / CLIENT VIEW -->
+        <!-- ========================================== -->
+        <template x-if="!isAdminLoggedIn">
+            <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+                
+                <!-- Top Header Bar -->
+                <header class="bg-gradient-to-r from-brand-darkpink via-pink-400 to-brand-darkpink text-white px-4 pt-3 pb-3 relative shadow-md">
+                    <div class="flex justify-between items-center mb-2">
+                        <!-- Hamburger Menu (Admin Trigger) -->
+                        <button @click="showAdminModal = true" class="p-1 hover:bg-white/20 rounded-lg transition text-xl">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+                        <div class="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
+                            <i class="fa-solid fa-paw mr-1"></i> Cosplay Rental & More!
+                        </div>
+                        <div class="flex gap-2 text-lg">
+                            <button @click="activeTab = 'contact'" class="hover:text-pink-200"><i class="fa-regular fa-bell"></i></button>
+                            <button @click="activeTab = 'stamps'" class="hover:text-pink-200"><i class="fa-regular fa-heart"></i></button>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-1.5 drop-shadow-sm">
-                🐾 PANTERz Cosshop 🐾
-            </h1>
-            <p class="text-xs text-pink-100 font-light mt-0.5 bg-black/10 px-3 py-1 rounded-full backdrop-blur-xs">
-                Cosplay Rental & Wigs • บริการเช่าชุดคอสเพลย์ครบวงจร
-            </p>
-        </div>
 
-        <!-- Search Bar -->
-        <div class="mt-4 relative z-10" x-show="activeTab === 'home'">
-            <div class="relative">
-                <input type="text" 
-                       x-model="searchQuery" 
-                       placeholder="ค้นหาตัวละคร ชื่อเรื่อง หรือเกม..." 
-                       class="w-full pl-11 pr-10 py-3 rounded-full text-sm text-gray-800 bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-pink-300 transition">
-                <i data-lucide="search" class="w-5 h-5 text-gray-400 absolute left-4 top-3.5"></i>
-                <button x-show="searchQuery !== ''" @click="searchQuery = ''" class="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            </div>
-        </div>
-    </header>
+                    <!-- Logo Banner Area -->
+                    <div class="flex items-center gap-3 mt-1">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=200" class="w-16 h-16 rounded-full border-4 border-white shadow-lg object-cover">
+                            <span class="absolute -bottom-1 -right-1 bg-yellow-400 text-xs text-slate-900 rounded-full w-5 h-5 flex items-center justify-center font-bold shadow">👑</span>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-black tracking-wide flex items-center gap-1 font-sans text-white drop-shadow">
+                                <i class="fa-solid fa-paw text-pink-200 text-sm"></i> PANTERz Cosshop <i class="fa-solid fa-heart text-pink-200 text-xs"></i>
+                            </h1>
+                            <p class="text-xs text-pink-100 font-light">บริการเช่าชุดคอสเพลย์ ส่งทั่วไทย ✨</p>
+                        </div>
+                    </div>
+                </header>
 
-    <!-- Main Content Body -->
-    <main class="p-4">
-
-        <!-- TAB 1: HOME / CATALOG -->
-        <div x-show="activeTab === 'home'" class="space-y-5">
-
-            <!-- Category Filter Pills -->
-            <div class="flex space-x-2 overflow-x-auto hide-scrollbar py-1 text-sm font-medium">
-                <template x-for="cat in categories" :key="cat.id">
-                    <button @click="selectedCategory = cat.id"
-                            :class="selectedCategory === cat.id ? 'bg-brand-deepPink text-white shadow-md scale-105' : 'bg-white text-gray-600 hover:bg-pink-50 border border-pink-100'"
-                            class="px-4 py-2 rounded-full whitespace-nowrap transition-all duration-200 flex items-center space-x-1.5 text-xs">
-                        <span x-text="cat.icon"></span>
-                        <span x-text="cat.name"></span>
-                    </button>
-                </template>
-            </div>
-
-            <!-- Title & Count -->
-            <div class="flex justify-between items-center px-1">
-                <h2 class="text-base font-bold text-gray-800 flex items-center gap-1.5">
-                    <span class="text-brand-deepPink">🐾</span> ตัวละครแนะนำ 
-                    <span class="text-xs text-gray-400 font-normal" x-text="'(' + filteredCostumes.length + ' รายการ)'"></span>
-                </h2>
-                <span class="text-xs text-brand-deepPink font-semibold cursor-pointer" @click="selectedCategory = 'all'; searchQuery = ''">ดูทั้งหมด &gt;</span>
-            </div>
-
-            <!-- Costumes Grid -->
-            <div class="grid grid-cols-2 gap-3.5">
-                <template x-for="item in filteredCostumes" :key="item.id">
-                    <div class="bg-white rounded-2xl overflow-hidden border border-pink-100 shadow-sm hover:shadow-md transition-all flex flex-col relative group">
+                <!-- Scrollable Content View Port -->
+                <main class="flex-1 overflow-y-auto custom-scrollbar pb-24 relative">
+                    
+                    <!-- ----------------------------------------- -->
+                    <!-- PAGE 1: HOME PAGE -->
+                    <!-- ----------------------------------------- -->
+                    <div x-show="activeTab === 'home'" class="p-4 space-y-4">
                         
-                        <!-- Image Container with Badges -->
-                        <div class="relative aspect-[3/4] overflow-hidden bg-pink-50">
-                            <img :src="item.image" :alt="item.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                            
-                            <!-- Game Badge -->
-                            <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
-                                <span x-text="item.categoryIcon"></span>
-                                <span x-text="item.game"></span>
+                        <!-- Search Box -->
+                        <div class="relative">
+                            <input type="text" x-model="searchQuery" placeholder="ค้นหาตัวละคร, ชื่อเรื่อง หรือเกม..." 
+                                class="w-full pl-10 pr-10 py-2.5 rounded-full border-2 border-brand-pink text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-darkpink/50 shadow-sm">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-brand-darkpink"></i>
+                            <button class="absolute right-3 top-2.5 text-brand-darkpink text-sm"><i class="fa-solid fa-sliders"></i></button>
+                        </div>
+
+                        <!-- 5 Circular/Pill Navigation Items -->
+                        <div class="flex justify-between items-center text-center gap-1 overflow-x-auto pb-1 no-scrollbar text-xs">
+                            <button @click="selectedCategory = 'ทั้งหมด'" :class="selectedCategory === 'ทั้งหมด' ? 'bg-brand-darkpink text-white font-bold' : 'bg-white text-slate-700'" class="px-3.5 py-2 rounded-full shadow-sm whitespace-nowrap transition flex items-center gap-1">
+                                <i class="fa-solid fa-house"></i> ทั้งหมด
+                            </button>
+                            <button @click="selectedCategory = 'Genshin Impact'" :class="selectedCategory === 'Genshin Impact' ? 'bg-brand-darkpink text-white font-bold' : 'bg-white text-slate-700'" class="px-3.5 py-2 rounded-full shadow-sm whitespace-nowrap transition flex items-center gap-1">
+                                <i class="fa-solid fa-star"></i> Genshin
+                            </button>
+                            <button @click="selectedCategory = 'Honkai: Star Rail'" :class="selectedCategory === 'Honkai: Star Rail' ? 'bg-brand-darkpink text-white font-bold' : 'bg-white text-slate-700'" class="px-3.5 py-2 rounded-full shadow-sm whitespace-nowrap transition flex items-center gap-1">
+                                <i class="fa-solid fa-moon"></i> Star Rail
+                            </button>
+                            <button @click="selectedCategory = 'Zenless Zone Zero'" :class="selectedCategory === 'Zenless Zone Zero' ? 'bg-brand-darkpink text-white font-bold' : 'bg-white text-slate-700'" class="px-3.5 py-2 rounded-full shadow-sm whitespace-nowrap transition flex items-center gap-1">
+                                <i class="fa-solid fa-bolt"></i> ZZZ
+                            </button>
+                            <button @click="selectedCategory = 'อนิเมะ'" :class="selectedCategory === 'อนิเมะ' ? 'bg-brand-darkpink text-white font-bold' : 'bg-white text-slate-700'" class="px-3.5 py-2 rounded-full shadow-sm whitespace-nowrap transition flex items-center gap-1">
+                                <i class="fa-solid fa-cat"></i> อนิเมะ
+                            </button>
+                        </div>
+
+                        <!-- Promo Banner -->
+                        <div class="bg-gradient-to-r from-pink-200 via-pink-100 to-purple-100 p-3 rounded-2xl border border-pink-300 flex justify-between items-center shadow-sm relative overflow-hidden">
+                            <div class="z-10">
+                                <span class="bg-brand-darkpink text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">โปรโมชั่นประจำเดือน</span>
+                                <h3 class="font-bold text-slate-800 text-sm mt-1">ลดสูงสุด 100.- + ส่งฟรี! 📦</h3>
+                                <p class="text-[11px] text-slate-600">เมื่อจองคิวเช่าล่วงหน้า 7 วันขึ้นไป (มัดจำ 50%)</p>
+                            </div>
+                            <i class="fa-solid fa-dog text-4xl text-brand-darkpink/30 absolute right-2 bottom-1"></i>
+                        </div>
+
+                        <!-- Recommended Costumes Grid -->
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <h2 class="font-bold text-slate-800 flex items-center gap-1.5 text-base">
+                                    <i class="fa-solid fa-paw text-brand-darkpink"></i> ตัวละครแนะนำ
+                                </h2>
+                                <span class="text-xs text-brand-darkpink font-medium cursor-pointer hover:underline">ดูทั้งหมด ></span>
                             </div>
 
-                            <!-- Favorite Heart Button -->
-                            <button @click.stop="item.isFav = !item.isFav" class="absolute top-2 right-2 p-1.5 bg-white/80 rounded-full text-brand-deepPink shadow hover:bg-white">
-                                <i data-lucide="heart" :class="item.isFav ? 'fill-brand-deepPink text-brand-deepPink' : 'text-gray-400'" class="w-4 h-4"></i>
-                            </button>
+                            <div class="grid grid-cols-2 gap-3">
+                                <template x-for="item in filteredCostumes" :key="item.id">
+                                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-pink-100 flex flex-col justify-between hover:shadow-md transition">
+                                        <div class="relative">
+                                            <img :src="item.image" class="w-full h-44 object-cover">
+                                            <span class="absolute top-2 left-2 bg-slate-900/70 text-white text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm" x-text="item.category"></span>
+                                            <button @click="item.liked = !item.liked" class="absolute top-2 right-2 w-7 h-7 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-pink-500 shadow-sm">
+                                                <i :class="item.liked ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+                                            </button>
+                                        </div>
+                                        <div class="p-2.5 flex-1 flex flex-col justify-between">
+                                            <div>
+                                                <h3 class="font-bold text-slate-800 text-sm truncate" x-text="item.name"></h3>
+                                                <p class="text-[11px] text-slate-400 truncate" x-text="item.series"></p>
+                                                <div class="mt-1 flex items-baseline gap-1">
+                                                    <span class="text-brand-darkpink font-extrabold text-sm" x-text="item.price + '.-'"></span>
+                                                    <span class="text-[10px] text-slate-400">/ วัน</span>
+                                                </div>
+                                                <div class="flex flex-wrap gap-1 mt-1 text-[9px] text-slate-500">
+                                                    <span class="bg-slate-100 px-1.5 py-0.5 rounded">+ ชุดเต็ม</span>
+                                                    <span class="bg-slate-100 px-1.5 py-0.5 rounded">+ วิก</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mt-3 flex gap-1">
+                                                <button @click="openDetail(item)" class="flex-1 py-1.5 bg-pink-50 text-brand-darkpink text-xs font-semibold rounded-lg hover:bg-pink-100 transition">รายละเอียด</button>
+                                                <button @click="startBooking(item)" class="flex-1 py-1.5 bg-brand-darkpink text-white text-xs font-semibold rounded-lg shadow hover:bg-brand-deep transition flex items-center justify-center gap-1">
+                                                    <i class="fa-solid fa-cart-shopping text-[10px]"></i> จองคิว
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
 
-                            <!-- Availability Tag overlay -->
-                            <div class="absolute bottom-2 left-2 right-2">
-                                <div x-show="item.status === 'available'" class="bg-emerald-500/90 text-white text-[10px] font-medium px-2 py-0.5 rounded-md text-center backdrop-blur-xs">
-                                    พร้อมเช่า ✨
+                    </div>
+
+                    <!-- ----------------------------------------- -->
+                    <!-- PAGE 2: COSTUME DETAIL MODAL/VIEW -->
+                    <!-- ----------------------------------------- -->
+                    <div x-show="activeTab === 'detail'" class="p-4 space-y-4">
+                        <button @click="activeTab = 'home'" class="flex items-center gap-2 text-slate-600 font-medium text-sm mb-2 hover:text-brand-darkpink">
+                            <i class="fa-solid fa-chevron-left"></i> ย้อนกลับ
+                        </button>
+
+                        <template x-if="selectedCostume">
+                            <div class="space-y-4">
+                                <div class="relative rounded-2xl overflow-hidden shadow-md">
+                                    <img :src="selectedCostume.image" class="w-full h-72 object-cover">
+                                    <span class="absolute top-3 left-3 bg-brand-darkpink text-white text-xs px-3 py-1 rounded-full font-medium" x-text="selectedCostume.category"></span>
                                 </div>
-                                <div x-show="item.status === 'booked'" class="bg-amber-500/90 text-white text-[10px] font-medium px-2 py-0.5 rounded-md text-center backdrop-blur-xs">
-                                    มีคิวเช่าบางวัน 📅
+
+                                <div class="bg-white p-4 rounded-2xl border border-pink-100 space-y-2 shadow-sm">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h2 class="text-xl font-bold text-slate-800" x-text="selectedCostume.name"></h2>
+                                            <p class="text-xs text-slate-400" x-text="selectedCostume.series"></p>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-2xl font-black text-brand-darkpink" x-text="selectedCostume.price + '.-'"></span>
+                                            <span class="text-xs text-slate-400"> / วัน</span>
+                                        </div>
+                                    </div>
+
+                                    <hr class="border-pink-100 my-2">
+
+                                    <!-- Size Options -->
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-700 block mb-1">🐾 ไซส์ที่มีให้เช่า:</label>
+                                        <div class="flex gap-2">
+                                            <template x-for="size in ['S', 'M', 'L', 'XL']">
+                                                <span class="px-3 py-1 border border-pink-200 rounded-lg text-xs font-semibold text-slate-700 bg-pink-50/50" x-text="size"></span>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- Measurements -->
+                                    <div class="bg-pink-50/50 p-2.5 rounded-xl border border-pink-100 text-xs space-y-1">
+                                        <p class="font-bold text-brand-darkpink"><i class="fa-solid fa-ruler-combined"></i> สัดส่วนแนะนำ:</p>
+                                        <p class="text-slate-600">อก 70-88 ซม. | เอว 58-70 ซม. | สะโพก 84-96 ซม.</p>
+                                    </div>
+
+                                    <!-- Included Items -->
+                                    <div>
+                                        <label class="text-xs font-bold text-slate-700 block mb-1">📦 รายละเอียดชุดในเซ็ต:</label>
+                                        <ul class="text-xs text-slate-600 space-y-1 pl-2">
+                                            <li>• เสื้อผ้า + เครื่องประดับครบเซ็ต</li>
+                                            <li>• วิกผมเซ็ตทรงแล้ว</li>
+                                            <li>• อุปกรณ์ประกอบตัวละครตามภาพ</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Promo Discount Tag -->
+                                <div class="bg-pink-100 border border-pink-300 p-3 rounded-xl flex items-center gap-3">
+                                    <i class="fa-solid fa-gift text-2xl text-brand-darkpink"></i>
+                                    <div>
+                                        <h4 class="font-bold text-xs text-slate-800">โปรโมชั่นพิเศษ! จองล่วงหน้า 7 วัน</h4>
+                                        <p class="text-[11px] text-slate-600">ชำระมัดจำเพียง 50% ของราคาเช่า</p>
+                                    </div>
+                                </div>
+
+                                <button @click="startBooking(selectedCostume)" class="w-full py-3 bg-brand-darkpink text-white font-bold rounded-xl shadow-lg hover:bg-brand-deep transition flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-calendar-check"></i> จองคิวเช่าชุดนี้
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- ----------------------------------------- -->
+                    <!-- PAGE 3: BOOKING FORM -->
+                    <!-- ----------------------------------------- -->
+                    <div x-show="activeTab === 'booking'" class="p-4 space-y-4">
+                        <!-- Stepper Header -->
+                        <div class="flex justify-between items-center text-xs px-4 py-2 bg-white rounded-xl shadow-sm border border-pink-100">
+                            <div class="flex items-center gap-1 font-bold text-brand-darkpink">
+                                <span class="w-5 h-5 bg-brand-darkpink text-white rounded-full flex items-center justify-center text-[10px]">1</span> กรอกข้อมูล
+                            </div>
+                            <div class="h-0.5 w-6 bg-slate-200"></div>
+                            <div class="flex items-center gap-1 text-slate-400">
+                                <span class="w-5 h-5 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center text-[10px]">2</span> ชำระเงิน
+                            </div>
+                            <div class="h-0.5 w-6 bg-slate-200"></div>
+                            <div class="flex items-center gap-1 text-slate-400">
+                                <span class="w-5 h-5 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center text-[10px]">3</span> ยืนยัน
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 space-y-3">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5 border-b pb-2">
+                                <i class="fa-solid fa-user text-brand-darkpink"></i> ข้อมูลผู้เช่า
+                            </h3>
+
+                            <div>
+                                <label class="text-xs font-semibold text-slate-700">ชื่อ Facebook *</label>
+                                <input type="text" x-model="bookingForm.fbName" placeholder="ชื่อเฟสบุ๊คลูกค้า" class="w-full mt-1 px-3 py-2 border rounded-xl text-xs bg-slate-50 focus:bg-white border-pink-200 focus:outline-none focus:ring-1 focus:ring-brand-darkpink">
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-semibold text-slate-700">ลิงก์ Facebook *</label>
+                                <input type="text" x-model="bookingForm.fbLink" placeholder="https://facebook.com/username" class="w-full mt-1 px-3 py-2 border rounded-xl text-xs bg-slate-50 focus:bg-white border-pink-200 focus:outline-none focus:ring-1 focus:ring-brand-darkpink">
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-semibold text-slate-700">เบอร์โทรศัพท์ติดต่อ *</label>
+                                <input type="tel" x-model="bookingForm.phone" placeholder="08X-XXX-XXXX" class="w-full mt-1 px-3 py-2 border rounded-xl text-xs bg-slate-50 focus:bg-white border-pink-200 focus:outline-none focus:ring-1 focus:ring-brand-darkpink">
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-semibold text-slate-700">รูปบัตรประชาชน (สำหรับทำสัญญา) *</label>
+                                <div class="mt-1 border-2 border-dashed border-pink-200 rounded-xl p-4 text-center bg-pink-50/30">
+                                    <i class="fa-solid fa-id-card text-2xl text-pink-300 mb-1 block"></i>
+                                    <span class="text-xs text-slate-500">อัปโหลดรูปภาพบัตรประชาชน</span>
+                                    <input type="file" @change="handleFileUpload($event)" class="hidden" id="idCardUpload">
+                                    <label for="idCardUpload" class="mt-2 inline-block px-3 py-1 bg-white border border-pink-300 text-brand-darkpink text-xs rounded-lg cursor-pointer font-medium hover:bg-pink-50">เลือกไฟล์</label>
+                                    <template x-if="bookingForm.idCardName">
+                                        <p class="text-[10px] text-green-600 mt-1 font-semibold" x-text="'✓ เลือกแล้ว: ' + bookingForm.idCardName"></p>
+                                    </template>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Card Info -->
-                        <div class="p-3 flex-1 flex flex-col justify-between">
+                        <!-- Date Selection & Rule Calculation -->
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 space-y-3">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5 border-b pb-2">
+                                <i class="fa-solid fa-calendar-days text-brand-darkpink"></i> รายละเอียดการเช่า
+                            </h3>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-[11px] font-semibold text-slate-700">วันที่เช่าใช้งาน *</label>
+                                    <input type="date" x-model="bookingForm.startDate" @change="calculatePricing()" class="w-full mt-1 px-2.5 py-1.5 border rounded-xl text-xs border-pink-200 bg-slate-50">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-semibold text-slate-700">คืนชุดภายในวันที่ *</label>
+                                    <input type="date" x-model="bookingForm.endDate" @change="calculatePricing()" class="w-full mt-1 px-2.5 py-1.5 border rounded-xl text-xs border-pink-200 bg-slate-50">
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Add-ons List Managed by Admin -->
                             <div>
-                                <h3 class="font-bold text-gray-800 text-sm leading-snug line-clamp-1" x-text="item.name"></h3>
-                                <p class="text-[11px] text-gray-400 mb-1.5" x-text="item.game"></p>
-                                
-                                <!-- Inclusions Tags -->
-                                <div class="flex flex-wrap gap-1 mb-2">
-                                    <template x-for="inc in item.inclusions" :key="inc">
-                                        <span class="text-[9px] bg-pink-50 text-brand-deepPink border border-pink-200 px-1.5 py-0.5 rounded-md" x-text="inc"></span>
+                                <label class="text-xs font-bold text-slate-700 block mb-1.5">🎀 เลือกเช่าพรอพ/อุปกรณ์เสริมเพิ่มเติม:</label>
+                                <div class="space-y-1.5">
+                                    <template x-for="addon in availableAddons" :key="addon.id">
+                                        <label class="flex items-center justify-between p-2 rounded-xl border border-pink-100 bg-pink-50/20 text-xs cursor-pointer hover:bg-pink-50">
+                                            <div class="flex items-center gap-2">
+                                                <input type="checkbox" :value="addon.id" x-model="bookingForm.selectedAddons" @change="calculatePricing()" class="accent-brand-darkpink rounded">
+                                                <span class="text-slate-700" x-text="addon.name"></span>
+                                            </div>
+                                            <span class="font-bold text-brand-darkpink" x-text="'+' + addon.price + '.-'"></span>
+                                        </label>
                                     </template>
                                 </div>
                             </div>
 
-                            <div class="pt-1 border-t border-gray-50 flex items-center justify-between">
-                                <div>
-                                    <span class="text-sm font-bold text-brand-deepPink" x-text="item.price"></span>
-                                    <span class="text-[10px] text-gray-400">/วัน</span>
+                            <!-- 50% Advance Booking Rule Banner -->
+                            <div class="p-3 rounded-xl text-xs border" :class="isEligibleForHalfPay ? 'bg-green-50 border-green-200 text-green-800' : 'bg-amber-50 border-amber-200 text-amber-800'">
+                                <div class="font-bold flex items-center gap-1">
+                                    <i :class="isEligibleForHalfPay ? 'fa-solid fa-circle-check text-green-600' : 'fa-solid fa-triangle-exclamation text-amber-600'"></i>
+                                    <span x-text="isEligibleForHalfPay ? 'เข้าเงื่อนไขจองล่วงหน้า 7 วัน (จ่ายครึ่งราคา 50%)' : 'จองน้อยกว่า 7 วัน (ต้องชำระราคาเต็ม 100%)'"></span>
                                 </div>
-                                <button @click="openDetailModal(item)" class="bg-gradient-to-r from-brand-pink to-brand-deepPink text-white text-xs font-medium px-3 py-1.5 rounded-xl shadow-sm hover:opacity-90 active:scale-95 transition">
-                                    ดู / เช่า
+                                <p class="text-[10px] mt-0.5 opacity-90" x-text="daysInAdvance > 0 ? 'คุณทำการจองล่วงหน้า ' + daysInAdvance + ' วัน' : 'กรุณาเลือกวันเช่าเพื่อคำนวณเงื่อนไข'"></p>
+                            </div>
+
+                            <!-- Payment Option Selection -->
+                            <div x-show="isEligibleForHalfPay" class="space-y-1">
+                                <label class="text-xs font-semibold text-slate-700">รูปแบบการชำระเงิน:</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button @click="bookingForm.paymentType = 'half'; calculatePricing()" :class="bookingForm.paymentType === 'half' ? 'bg-brand-darkpink text-white font-bold border-brand-darkpink' : 'bg-white text-slate-700 border-pink-200'" class="py-2 border rounded-xl text-xs transition">
+                                        มัดจำ 50% (<span x-text="calculatedHalfPrice + '.-'"></span>)
+                                    </button>
+                                    <button @click="bookingForm.paymentType = 'full'; calculatePricing()" :class="bookingForm.paymentType === 'full' ? 'bg-brand-darkpink text-white font-bold border-brand-darkpink' : 'bg-white text-slate-700 border-pink-200'" class="py-2 border rounded-xl text-xs transition">
+                                        ชำระเต็ม 100% (<span x-text="calculatedTotalPrice + '.-'"></span>)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Summary Price Box -->
+                        <div class="bg-pink-100/60 p-3.5 rounded-2xl border border-pink-200 flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-slate-500 block">ยอดที่ต้องชำระตอนนี้</span>
+                                <span class="text-xl font-black text-brand-darkpink" x-text="finalPayAmount + ' บาท'"></span>
+                            </div>
+                            <button @click="proceedToPayment()" class="px-5 py-2.5 bg-brand-darkpink text-white text-xs font-bold rounded-xl shadow-md hover:bg-brand-deep transition">
+                                ถัดไป: สแกนจ่าย <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ----------------------------------------- -->
+                    <!-- PAGE 4: SCAN PAYMENT & CONFIRMATION -->
+                    <!-- ----------------------------------------- -->
+                    <div x-show="activeTab === 'payment'" class="p-4 space-y-4">
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-pink-100 text-center space-y-3 relative overflow-hidden">
+                            <!-- Husky Success Avatar -->
+                            <div class="w-20 h-20 bg-pink-100 rounded-full mx-auto flex items-center justify-center relative border-4 border-pink-200 shadow-inner">
+                                <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover rounded-full">
+                                <span class="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs border-2 border-white"><i class="fa-solid fa-check"></i></span>
+                            </div>
+
+                            <div>
+                                <h2 class="text-lg font-black text-slate-800">จองคิวสำเร็จ! 🎉</h2>
+                                <p class="text-xs text-slate-500">ขอบคุณที่ใช้บริการกับทางร้านนะคะ 💖</p>
+                            </div>
+
+                            <!-- Booking Brief Card -->
+                            <div class="bg-pink-50/50 p-3 rounded-2xl border border-pink-100 text-left text-xs space-y-1.5">
+                                <div class="flex items-center gap-2">
+                                    <img :src="selectedCostume?.image" class="w-10 h-10 rounded-lg object-cover">
+                                    <div>
+                                        <h4 class="font-bold text-slate-800" x-text="selectedCostume?.name"></h4>
+                                        <p class="text-[10px] text-slate-400" x-text="selectedCostume?.series"></p>
+                                    </div>
+                                </div>
+                                <hr class="border-pink-200/60">
+                                <div class="flex justify-between text-slate-600">
+                                    <span>วันที่เช่า:</span>
+                                    <span class="font-medium text-slate-800" x-text="bookingForm.startDate"></span>
+                                </div>
+                                <div class="flex justify-between text-slate-600">
+                                    <span>ประเภทชำระ:</span>
+                                    <span class="font-bold text-brand-darkpink" x-text="bookingForm.paymentType === 'half' ? 'มัดจำ 50%' : 'ชำระเต็ม 100%'"></span>
+                                </div>
+                                <div class="flex justify-between text-slate-800 font-bold pt-1 border-t border-pink-200/60">
+                                    <span>ยอดชำระสุทธิ:</span>
+                                    <span class="text-brand-darkpink text-sm" x-text="finalPayAmount + '.-'"></span>
+                                </div>
+                            </div>
+
+                            <!-- PromptPay QR Code Section -->
+                            <div class="pt-2 border-t border-dashed border-pink-200">
+                                <p class="text-xs font-bold text-slate-700 mb-1">สแกนชำระเงิน (PromptPay)</p>
+                                <p class="text-[10px] text-slate-400 mb-2">กรุณาชำระเงินภายใน 24 ชม.</p>
+                                
+                                <div class="bg-white p-3 inline-block rounded-2xl border-2 border-pink-200 shadow-sm relative">
+                                    <!-- Dynamic Dummy QR -->
+                                    <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PROMPTPAY-PANTERZ-' + finalPayAmount" class="w-36 h-36 mx-auto">
+                                    <div class="mt-2 bg-blue-900 text-white text-[10px] py-1 px-3 rounded-md font-bold tracking-wider flex items-center justify-center gap-1">
+                                        <i class="fa-solid fa-qrcode"></i> PromptPay พร้อมเพย์
+                                    </div>
+                                </div>
+
+                                <button @click="copyAccount()" class="mt-3 w-full py-2 bg-pink-100 text-brand-darkpink text-xs font-bold rounded-xl hover:bg-pink-200 transition flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-copy"></i> คัดลอกเลขบัญชี / พร้อมเพย์
                                 </button>
                             </div>
-                        </div>
-                    </div>
-                </template>
-            </div>
 
-            <!-- Empty State -->
-            <div x-show="filteredCostumes.length === 0" class="text-center py-10 bg-white rounded-2xl border border-dashed border-pink-200 p-6">
-                <div class="text-4xl mb-2">🐾😭</div>
-                <p class="text-gray-500 font-medium">ไม่พบชุดตัวละครที่คุณค้นหา</p>
-                <p class="text-xs text-gray-400 mt-1">ลองเปลี่ยนคำค้นหา หรือสอบถามสั่งตัด/นำเข้าทางเพจได้เลย!</p>
-                <button @click="searchQuery = ''; selectedCategory = 'all'" class="mt-3 px-4 py-1.5 bg-brand-lightPink text-brand-deepPink rounded-full text-xs font-semibold">
-                    ดูตัวละครทั้งหมด
-                </button>
-            </div>
-
-            <!-- Banner Contact Section -->
-            <div class="bg-gradient-to-r from-pink-500 to-rose-400 rounded-2xl p-4 text-white shadow-md flex items-center justify-between">
-                <div>
-                    <h4 class="font-bold text-sm">หาชุดที่อยากเล่นไม่เจอ? 💬</h4>
-                    <p class="text-xs text-pink-100 mt-0.5">สอบถามคิวพิเศษ หรือสั่งตัดเพิ่มเติมผ่าน FB Page</p>
-                </div>
-                <button @click="openFacebookPage()" class="bg-white text-brand-deepPink px-3 py-1.5 rounded-xl text-xs font-bold shadow hover:bg-pink-50 whitespace-nowrap">
-                    ทักแชทเพจ
-                </button>
-            </div>
-        </div>
-
-        <!-- TAB 2: RULES & FB CONTACT -->
-        <div x-show="activeTab === 'rules'" class="space-y-4">
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-pink-100">
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="w-8 h-8 rounded-full bg-brand-lightPink flex items-center justify-center text-brand-deepPink">
-                        <i data-lucide="file-text" class="w-4 h-4"></i>
-                    </div>
-                    <h2 class="font-bold text-gray-800 text-base">กฎและข้อตกลงการเช่าชุด 📜</h2>
-                </div>
-
-                <div class="space-y-3 text-xs text-gray-600 leading-relaxed">
-                    <div class="p-3 bg-pink-50/60 rounded-xl border-l-4 border-brand-pink">
-                        <strong class="text-gray-800 block text-xs mb-0.5">1. ระยะเวลาการเช่า 🕒</strong>
-                        นับเป็นวันนัดส่งคืน (เช่น เช่า 1 วัน นัดส่งคืนวันถัดไปไม่เกิน 18:00 น.)
-                    </div>
-                    <div class="p-3 bg-pink-50/60 rounded-xl border-l-4 border-brand-pink">
-                        <strong class="text-gray-800 block text-xs mb-0.5">2. เงินประกันชุด (Deposit) 💸</strong>
-                        มีค่าประกันชุด 300 - 500 บาท/ชุด (ได้คืนเต็มจำนวนหลังทางร้านตรวจสอบสภาพชุดแล้ว)
-                    </div>
-                    <div class="p-3 bg-pink-50/60 rounded-xl border-l-4 border-brand-pink">
-                        <strong class="text-gray-800 block text-xs mb-0.5">3. การทำความสะอาด & วิก 🧼</strong>
-                        ห้ามตัดซอยวิก ห้ามเซ็ตวิกด้วยกาวติดแน่น ห้ามซักชุดด้วยเครื่องซักผ้า หากเลอะคราบหนักปรับตามจริง
-                    </div>
-                    <div class="p-3 bg-pink-50/60 rounded-xl border-l-4 border-brand-pink">
-                        <strong class="text-gray-800 block text-xs mb-0.5">4. ค่าปรับคืนล่าช้า ⏳</strong>
-                        ส่งคืนเกินเวลาที่กำหนด ปรับวันละ 100-200 บาท ตามประเภทของชุด
-                    </div>
-                </div>
-            </div>
-
-            <!-- Facebook Contact Card -->
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-pink-100 text-center">
-                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i data-lucide="facebook" class="w-8 h-8"></i>
-                </div>
-                <h3 class="font-bold text-gray-800 text-base">PANTERz Cosshop Official Page</h3>
-                <p class="text-xs text-gray-500 mt-1 mb-4">สอบถามคิวเพิ่มเติม แจ้งสลิป หรือติดต่อแอดมินโดยตรงได้ที่เพจ Facebook</p>
-                <button @click="openFacebookPage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-md transition">
-                    <i data-lucide="message-circle" class="w-4 h-4"></i>
-                    ติดต่อสอบถามผ่าน Facebook Page
-                </button>
-            </div>
-        </div>
-
-        <!-- TAB 3: SCHEDULE / CALENDAR CHECK -->
-        <div x-show="activeTab === 'calendar'" class="space-y-4">
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-pink-100">
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="font-bold text-gray-800 text-base flex items-center gap-1.5">
-                        <i data-lucide="calendar" class="w-5 h-5 text-brand-deepPink"></i> ตารางคิวเช่าชุด
-                    </h2>
-                    <span class="text-[10px] bg-pink-100 text-brand-deepPink font-bold px-2 py-0.5 rounded-full">อัปเดตเรียลไทม์</span>
-                </div>
-
-                <!-- Select Costume for Filtering Calendar -->
-                <div class="mb-4">
-                    <label class="block text-xs font-medium text-gray-600 mb-1">เลือกชุดที่ต้องการเช็คตารางคิว:</label>
-                    <select x-model="selectedCalendarCostumeId" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-pink-300 outline-none">
-                        <option value="all">-- แสดงตารางคิวทั้งหมด --</option>
-                        <template x-for="item in costumes" :key="item.id">
-                            <option :value="item.id" x-text="item.name + ' (' + item.game + ')'"></option>
-                        </template>
-                    </select>
-                </div>
-
-                <!-- Status Indicators Key -->
-                <div class="flex items-center justify-around bg-pink-50/50 p-2 rounded-xl mb-4 text-[11px]">
-                    <div class="flex items-center gap-1">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                        <span class="text-gray-600">ว่าง (พร้อมเช่า)</span>
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                        <span class="text-gray-600">ติดคิว / ไม่ว่าง</span>
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-                        <span class="text-gray-600">รอจัดส่ง</span>
-                    </div>
-                </div>
-
-                <!-- Calendar View Simulation -->
-                <div class="border rounded-xl p-3 bg-white">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="font-bold text-sm text-gray-700">พฤศจิกายน 2026</span>
-                        <div class="flex gap-1">
-                            <button class="p-1 text-gray-400 hover:text-gray-600"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
-                            <button class="p-1 text-gray-400 hover:text-gray-600"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Days Grid -->
-                    <div class="grid grid-cols-7 gap-1 text-center text-xs font-medium text-gray-400 mb-2">
-                        <div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div>
-                    </div>
-
-                    <!-- Dates Grid -->
-                    <div class="grid grid-cols-7 gap-1 text-center text-xs">
-                        <template x-for="day in dummyCalendarDays" :key="day.date">
-                            <div :class="{
-                                    'bg-rose-100 text-rose-700 font-bold border border-rose-300': day.status === 'booked',
-                                    'bg-amber-100 text-amber-800 font-bold border border-amber-300': day.status === 'shipping',
-                                    'bg-gray-50 text-gray-700 hover:bg-pink-50': day.status === 'available',
-                                    'opacity-30': day.isOtherMonth
-                                 }" 
-                                 class="p-2 rounded-lg min-h-[36px] flex flex-col items-center justify-center relative transition">
-                                <span x-text="day.dayNumber"></span>
-                                <span x-show="day.status === 'booked'" class="w-1.5 h-1.5 rounded-full bg-rose-500 mt-0.5"></span>
+                            <!-- Slip Upload Section -->
+                            <div class="text-left pt-2">
+                                <label class="text-xs font-semibold text-slate-700">แนบสลิปชำระเงิน *</label>
+                                <input type="file" @change="handleSlipUpload($event)" class="w-full mt-1 text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-darkpink file:text-white hover:file:bg-brand-deep cursor-pointer">
                             </div>
-                        </template>
-                    </div>
-                </div>
 
-                <!-- Upcoming Booking Lists -->
-                <div class="mt-4">
-                    <h3 class="font-bold text-xs text-gray-700 mb-2">รายการจองล่าสุดในระบบ:</h3>
-                    <div class="space-y-2 max-h-48 overflow-y-auto">
-                        <template x-for="b in filteredBookings" :key="b.id">
-                            <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-xl text-xs border border-gray-100">
+                            <button @click="confirmBookingComplete()" class="w-full py-3 bg-brand-darkpink text-white font-bold rounded-xl shadow-lg hover:bg-brand-deep transition mt-2">
+                                <i class="fa-solid fa-house"></i> ยืนยันการชำระเงิน & กลับสู่หน้าหลัก
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ----------------------------------------- -->
+                    <!-- PAGE 5: CALENDAR SCHEDULE VIEW -->
+                    <!-- ----------------------------------------- -->
+                    <div x-show="activeTab === 'calendar'" class="p-4 space-y-4">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100">
+                            <h2 class="font-bold text-slate-800 text-base mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-days text-brand-darkpink"></i> ตารางเช็คคิวชุดว่าง
+                            </h2>
+                            <p class="text-xs text-slate-500 mb-3">ตรวจสอบวันที่ชุดติดคิวจองล่วงหน้า</p>
+
+                            <!-- Mini Calendar Grid -->
+                            <div class="border rounded-xl p-3 bg-pink-50/20">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="font-bold text-xs text-slate-700">พฤศจิกายน 2568</span>
+                                    <div class="flex gap-1 text-xs">
+                                        <button class="px-2 py-0.5 border rounded bg-white"><i class="fa-solid fa-chevron-left"></i></button>
+                                        <button class="px-2 py-0.5 border rounded bg-white"><i class="fa-solid fa-chevron-right"></i></button>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-7 text-center text-[10px] font-bold text-slate-400 mb-2">
+                                    <span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span>
+                                </div>
+                                <div class="grid grid-cols-7 text-center text-xs gap-1">
+                                    <template x-for="day in 30">
+                                        <div :class="[15, 16, 23, 24, 25].includes(day) ? 'bg-pink-500 text-white font-bold rounded-lg py-1 shadow-sm' : 'bg-white text-slate-700 rounded-lg py-1 border border-slate-100'" x-text="day"></div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- Queue Status List -->
+                            <div class="mt-4 space-y-2">
+                                <h3 class="text-xs font-bold text-slate-700">รายการติดคิวเร็วๆ นี้:</h3>
+                                <template x-for="q in queueList" :key="q.id">
+                                    <div class="p-2.5 rounded-xl border border-pink-100 bg-pink-50/30 flex justify-between items-center text-xs">
+                                        <div>
+                                            <span class="font-bold text-slate-800" x-text="q.costume"></span>
+                                            <p class="text-[10px] text-slate-500" x-text="'วันที่: ' + q.dates"></p>
+                                        </div>
+                                        <span :class="q.status === 'ยืนยันคิวแล้ว' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'" class="px-2 py-0.5 rounded-full text-[10px] font-bold" x-text="q.status"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ----------------------------------------- -->
+                    <!-- PAGE 6: STAMP LOYALTY CARD -->
+                    <!-- ----------------------------------------- -->
+                    <div x-show="activeTab === 'stamps'" class="p-4 space-y-4">
+                        <div class="bg-gradient-to-br from-pink-500 to-rose-400 p-5 rounded-3xl text-white shadow-lg relative overflow-hidden">
+                            <i class="fa-solid fa-paw text-8xl text-white/10 absolute -right-4 -bottom-4"></i>
+                            <div class="flex justify-between items-start mb-4">
                                 <div>
-                                    <div class="font-bold text-gray-800" x-text="b.costumeName"></div>
-                                    <div class="text-[10px] text-gray-500" x-text="'วันที่: ' + b.startDate + ' ถึง ' + b.endDate"></div>
+                                    <span class="text-[10px] bg-white/20 px-2.5 py-1 rounded-full backdrop-blur-sm">บัตรสะสมแต้มสมาชิก</span>
+                                    <h2 class="text-lg font-black mt-1">PANTERz VIP Member</h2>
                                 </div>
-                                <span :class="b.status === 'ติดคิวเช่า' ? 'bg-rose-100 text-rose-600' : 'bg-amber-100 text-amber-700'" 
-                                      class="px-2 py-0.5 rounded-full text-[10px] font-bold" x-text="b.status"></span>
+                                <span class="text-xs font-bold bg-yellow-300 text-slate-900 px-2.5 py-0.5 rounded-full shadow">ครบ 8 เช่าฟรี 1!</span>
                             </div>
-                        </template>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- TAB 4: LOYALTY STAMPS (สะสมแต้ม) -->
-        <div x-show="activeTab === 'stamps'" class="space-y-4">
-            <div class="bg-gradient-to-br from-pink-500 to-brand-deepPink rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
-                <div class="flex justify-between items-start relative z-10">
+                            <!-- 8 Stamps Grid -->
+                            <div class="grid grid-cols-4 gap-3 bg-white/10 p-3 rounded-2xl backdrop-blur-md">
+                                <template x-for="i in 8">
+                                    <div class="aspect-square bg-white/20 rounded-xl flex items-center justify-center border border-white/30 relative">
+                                        <template x-if="i <= userStamps">
+                                            <i class="fa-solid fa-paw text-2xl text-yellow-300 drop-shadow"></i>
+                                        </template>
+                                        <template x-if="i > userStamps">
+                                            <span class="text-xs text-white/50 font-bold" x-text="i"></span>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <p class="text-xs text-pink-100 mt-3 text-center">สะสมเพิ่มอีก <span class="font-bold text-yellow-200" x-text="8 - userStamps"></span> แต้ม เพื่อรับสิทธิ์เช่าชุดฟรี 1 ครั้ง! ✨</p>
+                        </div>
+                    </div>
+
+                    <!-- ----------------------------------------- -->
+                    <!-- PAGE 7: CONTACT / RULES VIEW -->
+                    <!-- ----------------------------------------- -->
+                    <div x-show="activeTab === 'contact'" class="p-4 space-y-4">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 space-y-3">
+                            <h2 class="font-bold text-slate-800 text-base border-b pb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-scale-balanced text-brand-darkpink"></i> กฎการเช่า & เงื่อนไขบริการ
+                            </h2>
+                            <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4">
+                                <li>จองคิวมัดจำ 50% ต้องทำการจองล่วงหน้าอย่างน้อย 7 วันขึ้นไป</li>
+                                <li>กรณีจองน้อยกว่า 7 วัน ต้องชำระเต็มจำนวน 100%</li>
+                                <li>โปรดถ่ายคลิปวิดีโอขณะแกะกล่องพัสดุทุกครั้งเพื่อเป็นหลักฐาน</li>
+                                <li>หากทำชุดเสียหาย มีคราบเลอะชำระล้างไม่ได้ จะต้องชดใช้ตามจริง</li>
+                            </ul>
+
+                            <hr class="border-pink-100 my-3">
+
+                            <h3 class="font-bold text-slate-800 text-xs">ติดต่อสอบถามเพิ่มเติม:</h3>
+                            <a href="https://facebook.com" target="_blank" class="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700 font-bold text-xs hover:bg-blue-100 transition">
+                                <i class="fa-brands fa-facebook-f text-lg"></i> เพจ Facebook: PANTERz Cosshop
+                            </a>
+                        </div>
+                    </div>
+
+                </main>
+
+                <!-- Bottom Navigation Bar (App Dock) -->
+                <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-pink-100 px-2 py-2 flex justify-around items-center z-30 shadow-lg">
+                    <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'text-brand-darkpink font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-0.5 text-[10px] transition">
+                        <i class="fa-solid fa-house text-lg"></i>
+                        <span>หน้าแรก</span>
+                    </button>
+                    <button @click="activeTab = 'contact'" :class="activeTab === 'contact' ? 'text-brand-darkpink font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-0.5 text-[10px] transition">
+                        <i class="fa-solid fa-scale-balanced text-lg"></i>
+                        <span>กฎการเช่า</span>
+                    </button>
+                    <button @click="activeTab = 'calendar'" :class="activeTab === 'calendar' ? 'text-brand-darkpink font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-0.5 text-[10px] transition">
+                        <i class="fa-solid fa-calendar-days text-lg"></i>
+                        <span>เช็คตารางคิว</span>
+                    </button>
+                    <button @click="activeTab = 'stamps'" :class="activeTab === 'stamps' ? 'text-brand-darkpink font-bold' : 'text-slate-400'" class="flex flex-col items-center gap-0.5 text-[10px] transition">
+                        <i class="fa-solid fa-star text-lg"></i>
+                        <span>สะสมแต้ม</span>
+                    </button>
+                </nav>
+            </div>
+        </template>
+
+        <!-- ========================================== -->
+        <!-- ADMIN DASHBOARD PANEL VIEW (FULL MATCH MOCKUP) -->
+        <!-- ========================================== -->
+        <template x-if="isAdminLoggedIn">
+            <div class="flex-1 flex h-full bg-slate-900 text-slate-100 overflow-hidden">
+                
+                <!-- Dark Admin Sidebar -->
+                <aside class="w-48 bg-slate-950 flex flex-col justify-between border-r border-slate-800 p-3">
+                    <div class="space-y-4">
+                        <!-- Admin Logo Header -->
+                        <div class="flex items-center gap-2 pb-3 border-b border-slate-800">
+                            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=200" class="w-8 h-8 rounded-full border border-pink-400">
+                            <span class="font-bold text-xs text-pink-400 tracking-wider">PANTERz Admin</span>
+                        </div>
+
+                        <!-- Sidebar Menu Items -->
+                        <nav class="space-y-1 text-xs">
+                            <button @click="adminSubTab = 'dashboard'" :class="adminSubTab === 'dashboard' ? 'bg-brand-darkpink text-white font-bold' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2 rounded-xl transition flex items-center gap-2">
+                                <i class="fa-solid fa-house w-4"></i> หน้าหลัก
+                            </button>
+                            <button @click="adminSubTab = 'costumes'" :class="adminSubTab === 'costumes' ? 'bg-brand-darkpink text-white font-bold' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2 rounded-xl transition flex items-center gap-2">
+                                <i class="fa-solid fa-shirt w-4"></i> จัดการตัวละคร
+                            </button>
+                            <button @click="adminSubTab = 'customers'" :class="adminSubTab === 'customers' ? 'bg-brand-darkpink text-white font-bold' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2 rounded-xl transition flex items-center gap-2">
+                                <i class="fa-solid fa-users w-4"></i> ข้อมูลลูกค้า
+                            </button>
+                            <button @click="adminSubTab = 'stamps'" :class="adminSubTab === 'stamps' ? 'bg-brand-darkpink text-white font-bold' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2 rounded-xl transition flex items-center gap-2">
+                                <i class="fa-solid fa-star w-4"></i> ระบบสะสมแต้ม
+                            </button>
+                            <button @click="adminSubTab = 'addons'" :class="adminSubTab === 'addons' ? 'bg-brand-darkpink text-white font-bold' : 'text-slate-400 hover:bg-slate-800'" class="w-full text-left px-3 py-2 rounded-xl transition flex items-center gap-2">
+                                <i class="fa-solid fa-toolbox w-4"></i> จัดการพรอพเสริม
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Logout Button -->
+                    <button @click="isAdminLoggedIn = false" class="w-full py-2 bg-red-500/20 text-red-400 hover:bg-red-500/30 font-bold rounded-xl text-xs transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
+                    </button>
+                </aside>
+
+                <!-- Admin Main Workspace -->
+                <main class="flex-1 bg-slate-900 overflow-y-auto p-4 custom-scrollbar">
+                    
+                    <!-- ADMIN TAB 1: DASHBOARD OVERVIEW -->
+                    <div x-show="adminSubTab === 'dashboard'" class="space-y-4">
+                        <!-- Welcome Header Card -->
+                        <div class="bg-gradient-to-r from-pink-500 to-purple-600 p-4 rounded-2xl text-white flex justify-between items-center shadow-md">
+                            <div>
+                                <h2 class="font-black text-lg">ยินดีต้อนรับสู่ระบบหลังบ้าน ✨</h2>
+                                <p class="text-xs text-pink-100">จัดการร้านได้อย่างสะดวก รวดเร็ว และมีประสิทธิภาพ 💖</p>
+                            </div>
+                            <i class="fa-solid fa-crown text-3xl text-yellow-300"></i>
+                        </div>
+
+                        <!-- 4 Stat Cards -->
+                        <div class="grid grid-cols-2 gap-2 text-slate-800">
+                            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-700 flex items-center gap-3">
+                                <div class="w-10 h-10 bg-pink-100 rounded-xl flex items-center justify-center text-brand-darkpink font-bold"><i class="fa-solid fa-shirt"></i></div>
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block">จำนวนตัวละครทั้งหมด</span>
+                                    <span class="text-base font-black text-slate-800" x-text="costumes.length"></span>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-700 flex items-center gap-3">
+                                <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 font-bold"><i class="fa-solid fa-calendar-check"></i></div>
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block">คิวเช่าทั้งหมด</span>
+                                    <span class="text-base font-black text-slate-800">28</span>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-700 flex items-center gap-3">
+                                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 font-bold"><i class="fa-solid fa-users"></i></div>
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block">ลูกค้าทั้งหมด</span>
+                                    <span class="text-base font-black text-slate-800">367</span>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-700 flex items-center gap-3">
+                                <div class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center text-yellow-600 font-bold"><i class="fa-solid fa-star"></i></div>
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block">คะแนนสะสมทั้งหมด</span>
+                                    <span class="text-base font-black text-slate-800">2,530</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Orders Dashboard Section -->
+                        <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3">
+                            <h3 class="font-bold text-sm text-pink-400">คำสั่งเช่าล่าสุด</h3>
+                            <div class="space-y-2 text-xs">
+                                <template x-for="order in adminOrders" :key="order.id">
+                                    <div class="bg-slate-700/50 p-2.5 rounded-xl flex justify-between items-center border border-slate-600">
+                                        <div>
+                                            <span class="font-mono text-slate-400 text-[10px]" x-text="order.id"></span>
+                                            <h4 class="font-bold text-slate-200" x-text="order.customer"></h4>
+                                            <p class="text-[10px] text-slate-400" x-text="order.costume + ' (' + order.dates + ')'"></p>
+                                        </div>
+                                        <span :class="order.status === 'ยืนยันแล้ว' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'" class="px-2 py-0.5 rounded-full text-[10px] font-bold" x-text="order.status"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ADMIN TAB 2: CUSTOMERS DATA TABLE -->
+                    <div x-show="adminSubTab === 'customers'" class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h2 class="font-bold text-base text-pink-400 flex items-center gap-2"><i class="fa-solid fa-users"></i> ข้อมูลลูกค้าทั้งหมด</h2>
+                            <input type="text" placeholder="ค้นหาชื่อผู้ใช้..." class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white">
+                        </div>
+
+                        <div class="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700">
+                            <table class="w-full text-left text-xs text-slate-300">
+                                <thead class="bg-slate-950 text-slate-400 uppercase text-[10px]">
+                                    <tr>
+                                        <th class="p-2.5">ชื่อผู้ใช้</th>
+                                        <th class="p-2.5">ชุดที่เช่า</th>
+                                        <th class="p-2.5">วันที่เช่า</th>
+                                        <th class="p-2.5">สถานะ</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-700">
+                                    <template x-for="c in adminOrders" :key="c.id">
+                                        <tr>
+                                            <td class="p-2.5 font-bold text-white" x-text="c.customer"></td>
+                                            <td class="p-2.5" x-text="c.costume"></td>
+                                            <td class="p-2.5 text-[10px]" x-text="c.dates"></td>
+                                            <td class="p-2.5">
+                                                <span class="px-2 py-0.5 rounded-full text-[9px] bg-green-500/20 text-green-400 font-bold" x-text="c.status"></span>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ADMIN TAB 3: COSTUME MANAGEMENT -->
+                    <div x-show="adminSubTab === 'costumes'" class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h2 class="font-bold text-base text-pink-400 flex items-center gap-2"><i class="fa-solid fa-shirt"></i> จัดการรายการตัวละคร</h2>
+                            <button @click="showAddCostumeModal = true" class="px-3 py-1.5 bg-brand-darkpink text-white rounded-xl text-xs font-bold shadow hover:bg-brand-deep">
+                                + เพิ่มตัวละครใหม่
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <template x-for="item in costumes" :key="item.id">
+                                <div class="bg-slate-800 rounded-xl p-2 border border-slate-700 relative">
+                                    <img :src="item.image" class="w-full h-28 object-cover rounded-lg mb-2">
+                                    <h4 class="font-bold text-xs text-white truncate" x-text="item.name"></h4>
+                                    <p class="text-[10px] text-pink-400 font-bold" x-text="item.price + '.- / วัน'"></p>
+                                    <button @click="deleteCostume(item.id)" class="absolute top-3 right-3 bg-red-600 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center shadow">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- ADMIN TAB 4: ADD-ONS PROPS MANAGEMENT -->
+                    <div x-show="adminSubTab === 'addons'" class="space-y-4">
+                        <h2 class="font-bold text-base text-pink-400 flex items-center gap-2"><i class="fa-solid fa-toolbox"></i> จัดการพรอพ/อุปกรณ์เสริม</h2>
+
+                        <!-- Add New Add-on Form -->
+                        <div class="bg-slate-800 p-3 rounded-2xl border border-slate-700 space-y-2">
+                            <h3 class="text-xs font-bold text-white">+ เพิ่มพรอพเสริมใหม่</h3>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" x-model="newAddon.name" placeholder="ชื่ออุปกรณ์ (เช่น รองเท้าคอส)" class="px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white">
+                                <input type="number" x-model="newAddon.price" placeholder="ราคาเพิ่ม (บาท)" class="px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white">
+                            </div>
+                            <button @click="addNewAddon()" class="w-full py-2 bg-brand-darkpink text-white text-xs font-bold rounded-xl hover:bg-brand-deep transition">
+                                เพิ่มรายการ
+                            </button>
+                        </div>
+
+                        <!-- Existing Addons List -->
+                        <div class="space-y-2">
+                            <template x-for="addon in availableAddons" :key="addon.id">
+                                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
+                                    <div>
+                                        <span class="font-bold text-white" x-text="addon.name"></span>
+                                        <span class="text-pink-400 font-bold ml-2" x-text="'+' + addon.price + ' บาท'"></span>
+                                    </div>
+                                    <button @click="deleteAddon(addon.id)" class="text-red-400 hover:text-red-300">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+        </template>
+
+        <!-- ========================================== -->
+        <!-- ADMIN LOGIN POPUP MODAL -->
+        <!-- ========================================== -->
+        <div x-show="showAdminModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-4 relative border-4 border-pink-200">
+                <button @click="showAdminModal = false" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+
+                <div class="text-center space-y-1">
+                    <div class="w-12 h-12 bg-pink-100 rounded-full mx-auto flex items-center justify-center text-brand-darkpink text-xl">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3 class="font-black text-slate-800 text-base">เข้าสู่ระบบแอดมิน</h3>
+                    <p class="text-[11px] text-slate-400">PANTERz Cosshop Admin</p>
+                </div>
+
+                <div class="space-y-2">
                     <div>
-                        <span class="text-[10px] bg-white/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">VIP Member Card</span>
-                        <h2 class="text-xl font-bold mt-1">บัตรสะสมแต้มเช่าชุด 🐾</h2>
+                        <label class="text-[11px] font-semibold text-slate-600">อีเมลของคุณ</label>
+                        <input type="email" x-model="adminLogin.email" placeholder="admin@panterz.com" class="w-full mt-1 px-3 py-1.5 border border-pink-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-brand-darkpink">
                     </div>
-                    <div class="text-right">
-                        <span class="text-2xl font-black text-yellow-300" x-text="userPoints"></span>
-                        <span class="text-xs text-pink-200">/ 8 แต้ม</span>
-                    </div>
-                </div>
-
-                <!-- Stamp Grid (8 slots) -->
-                <div class="grid grid-cols-4 gap-3 my-5 relative z-10">
-                    <template x-for="i in 8" :key="i">
-                        <div class="aspect-square rounded-xl bg-white/10 backdrop-blur-md border border-white/30 flex items-center justify-center relative">
-                            <template x-if="i <= userPoints">
-                                <div class="animate-bounce">
-                                    <span class="text-2xl">🐾</span>
-                                </div>
-                            </template>
-                            <template x-if="i > userPoints">
-                                <span class="text-xs text-pink-200 font-bold opacity-40" x-text="i"></span>
-                            </template>
-                            
-                            <!-- Reward Crown on 8th Slot -->
-                            <template x-if="i === 8">
-                                <div class="absolute -top-1 -right-1 text-xs">👑</div>
-                            </template>
-                        </div>
-                    </template>
-                </div>
-
-                <div class="relative z-10 bg-white/20 rounded-xl p-2.5 backdrop-blur-md flex justify-between items-center text-xs">
-                    <span>เงื่อนไข: เช่าชุดครบทุก 1 ครั้ง รับ 1 แต้ม (ครบ 8 แต้ม เช่าชุดฟรี 1 ครั้ง!)</span>
-                </div>
-            </div>
-
-            <!-- Reward Voucher Box -->
-            <div x-show="userPoints >= 8" class="bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl p-4 text-center">
-                <div class="text-3xl mb-1">🎉🎁</div>
-                <h3 class="font-bold text-amber-900 text-sm">ยินดีด้วย! คุณได้รับสิทธิ์เช่าฟรี 1 ครั้ง</h3>
-                <p class="text-xs text-amber-700 mt-0.5 mb-3">แสดงคูปองนี้กับแอดมินทางเพจ Facebook เพื่อรับสิทธิ์ได้เลย</p>
-                <button @click="openFacebookPage()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow">
-                    รับสิทธิ์ผ่าน Facebook Page
-                </button>
-            </div>
-
-            <!-- Demo Simulate Buttons -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-pink-100 space-y-2">
-                <h3 class="font-bold text-xs text-gray-700">ทดสอบระบบสะสมแต้ม (Demo):</h3>
-                <div class="flex gap-2">
-                    <button @click="userPoints = Math.min(8, userPoints + 1)" class="flex-1 bg-pink-100 text-brand-deepPink font-semibold py-2 rounded-xl text-xs hover:bg-pink-200 transition">
-                        + เพิ่ม 1 แต้ม
-                    </button>
-                    <button @click="userPoints = 0" class="bg-gray-100 text-gray-600 font-semibold px-4 py-2 rounded-xl text-xs hover:bg-gray-200 transition">
-                        รีเซ็ตแต้ม
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- BOTTOM NAVIGATION BAR (Matching reference UI) -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-pink-100 px-3 py-2 flex justify-around items-center z-40 shadow-lg">
-        <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'text-brand-deepPink font-bold scale-105' : 'text-gray-400 font-normal'" class="flex flex-col items-center gap-1 transition">
-            <i data-lucide="home" class="w-5 h-5"></i>
-            <span class="text-[10px]">หน้าแรก</span>
-        </button>
-        <button @click="activeTab = 'rules'" :class="activeTab === 'rules' ? 'text-brand-deepPink font-bold scale-105' : 'text-gray-400 font-normal'" class="flex flex-col items-center gap-1 transition">
-            <i data-lucide="file-text" class="w-5 h-5"></i>
-            <span class="text-[10px]">กฎการเช่า</span>
-        </button>
-        <button @click="activeTab = 'calendar'" :class="activeTab === 'calendar' ? 'text-brand-deepPink font-bold scale-105' : 'text-gray-400 font-normal'" class="flex flex-col items-center gap-1 transition">
-            <i data-lucide="calendar" class="w-5 h-5"></i>
-            <span class="text-[10px]">เช็คตารางคิวเช่า</span>
-        </button>
-        <button @click="activeTab = 'stamps'" :class="activeTab === 'stamps' ? 'text-brand-deepPink font-bold scale-105' : 'text-gray-400 font-normal'" class="flex flex-col items-center gap-1 transition relative">
-            <i data-lucide="star" class="w-5 h-5"></i>
-            <span class="text-[10px]">สะสมแต้มสมาชิก</span>
-            <span x-show="userPoints > 0" class="absolute top-0 right-2 w-2 h-2 bg-brand-deepPink rounded-full"></span>
-        </button>
-    </nav>
-
-    <!-- MODAL 1: COSTUME DETAIL & REVIEWS -->
-    <div x-show="showDetailModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" x-transition.opacity>
-        <div @click.away="showDetailModal = false" class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl max-h-[90vh] overflow-y-auto p-5 space-y-4">
-            
-            <div class="flex justify-between items-start">
-                <div>
-                    <span class="text-[10px] bg-pink-100 text-brand-deepPink font-bold px-2 py-0.5 rounded-full" x-text="selectedCostume?.game"></span>
-                    <h2 class="text-xl font-bold text-gray-800 mt-1" x-text="selectedCostume?.name"></h2>
-                </div>
-                <button @click="showDetailModal = false" class="p-1 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <!-- Main Image Preview -->
-            <div class="aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100">
-                <img :src="selectedCostume?.image" class="w-full h-full object-cover">
-            </div>
-
-            <!-- Price & Sizes -->
-            <div class="flex justify-between items-center bg-pink-50/70 p-3 rounded-2xl border border-pink-100">
-                <div>
-                    <span class="text-xs text-gray-500">ค่าเช่าเริ่มต้น</span>
-                    <div class="text-lg font-bold text-brand-deepPink">
-                        <span x-text="selectedCostume?.price"></span> <span class="text-xs text-gray-500 font-normal">/ วัน</span>
+                    <div>
+                        <label class="text-[11px] font-semibold text-slate-600">รหัสผ่านของคุณ</label>
+                        <input type="password" x-model="adminLogin.password" placeholder="••••••••" class="w-full mt-1 px-3 py-1.5 border border-pink-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-brand-darkpink">
                     </div>
                 </div>
-                <div>
-                    <span class="text-xs text-gray-500 block text-right mb-1">ไซส์ที่พร้อมบริการ</span>
-                    <div class="flex gap-1">
-                        <template x-for="size in selectedCostume?.sizes" :key="size">
-                            <span class="text-xs bg-white text-gray-700 font-bold px-2.5 py-1 rounded-lg border border-pink-200" x-text="size"></span>
-                        </template>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Equipment Included -->
-            <div>
-                <h4 class="font-bold text-xs text-gray-700 mb-1.5">สิ่งที่จะได้รับในเซ็ต:</h4>
-                <div class="flex flex-wrap gap-1.5">
-                    <template x-for="item in selectedCostume?.inclusions" :key="item">
-                        <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full flex items-center gap-1">
-                            <span>✨</span> <span x-text="item"></span>
-                        </span>
-                    </template>
-                </div>
-            </div>
-
-            <!-- Customer Reviews Section -->
-            <div class="border-t border-gray-100 pt-3">
-                <div class="flex justify-between items-center mb-2">
-                    <h4 class="font-bold text-xs text-gray-700">รีวิวจากลูกค้า (4.9 ⭐)</h4>
-                    <span class="text-[10px] text-brand-deepPink cursor-pointer" @click="addDemoReview()">+ เขียนรีวิว</span>
-                </div>
-
-                <div class="space-y-2 max-h-36 overflow-y-auto pr-1">
-                    <template x-for="rev in selectedCostume?.reviews" :key="rev.id">
-                        <div class="p-2.5 bg-gray-50 rounded-xl text-xs">
-                            <div class="flex justify-between text-gray-600 font-medium mb-1">
-                                <span x-text="rev.user"></span>
-                                <span class="text-amber-400">★★★★★</span>
-                            </div>
-                            <p class="text-gray-500 text-[11px]" x-text="rev.comment"></p>
-                        </div>
-                    </template>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="pt-2 flex gap-2">
-                <button @click="openFacebookPage()" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 rounded-xl text-xs flex items-center justify-center gap-1">
-                    <i data-lucide="message-square" class="w-4 h-4"></i> สอบถาม
-                </button>
-                <button @click="openBookingModal()" class="w-2/3 bg-gradient-to-r from-brand-pink to-brand-deepPink text-white font-bold py-3 rounded-xl text-xs shadow-md hover:opacity-95 transition">
-                    📅 เลือกระยะเวลา & เช่าชุด
+                <button @click="loginAdmin()" class="w-full py-2.5 bg-brand-darkpink text-white font-bold rounded-xl shadow-md text-xs hover:bg-brand-deep transition">
+                    เข้าสู่ระบบ
                 </button>
             </div>
         </div>
+
     </div>
 
-    <!-- MODAL 2: BOOKING DATE SELECTION & PAYMENT SIMULATION -->
-    <div x-show="showBookingModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" x-transition.opacity>
-        <div @click.away="showBookingModal = false" class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl max-h-[90vh] overflow-y-auto p-5 space-y-4">
-            
-            <div class="flex justify-between items-center">
-                <h3 class="font-bold text-base text-gray-800">จองคิวเช่าชุด 🐾</h3>
-                <button @click="showBookingModal = false" class="p-1 rounded-full bg-gray-100 text-gray-500"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-
-            <!-- Selected Summary -->
-            <div class="flex gap-3 bg-pink-50/50 p-2.5 rounded-xl border border-pink-100 items-center">
-                <img :src="selectedCostume?.image" class="w-12 h-12 rounded-lg object-cover">
-                <div>
-                    <h4 class="font-bold text-xs text-gray-800" x-text="selectedCostume?.name"></h4>
-                    <p class="text-[10px] text-gray-500" x-text="selectedCostume?.game"></p>
-                </div>
-            </div>
-
-            <!-- Date Pickers -->
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">วันเริ่มเช่า:</label>
-                    <input type="date" x-model="startDate" @change="calculateTotal()" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-pink-300">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">วันส่งคืนชุด:</label>
-                    <input type="date" x-model="endDate" @change="calculateTotal()" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-pink-300">
-                </div>
-            </div>
-
-            <!-- Price Breakdown -->
-            <div class="bg-gray-50 p-3 rounded-2xl space-y-1.5 text-xs">
-                <div class="flex justify-between text-gray-600">
-                    <span>จำนวนวันเช่า:</span>
-                    <span class="font-bold" x-text="rentalDays + ' วัน'"></span>
-                </div>
-                <div class="flex justify-between text-gray-600">
-                    <span>ค่าเช่าชุด:</span>
-                    <span class="font-bold" x-text="costumeTotalPrice + ' บาท'"></span>
-                </div>
-                <div class="flex justify-between text-gray-600">
-                    <span>ค่ามัดจำประกันชุด (ได้คืน):</span>
-                    <span class="font-bold" x-text="depositFee + ' บาท'"></span>
-                </div>
-                <div class="border-t border-gray-200 pt-1.5 flex justify-between text-sm font-bold text-brand-deepPink">
-                    <span>รวมชำระทั้งสิ้น:</span>
-                    <span x-text="grandTotal + ' บาท'"></span>
-                </div>
-            </div>
-
-            <!-- QR Code PromptPay Simulation -->
-            <div class="bg-white border-2 border-brand-pink/30 rounded-2xl p-4 text-center space-y-2 shadow-inner">
-                <span class="text-[10px] bg-blue-600 text-white font-bold px-2 py-0.5 rounded">PromptPay สแกนจ่าย</span>
-                <p class="text-xs text-gray-500">สแกน QR Code ด้านล่างเพื่อชำระเงินจองคิวทันที</p>
-                
-                <!-- Dynamic Mock QR Code -->
-                <div class="w-40 h-40 mx-auto bg-gray-100 p-2 rounded-xl border border-gray-200 flex items-center justify-center">
-                    <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PROMPTPAY_PANTERZ_COSTUME_' + grandTotal" alt="PromptPay QR Code" class="w-full h-full object-contain">
-                </div>
-                
-                <p class="text-xs font-bold text-gray-700">ยอดชำระ: <span class="text-brand-deepPink" x-text="grandTotal + ' THB'"></span></p>
-            </div>
-
-            <button @click="confirmPayment()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl text-xs shadow-md flex items-center justify-center gap-2 transition">
-                <i data-lucide="check-circle" class="w-4 h-4"></i> ยืนยันการชำระเงิน & ลงคิวปฏิทิน
-            </button>
-        </div>
-    </div>
-
-    <!-- SUCCESS NOTIFICATION TOAST -->
-    <div x-show="showToast" 
-         x-transition:enter="transition ease-out duration-300 transform"
-         x-transition:enter-start="opacity-0 translate-y-4"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-200 transform"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 translate-y-4"
-         class="fixed bottom-20 left-4 right-4 max-w-md mx-auto bg-gray-900/90 text-white p-3.5 rounded-2xl shadow-xl z-50 flex items-center gap-3 backdrop-blur-md">
-        <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white shrink-0">
-            <i data-lucide="check" class="w-5 h-5"></i>
-        </div>
-        <div class="text-xs">
-            <p class="font-bold text-white" x-text="toastTitle"></p>
-            <p class="text-gray-300 text-[11px]" x-text="toastMessage"></p>
-        </div>
-    </div>
-
-    <!-- Alpine.js Application Logic -->
+    <!-- Alpine.js Application Logic Script -->
     <script>
         function cosplayApp() {
             return {
                 activeTab: 'home',
+                adminSubTab: 'dashboard',
+                selectedCategory: 'ทั้งหมด',
                 searchQuery: '',
-                selectedCategory: 'all',
-                showDetailModal: false,
-                showBookingModal: false,
-                selectedCostume: null,
-                userPoints: 5,
-                showToast: false,
-                toastTitle: '',
-                toastMessage: '',
-                selectedCalendarCostumeId: 'all',
-                
-                // Booking Dates & Pricing
-                startDate: new Date().toISOString().split('T')[0],
-                endDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-                rentalDays: 1,
-                costumeTotalPrice: 600,
-                depositFee: 300,
-                grandTotal: 900,
+                showAdminModal: false,
+                isAdminLoggedIn: false,
 
-                categories: [
-                    { id: 'all', name: 'ทั้งหมด', icon: '🏠' },
-                    { id: 'genshin', name: 'Genshin', icon: '✦' },
-                    { id: 'starrail', name: 'Star Rail', icon: '💫' },
-                    { id: 'zzz', name: 'ZZZ', icon: '⚡' },
-                    { id: 'anime', name: 'อนิเมะ', icon: '🐱' },
-                    { id: 'games', name: 'เกมอื่นๆ', icon: '🎮' }
-                ],
+                // User Stamp Count
+                userStamps: 3,
 
+                // Costume Database List
                 costumes: [
-                    {
-                        id: 1,
-                        name: 'Ganyu (กานยู)',
-                        game: 'Genshin Impact',
-                        categoryId: 'genshin',
-                        categoryIcon: '✦',
-                        price: '600.-',
-                        numericPrice: 600,
-                        inclusions: ['+ ชุดเต็ม', 'พร้อมวิก', 'เขา+พร็อบ'],
-                        sizes: ['S', 'M'],
-                        image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&q=80&w=400',
-                        status: 'available',
-                        isFav: false,
-                        reviews: [
-                            { id: 1, user: 'Neko_Cos', comment: 'ชุดตรงปกมากค่ะ วิกเซ็ตสวยพร้อมใส่ออกงานได้เลย!' },
-                            { id: 2, user: 'KuroChan', comment: 'แอดมินใจดี ตอบไว ส่งของตรงเวลามากครับ' }
-                        ]
-                    },
-                    {
-                        id: 2,
-                        name: 'Sunday (ซันเดย์)',
-                        game: 'Honkai: Star Rail',
-                        categoryId: 'starrail',
-                        categoryIcon: '💫',
-                        price: '650.-',
-                        numericPrice: 650,
-                        inclusions: ['+ ชุดเต็ม', 'พร้อมวิก', 'ปีกวิญญาณ'],
-                        sizes: ['M', 'L'],
-                        image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=400',
-                        status: 'available',
-                        isFav: true,
-                        reviews: [
-                            { id: 1, user: 'StarRider', comment: 'งานปักอลังการมาก ปีกน้ำหนักเบาถ่ายรูปขึ้นสุดๆ' }
-                        ]
-                    },
-                    {
-                        id: 3,
-                        name: 'Ellen Joe (เอลเลน โจ)',
-                        game: 'Zenless Zone Zero',
-                        categoryId: 'zzz',
-                        categoryIcon: '⚡',
-                        price: '600.-',
-                        numericPrice: 600,
-                        inclusions: ['+ ชุดเต็ม', 'พร้อมวิก', 'หางฉลาม'],
-                        sizes: ['S', 'M'],
-                        image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&q=80&w=400',
-                        status: 'booked',
-                        isFav: false,
-                        reviews: [
-                            { id: 1, user: 'Sharkie', comment: 'หางฉลามนุ่มฟูมากกก คุ้มค่าเช่ามากค่ะ' }
-                        ]
-                    },
-                    {
-                        id: 4,
-                        name: 'Zero Two (ซีโร่ทู)',
-                        game: 'DARLING in the FRANXX',
-                        categoryId: 'anime',
-                        categoryIcon: '🐱',
-                        price: '550.-',
-                        numericPrice: 550,
-                        inclusions: ['+ ชุดเต็ม', 'พร้อมวิก', 'ที่คาดผมเขา'],
-                        sizes: ['S', 'M', 'L'],
-                        image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&q=80&w=400',
-                        status: 'available',
-                        isFav: false,
-                        reviews: [
-                            { id: 1, user: 'DarlingFan', comment: 'ชุดทรงสวยเข้ารูป ผ้าดีมากครับ' }
-                        ]
-                    },
-                    {
-                        id: 5,
-                        name: 'Hu Tao (หูเถา)',
-                        game: 'Genshin Impact',
-                        categoryId: 'genshin',
-                        categoryIcon: '✦',
-                        price: '600.-',
-                        numericPrice: 600,
-                        inclusions: ['+ ชุดเต็ม', 'พร้อมวิก', 'หมวก+แหวน'],
-                        sizes: ['S', 'M'],
-                        image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400',
-                        status: 'available',
-                        isFav: false,
-                        reviews: []
-                    },
-                    {
-                        id: 6,
-                        name: 'Kafka (คาฟกา)',
-                        game: 'Honkai: Star Rail',
-                        categoryId: 'starrail',
-                        categoryIcon: '💫',
-                        price: '600.-',
-                        numericPrice: 600,
-                        inclusions: ['+ ชุดเต็ม', 'พร้อมวิก', 'แว่นกันแดด'],
-                        sizes: ['M', 'L'],
-                        image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&q=80&w=400',
-                        status: 'booked',
-                        isFav: false,
-                        reviews: []
-                    }
+                    { id: 1, name: 'Ganyu', series: 'Genshin Impact', category: 'Genshin Impact', price: 600, image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&q=80&w=400', liked: false },
+                    { id: 2, name: 'Sunday', series: 'Honkai: Star Rail', category: 'Honkai: Star Rail', price: 650, image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=400', liked: false },
+                    { id: 3, name: 'Ellen Joe', series: 'Zenless Zone Zero', category: 'Zenless Zone Zero', price: 600, image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&q=80&w=400', liked: false },
+                    { id: 4, name: 'Zero Two', series: 'DARLING in the FRANXX', category: 'อนิเมะ', price: 550, image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&q=80&w=400', liked: false },
+                    { id: 5, name: 'Hu Tao', series: 'Genshin Impact', category: 'Genshin Impact', price: 600, image: 'https://images.unsplash.com/photo-1541562232579-512a21360020?auto=format&fit=crop&q=80&w=400', liked: false },
+                    { id: 6, name: 'Kafka', series: 'Honkai: Star Rail', category: 'Honkai: Star Rail', price: 600, image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&q=80&w=400', liked: false }
                 ],
 
-                bookings: [
-                    { id: 101, costumeName: 'Ellen Joe (เอลเลน โจ)', startDate: '2026-11-12', endDate: '2026-11-14', status: 'ติดคิวเช่า' },
-                    { id: 102, costumeName: 'Kafka (คาฟกา)', startDate: '2026-11-18', endDate: '2026-11-20', status: 'รอจัดส่ง' }
+                selectedCostume: null,
+
+                // Available Add-ons (Dynamic managed by Admin)
+                availableAddons: [
+                    { id: 'shoes', name: 'เช่ารองเท้าเพิ่ม', price: 100 },
+                    { id: 'petticoat', name: 'เช่ากระโปรงสุ่มเพิ่ม', price: 100 }
                 ],
 
-                dummyCalendarDays: [
-                    { dayNumber: 26, isOtherMonth: true, status: 'available' },
-                    { dayNumber: 27, isOtherMonth: true, status: 'available' },
-                    { dayNumber: 28, isOtherMonth: true, status: 'available' },
-                    { dayNumber: 29, isOtherMonth: true, status: 'available' },
-                    { dayNumber: 30, isOtherMonth: true, status: 'available' },
-                    { dayNumber: 31, isOtherMonth: true, status: 'available' },
-                    { dayNumber: 1, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 2, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 3, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 4, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 5, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 6, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 7, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 8, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 9, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 10, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 11, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 12, isOtherMonth: false, status: 'booked' },
-                    { dayNumber: 13, isOtherMonth: false, status: 'booked' },
-                    { dayNumber: 14, isOtherMonth: false, status: 'booked' },
-                    { dayNumber: 15, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 16, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 17, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 18, isOtherMonth: false, status: 'shipping' },
-                    { dayNumber: 19, isOtherMonth: false, status: 'shipping' },
-                    { dayNumber: 20, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 21, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 22, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 23, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 24, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 25, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 26, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 27, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 28, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 29, isOtherMonth: false, status: 'available' },
-                    { dayNumber: 30, isOtherMonth: false, status: 'available' }
-                ],
+                // New Addon Form for Admin
+                newAddon: { name: '', price: '' },
 
-                initApp() {
-                    this.$nextTick(() => {
-                        lucide.createIcons();
-                    });
+                // Booking Form State
+                bookingForm: {
+                    fbName: '',
+                    fbLink: '',
+                    phone: '',
+                    idCardName: '',
+                    startDate: '',
+                    endDate: '',
+                    selectedAddons: [],
+                    paymentType: 'full' // 'half' or 'full'
                 },
+
+                // Calculation States
+                daysInAdvance: 0,
+                isEligibleForHalfPay: false,
+                calculatedTotalPrice: 0,
+                calculatedHalfPrice: 0,
+                finalPayAmount: 0,
+
+                // Admin State
+                adminLogin: { email: '', password: '' },
+                adminOrders: [
+                    { id: '#Q202511001', customer: 'คุณมิม', costume: 'Ganyu', dates: '25-27/11/68', status: 'รอชำระเงิน' },
+                    { id: '#Q202511000', customer: 'คุณนิน', costume: 'Hu Tao', dates: '24-26/11/68', status: 'ยืนยันแล้ว' },
+                    { id: '#Q202510099', customer: 'คุณพิม', costume: 'Kafka', dates: '23-25/11/68', status: 'จัดส่งแล้ว' }
+                ],
+
+                queueList: [
+                    { id: 1, costume: 'Ganyu (Genshin Impact)', dates: '15-16 พ.ย. 2568', status: 'ยืนยันคิวแล้ว' },
+                    { id: 2, costume: 'Hu Tao (Genshin Impact)', dates: '20-22 พ.ย. 2568', status: 'รอตรวจสอบ' }
+                ],
 
                 get filteredCostumes() {
                     return this.costumes.filter(item => {
-                        const matchesCategory = this.selectedCategory === 'all' || item.categoryId === this.selectedCategory;
-                        const matchesQuery = item.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
-                                             item.game.toLowerCase().includes(this.searchQuery.toLowerCase());
-                        return matchesCategory && matchesQuery;
+                        const matchCat = this.selectedCategory === 'ทั้งหมด' || item.category === this.selectedCategory;
+                        const matchSearch = item.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+                                           item.series.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        return matchCat && matchSearch;
                     });
                 },
 
-                get filteredBookings() {
-                    if (this.selectedCalendarCostumeId === 'all') return this.bookings;
-                    const item = this.costumes.find(c => c.id == this.selectedCalendarCostumeId);
-                    return item ? this.bookings.filter(b => b.costumeName.includes(item.name.split(' ')[0])) : this.bookings;
-                },
-
-                openDetailModal(item) {
+                openDetail(item) {
                     this.selectedCostume = item;
-                    this.showDetailModal = true;
-                    this.calculateTotal();
+                    this.activeTab = 'detail';
                 },
 
-                openBookingModal() {
-                    this.showDetailModal = false;
-                    this.showBookingModal = true;
-                    this.calculateTotal();
+                startBooking(item) {
+                    this.selectedCostume = item;
+                    this.activeTab = 'booking';
+                    this.calculatePricing();
                 },
 
-                calculateTotal() {
+                handleFileUpload(e) {
+                    const file = e.target.files[0];
+                    if(file) this.bookingForm.idCardName = file.name;
+                },
+
+                handleSlipUpload(e) {
+                    alert('อัปโหลดสลิปเรียบร้อยแล้วค่ะ!');
+                },
+
+                calculatePricing() {
                     if (!this.selectedCostume) return;
-                    const start = new Date(this.startDate);
-                    const end = new Date(this.endDate);
-                    const diffTime = Math.max(86400000, end - start);
-                    this.rentalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    if (this.rentalDays < 1) this.rentalDays = 1;
 
-                    this.costumeTotalPrice = this.selectedCostume.numericPrice * this.rentalDays;
-                    this.grandTotal = this.costumeTotalPrice + this.depositFee;
-                },
+                    let basePrice = this.selectedCostume.price;
 
-                confirmPayment() {
-                    this.showBookingModal = false;
-                    
-                    // 1. Add booking to schedule
-                    this.bookings.unshift({
-                        id: Date.now(),
-                        costumeName: this.selectedCostume.name,
-                        startDate: this.startDate,
-                        endDate: this.endDate,
-                        status: 'ติดคิวเช่า'
+                    // Addons price calculation
+                    let addonsTotal = 0;
+                    this.bookingForm.selectedAddons.forEach(addonId => {
+                        const found = this.availableAddons.find(a => a.id === addonId);
+                        if(found) addonsTotal += found.price;
                     });
 
-                    // 2. Add stamp reward point
-                    if (this.userPoints < 8) {
-                        this.userPoints++;
+                    this.calculatedTotalPrice = basePrice + addonsTotal;
+                    this.calculatedHalfPrice = Math.round(this.calculatedTotalPrice / 2);
+
+                    // Calculate Days in Advance Rule
+                    if (this.bookingForm.startDate) {
+                        const today = new Date();
+                        const start = new Date(this.bookingForm.startDate);
+                        const diffTime = start - today;
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        
+                        this.daysInAdvance = diffDays > 0 ? diffDays : 0;
+                        this.isEligibleForHalfPay = this.daysInAdvance >= 7;
+
+                        if (!this.isEligibleForHalfPay) {
+                            this.bookingForm.paymentType = 'full';
+                        }
                     }
 
-                    // 3. Mark costume status as booked
-                    this.selectedCostume.status = 'booked';
-
-                    // 4. Trigger Toast notification
-                    this.triggerToast('จองคิวสำเร็จ! 🐾', 'ระบบบันทึกคิวในปฏิทิน และเพิ่มแต้มสะสมให้คุณเรียบร้อยแล้ว');
+                    this.finalPayAmount = (this.bookingForm.paymentType === 'half' && this.isEligibleForHalfPay) 
+                        ? this.calculatedHalfPrice 
+                        : this.calculatedTotalPrice;
                 },
 
-                addDemoReview() {
-                    if (!this.selectedCostume) return;
-                    this.selectedCostume.reviews.unshift({
-                        id: Date.now(),
-                        user: 'คุณ (ผู้ใช้งาน)',
-                        comment: 'ชุดสะอาด หอม สภาพดีมาก อุปกรณ์ครบตามที่แจ้งไว้เลยครับ!'
-                    });
-                    this.triggerToast('เพิ่มรีวิวสำเร็จ ⭐', 'ขอบคุณสำหรับรีวิวชุดคอสเพลย์กับทางร้านค่ะ');
+                proceedToPayment() {
+                    if (!this.bookingForm.fbName || !this.bookingForm.startDate) {
+                        alert('กรุณากรอกข้อมูลและเลือกวันที่เช่าให้ครบถ้วนก่อนนะคะ');
+                        return;
+                    }
+                    this.activeTab = 'payment';
                 },
 
-                triggerToast(title, msg) {
-                    this.toastTitle = title;
-                    this.toastMessage = msg;
-                    this.showToast = true;
-                    setTimeout(() => {
-                        this.showToast = false;
-                    }, 4000);
+                copyAccount() {
+                    navigator.clipboard.writeText('0812345678');
+                    alert('คัดลอกเลขบัญชี PromptPay เรียบร้อยแล้ว!');
                 },
 
-                openFacebookPage() {
-                    window.open('https://facebook.com', '_blank');
+                confirmBookingComplete() {
+                    // Add Stamp Reward
+                    if(this.userStamps < 8) this.userStamps++;
+
+                    alert('ขอบคุณสำหรับการจองค่ะ! ระบบได้ทำการบันทึกคิวในปฏิทินและสะสม 1 แต้มให้คุณแล้วค่ะ ✨');
+                    this.activeTab = 'home';
                 },
 
-                shareShop() {
-                    if (navigator.share) {
-                        navigator.share({
-                            title: 'PANTERz Cosshop',
-                            text: 'เช่าชุดคอสเพลย์ คุณภาพดี อุปกรณ์ครบ กับ PANTERz Cosshop',
-                            url: window.location.href,
-                        }).catch(() => {});
+                loginAdmin() {
+                    if (this.adminLogin.email && this.adminLogin.password) {
+                        this.isAdminLoggedIn = true;
+                        this.showAdminModal = false;
                     } else {
-                        this.triggerToast('คัดลอกลิงก์แล้ว 🔗', 'สามารถส่งต่อให้เพื่อนๆ เพื่อเข้าชมร้านได้เลย!');
+                        alert('กรุณากรอกอีเมลและรหัสผ่าน');
                     }
+                },
+
+                addNewAddon() {
+                    if (this.newAddon.name && this.newAddon.price) {
+                        this.availableAddons.push({
+                            id: 'addon_' + Date.now(),
+                            name: this.newAddon.name,
+                            price: parseInt(this.newAddon.price)
+                        });
+                        this.newAddon.name = '';
+                        this.newAddon.price = '';
+                    }
+                },
+
+                deleteAddon(id) {
+                    this.availableAddons = this.availableAddons.filter(a => a.id !== id);
+                },
+
+                deleteCostume(id) {
+                    this.costumes = this.costumes.filter(c => c.id !== id);
                 }
             }
         }
