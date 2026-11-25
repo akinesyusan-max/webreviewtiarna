@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store & Queue Management</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--bg-main, #fffcfc); 
+            color: #4a4a4a;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff0f3;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffb3c1;
+            border-radius: 10px;
+        }
+
+        /* เอฟเฟกต์ปุ่มกดทามาก็อตจิ */
+        .tama-btn-hit {
+            cursor: pointer;
+            transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tama-btn-hit:hover {
+            filter: brightness(1.06);
+        }
+        .tama-btn-hit:active, .tama-btn-pressed {
+            transform: scale(0.84) translateY(3px) !important;
+            filter: brightness(0.92);
+        }
+
+        /* เอฟเฟกต์กรอบหน้าจอด้านในเวลากด */
+        .tama-screen-btn {
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tama-screen-btn:active {
+            transform: scale(0.96);
+            background-color: rgba(252, 238, 241, 0.65);
+        }
+
+        /* เอฟเฟกต์ดาวรีวิว */
+        .star-picker-btn {
+            transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.15s ease;
+        }
+        .star-picker-btn:hover {
+            transform: scale(1.15);
+        }
+        .star-picker-btn:active {
+            transform: scale(0.9);
+        }
+    </style>
+</head>
+<body id="app-body" class="min-h-screen pb-32 relative" style="--bg-main: #fffcfc;">
+
+    <!-- ==================== MAIN SHOP VIEW ==================== -->
+    <div id="main-shop-container">
+        <!-- Top Bar -->
+        <header class="sticky top-0 z-40 bg-white/85 backdrop-blur-md shadow-xs px-4 py-3 flex justify-between items-center border-b border-[#f7eff0]">
+            <div class="flex items-center space-x-2">
+                <button onclick="openAdminLoginModal()" class="w-8 h-8 rounded-full bg-[#fdfafb] border border-[#f0e6e7] flex items-center justify-center text-[#a7898d] hover:bg-[#f5e8ea] transition shadow-2xs" title="เข้าสู่ระบบแอดมิน">
+                    <i class="fa-solid fa-chess-rook text-sm"></i>
+                </button>
+                <span id="shop-title-header" class="text-[#a7898d] font-extrabold text-lg">ชื่อร้าน</span>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <button onclick="openCartModal()" class="relative w-9 h-9 rounded-full bg-[#fdfafb] border border-[#f0e6e7] flex items-center justify-center text-[#a7898d] hover:bg-[#f5e8ea] transition shadow-2xs" title="ตะกร้าสินค้า">
+                    <i class="fa-solid fa-basket-shopping text-sm"></i>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-[#a7898d] text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-xs">0</span>
+                </button>
+                <div class="flex flex-col space-y-1 w-6 opacity-30 cursor-default">
+                    <span class="h-0.5 bg-gray-600 rounded-full w-full"></span>
+                    <span class="h-0.5 bg-gray-600 rounded-full w-4 ml-auto"></span>
+                    <span class="h-0.5 bg-gray-600 rounded-full w-full"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container Views -->
+        <main class="max-w-md mx-auto p-4 space-y-5">
+
+            <!-- TAB 1: HOME (TAMAGOTCHI CENTERPIECE) -->
+            <section id="view-home" class="view-section min-h-[calc(100vh-170px)] flex flex-col items-center justify-center py-2">
+                <div class="relative w-full max-w-[370px] aspect-square mx-auto select-none">
+                    <img id="tama-body-img" 
+                         src="tamagotchi-body.png" 
+                         onerror="this.style.opacity='0.2'"
+                         alt="Tamagotchi Body" 
+                         class="w-full h-full object-contain pointer-events-none relative z-10 drop-shadow-md">
+
+                    <button onclick="handleTamaScreenClick()" 
+                            class="tama-screen-btn absolute z-20 rounded-[18px] flex flex-col items-center justify-center p-3 text-center cursor-pointer group focus:outline-none"
+                            style="top: 41.5%; left: 34.8%; width: 32.5%; height: 26.8%;"
+                            title="กดหน้าจอเพื่อจองคิว">
+                        <span id="tama-screen-icon" class="text-[#a7898d] text-lg mb-1 transition-transform group-hover:scale-110">
+                            <i class="fa-solid fa-heart"></i>
+                        </span>
+                        <span id="tama-screen-title" class="text-[11px] font-extrabold text-[#a7898d] leading-tight">
+                            ยินดีต้อนรับ ♡
+                        </span>
+                        <span id="tama-screen-sub" class="text-[9px] font-semibold text-[#c0aab1] mt-0.5">
+                            แตะหน้าจอเพื่อจองคิว
+                        </span>
+                    </button>
+
+                    <div id="tama-btn-left-wrap" 
+                         onclick="pressTamaButton('left')"
+                         class="tama-btn-hit absolute inset-0 z-30"
+                         style="clip-path: circle(5.2% at 39.1% 77.6%); transform-origin: 39.1% 77.6%;"
+                         title="ปุ่มซ้าย: ดูสินค้า">
+                        <img id="tama-btn-img-1" src="tamagotchi-buttons.png" alt="Button Left" class="w-full h-full object-contain pointer-events-none">
+                    </div>
+
+                    <div id="tama-btn-center-wrap" 
+                         onclick="pressTamaButton('center')"
+                         class="tama-btn-hit absolute inset-0 z-30"
+                         style="clip-path: circle(5.2% at 50.3% 79.8%); transform-origin: 50.3% 79.8%;"
+                         title="ปุ่มกลาง: จองคิว">
+                        <img id="tama-btn-img-2" src="tamagotchi-buttons.png" alt="Button Center" class="w-full h-full object-contain pointer-events-none">
+                    </div>
+
+                    <div id="tama-btn-right-wrap" 
+                         onclick="pressTamaButton('right')"
+                         class="tama-btn-hit absolute inset-0 z-30"
+                         style="clip-path: circle(5.2% at 61.5% 77.6%); transform-origin: 61.5% 77.6%;"
+                         title="ปุ่มขวา: เช็คคิว">
+                        <img id="tama-btn-img-3" src="tamagotchi-buttons.png" alt="Button Right" class="w-full h-full object-contain pointer-events-none">
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: PRODUCTS (GROUP) -->
+            <section id="view-products" class="view-section hidden space-y-4">
+                <h2 class="font-extrabold text-[22px] text-[#a7898d]">Group</h2>
+                
+                <div class="flex items-center space-x-2.5">
+                    <div class="relative flex items-center bg-white border border-[#f7eff0] rounded-full shadow-2xs px-4 py-3 flex-1">
+                        <i class="fa-solid fa-magnifying-glass text-[#c0aab1] text-sm mr-3"></i>
+                        <input type="text" id="product-search-input" oninput="renderProducts()" placeholder="ค้นหาสินค้า..." class="w-full text-xs text-gray-600 focus:outline-none bg-transparent placeholder-[#c0aab1]">
+                    </div>
+                    <button onclick="openCatFilterModal()" class="w-11 h-11 bg-white border border-[#f7eff0] rounded-full shadow-2xs flex items-center justify-center text-[#a7898d] hover:bg-[#fdfafb] transition shrink-0" title="ตัวกรอง">
+                        <i class="fa-solid fa-paw text-sm"></i>
+                    </button>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button class="w-8 h-8 rounded-full bg-white border border-[#f7eff0] text-[#a7898d] flex items-center justify-center shadow-2xs shrink-0 text-xs">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div id="categories-tabs-container" class="flex space-x-2 overflow-x-auto pb-1 scrollbar-none flex-1"></div>
+                    <button class="w-8 h-8 rounded-full bg-white border border-[#f7eff0] text-[#a7898d] flex items-center justify-center shadow-2xs shrink-0 text-xs">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div id="product-count-label" class="text-[11px] text-[#c0aab1] font-medium pt-0.5">2 items</div>
+
+                <div id="products-grid" class="grid grid-cols-2 gap-3.5 pt-1"></div>
+            </section>
+
+            <!-- TAB 3: QUEUE CHECK -->
+            <section id="view-queue" class="view-section hidden space-y-4">
+                <div class="bg-white rounded-[32px] p-2 shadow-sm border border-[#f7eff0]">
+                    <div class="h-40 w-full rounded-[24px] overflow-hidden relative border border-[#f0e6e7]">
+                        <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80" alt="Queue Banner" class="w-full h-full object-cover opacity-80">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-12 gap-3 items-stretch">
+                    <div class="col-span-7 flex flex-col justify-between space-y-2.5">
+                        <div class="relative flex items-center bg-white rounded-full shadow-2xs px-4 py-2.5 border border-[#f0e6e7]">
+                            <i class="fa-solid fa-magnifying-glass text-[#c0aab1] text-xs mr-2.5 shrink-0"></i>
+                            <input type="text" id="queue-search-input" oninput="renderQueues()" placeholder="ค้นหาคิวงาน..." class="w-full text-xs font-medium text-gray-600 focus:outline-none bg-transparent placeholder-[#c0aab1]">
+                        </div>
+
+                        <div class="bg-white rounded-[24px] p-3.5 border border-[#f0e6e7] shadow-2xs space-y-1 flex-1 flex flex-col justify-center">
+                            <div class="flex items-center space-x-1.5 text-xs font-bold text-[#8c6b70]">
+                                <i class="fa-regular fa-file-lines text-[#9c7d82] text-xs"></i>
+                                <span>รายละเอียดร้านค้า</span>
+                            </div>
+                            <p id="queue-shop-detail-text" class="text-[11px] text-[#9c7d82] leading-relaxed">
+                                ยินดีต้อนรับสู่ร้านค้าออนไลน์ของเรา เลือกชมสินค้าและบริการได้เลยค่ะ ♡
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-span-5">
+                        <div class="h-full min-h-[126px] w-full rounded-[26px] overflow-hidden border border-[#f0e6e7] shadow-2xs bg-[#fdfafb]">
+                            <img id="queue-side-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=500&q=80" alt="Queue Side Image" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center bg-[#fdfafb] p-1.5 rounded-full border border-[#f7eff0] shadow-sm">
+                    <button onclick="setQueueFilter('ทั้งหมด')" id="q-filter-ทั้งหมด" class="flex-1 px-3 py-2.5 rounded-full text-[10px] font-extrabold text-[#a7898d] bg-white shadow-xs transition">ทั้งหมด</button>
+                    <button onclick="setQueueFilter('ยังไม่ได้เริ่ม')" id="q-filter-ยังไม่ได้เริ่ม" class="flex-1 px-3 py-2.5 rounded-full text-[10px] font-medium text-[#c0aab1] transition">ยังไม่ได้เริ่ม</button>
+                    <button onclick="setQueueFilter('กำลังทำ')" id="q-filter-กำลังทำ" class="flex-1 px-3 py-2.5 rounded-full text-[10px] font-medium text-[#c0aab1] transition">กำลังทำ</button>
+                    <button onclick="setQueueFilter('เสร็จแล้ว')" id="q-filter-เสร็จแล้ว" class="flex-1 px-3 py-2.5 rounded-full text-[10px] font-medium text-[#c0aab1] transition">เสร็จแล้ว</button>
+                </div>
+
+                <div id="queue-list-container" class="space-y-5 pt-2"></div>
+            </section>
+
+            <!-- TAB 4: DETAIL (REVIEW PAGE - NO PROFILE) -->
+            <section id="view-detail" class="view-section hidden space-y-4 pt-1">
+                <div class="bg-white rounded-[24px] py-4 px-5 border border-[#f2e4e6] shadow-2xs grid grid-cols-2 items-center text-center relative">
+                    <div class="border-r border-[#f2e4e6] flex flex-col items-center justify-center">
+                        <span id="review-total-count" class="text-lg font-extrabold text-[#a7898d] leading-tight">2</span>
+                        <span class="text-[11px] text-[#a7898d] font-medium mt-0.5">reviews</span>
+                    </div>
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="flex items-center space-x-1 text-lg font-extrabold text-[#a7898d] leading-tight">
+                            <span class="text-sm text-[#e8b84b]">★</span>
+                            <span id="review-avg-rating">4.5</span>
+                        </div>
+                        <span class="text-[11px] text-[#a7898d] font-medium mt-0.5">rating</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[26px] p-4 border border-[#f2e4e6] shadow-2xs space-y-3">
+                    <div>
+                        <input type="text" id="review-author-input" placeholder="ชื่อของคุณ..." 
+                               class="w-full px-4 py-2.5 bg-[#fffdfd] border border-[#f2e4e6] rounded-full text-xs text-gray-600 focus:outline-none focus:border-[#a7898d] placeholder-[#c9b3b7] transition">
+                    </div>
+
+                    <div class="py-2 bg-[#fffdfd] border border-[#f2e4e6] rounded-full flex items-center justify-center space-x-2" id="review-star-picker">
+                        <button type="button" onclick="setReviewRating(1)" data-star="1" class="star-picker-btn text-lg text-[#e8b84b] focus:outline-none">★</button>
+                        <button type="button" onclick="setReviewRating(2)" data-star="2" class="star-picker-btn text-lg text-[#e8b84b] focus:outline-none">★</button>
+                        <button type="button" onclick="setReviewRating(3)" data-star="3" class="star-picker-btn text-lg text-[#e8b84b] focus:outline-none">★</button>
+                        <button type="button" onclick="setReviewRating(4)" data-star="4" class="star-picker-btn text-lg text-[#e8b84b] focus:outline-none">★</button>
+                        <button type="button" onclick="setReviewRating(5)" data-star="5" class="star-picker-btn text-lg text-[#e6d8da] focus:outline-none">★</button>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <label class="w-10 h-10 rounded-full bg-[#fffdfd] hover:bg-[#fdf3f5] border border-[#f2e4e6] flex items-center justify-center text-[#b5979c] cursor-pointer shrink-0 transition" title="แนบรูปรีวิว">
+                            <i class="fa-solid fa-camera text-sm"></i>
+                            <input type="file" id="review-img-input" accept="image/*" class="hidden" onchange="handleReviewImageUpload(this)">
+                        </label>
+                        <input type="text" id="review-comment-input" placeholder="พิมพ์รีวิวของคุณที่นี่..." 
+                               class="flex-1 px-4 py-2.5 bg-[#fffdfd] border border-[#f2e4e6] rounded-full text-xs text-gray-600 focus:outline-none focus:border-[#a7898d] placeholder-[#c9b3b7] transition">
+                    </div>
+
+                    <div id="review-img-preview-wrap" class="hidden items-center justify-between bg-[#fdf7f8] border border-[#f2e4e6] rounded-2xl p-2 px-3">
+                        <div class="flex items-center space-x-2.5">
+                            <img id="review-img-preview" src="" alt="Preview" class="w-10 h-10 rounded-xl object-cover border border-[#f0e6e7]">
+                            <span id="review-img-name" class="text-[11px] text-[#a7898d] font-medium truncate max-w-[170px]">แนบรูปแล้ว</span>
+                        </div>
+                        <button type="button" onclick="clearReviewImage()" class="text-xs text-gray-400 hover:text-[#a7898d] px-1.5">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <button type="button" onclick="submitReview()" 
+                            class="w-full py-2.5 bg-[#fffdfd] hover:bg-[#fdf2f4] border border-[#f2e4e6] rounded-full text-xs font-bold text-[#a7898d] shadow-2xs active:scale-[0.98] transition">
+                        ส่ง
+                    </button>
+                </div>
+
+                <div class="space-y-3 pt-1">
+                    <h3 class="text-xs font-bold text-[#9c7d82] px-1">ความคิดเห็นทั้งหมด</h3>
+                    <div id="reviews-list-container" class="space-y-3"></div>
+                </div>
+            </section>
+
+            <!-- TAB 5: MEMBER (COLLECTING POINT) -->
+            <section id="view-member" class="view-section hidden space-y-4 pt-3">
+                <div class="px-1">
+                    <h2 class="text-2xl font-extrabold text-[#a7898d] tracking-tight">Collecting Point</h2>
+                </div>
+
+                <div class="bg-white rounded-[26px] p-5 border border-[#f2e4e6] shadow-2xs space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span id="stamp-progress-label" class="text-sm font-bold text-[#a7898d]">0 / 10 stamps</span>
+                        <span id="stamp-card-owner-badge" class="text-[11px] font-semibold text-[#b5979c] bg-[#fdfafb] border border-[#f2e4e6] px-3 py-0.5 rounded-full">
+                            บัตรของ: mimi
+                        </span>
+                    </div>
+
+                    <div id="stamp-grid-container" class="grid grid-cols-5 gap-3 py-1"></div>
+                </div>
+
+                <div class="bg-white rounded-[26px] p-5 border border-[#f2e4e6] shadow-2xs space-y-3">
+                    <label for="stamp-search-input" class="block text-xs font-bold text-[#9c7d82]">
+                        Find your card — type your name
+                    </label>
+                    <div class="flex items-center space-x-2.5">
+                        <input type="text" 
+                               id="stamp-search-input" 
+                               onkeydown="if(event.key === 'Enter') searchStampCard()"
+                               placeholder="Your name" 
+                               class="flex-1 px-4 py-2.5 bg-[#fffdfd] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d] placeholder-[#c9b3b7] transition">
+                        <button type="button" 
+                                onclick="searchStampCard()" 
+                                class="px-6 py-2.5 bg-[#b8969b] hover:bg-[#a7898d] active:scale-[0.97] text-white rounded-2xl text-xs font-bold shadow-xs transition shrink-0">
+                            Search
+                        </button>
+                    </div>
+                    <p id="stamp-search-status" class="text-[11px] text-[#c0aab1] min-h-[16px]"></p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="fixed bottom-4 left-0 right-0 max-w-sm mx-auto z-30 px-4">
+            <nav class="bg-white/95 backdrop-blur-md border border-[#f7eff0] py-2.5 px-4 rounded-full flex justify-around items-center shadow-xl text-[10px]">
+                <button onclick="switchTab('home')" id="nav-btn-home" class="nav-btn flex flex-col items-center text-[#a7898d] transition">
+                    <i class="fa-solid fa-house text-sm"></i>
+                    <span class="mt-1 font-semibold">Home</span>
+                </button>
+                <button onclick="switchTab('products')" id="nav-btn-products" class="nav-btn flex flex-col items-center text-gray-400 transition relative">
+                    <i class="fa-solid fa-folder-open text-sm"></i>
+                    <span class="mt-1 font-semibold">Group</span>
+                </button>
+                <button onclick="switchTab('queue')" id="nav-btn-queue" class="nav-btn flex flex-col items-center text-gray-400 transition">
+                    <i class="fa-solid fa-list-check text-sm"></i>
+                    <span class="mt-1 font-semibold">Queue</span>
+                </button>
+                <button onclick="switchTab('detail')" id="nav-btn-detail" class="nav-btn flex flex-col items-center text-gray-400 transition">
+                    <i class="fa-solid fa-file-lines text-sm"></i>
+                    <span class="mt-1 font-semibold">Detail</span>
+                </button>
+                <button onclick="switchTab('member')" id="nav-btn-member" class="nav-btn flex flex-col items-center text-gray-400 transition">
+                    <i class="fa-solid fa-user text-sm"></i>
+                    <span class="mt-1 font-semibold">Member</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Floating Social Menu -->
+        <div class="fixed bottom-20 right-5 z-40 flex flex-col items-end">
+            <div id="social-menu-popup" class="space-y-2 mb-2 hidden w-44">
+                <a href="https://line.me" target="_blank" class="flex items-center justify-between px-3.5 py-2 bg-white/95 backdrop-blur-md rounded-full shadow-md text-[11px] font-bold text-[#a7898d] border border-[#f7eff0] transition hover:bg-[#fdfafb]">
+                    <span>Line Official</span>
+                    <i class="fa-solid fa-comment text-[#52b788] text-sm pr-1"></i>
+                </a>
+                <a href="https://instagram.com" target="_blank" class="flex items-center justify-between px-3.5 py-2 bg-white/95 backdrop-blur-md rounded-full shadow-md text-[11px] font-bold text-[#a7898d] border border-[#f7eff0] transition hover:bg-[#fdfafb]">
+                    <span>Instagram</span>
+                    <i class="fa-brands fa-instagram text-[#c9184a] text-base pr-0.5"></i>
+                </a>
+                <a href="https://facebook.com" target="_blank" class="flex items-center justify-between px-3.5 py-2 bg-white/95 backdrop-blur-md rounded-full shadow-md text-[11px] font-bold text-[#a7898d] border border-[#f7eff0] transition hover:bg-[#fdfafb]">
+                    <span>Facebook</span>
+                    <i class="fa-brands fa-facebook-f text-[#457b9d] text-sm pr-1"></i>
+                </a>
+            </div>
+            <button onclick="toggleSocialMenu()" class="w-12 h-12 rounded-full bg-[#fceef1] hover:bg-[#f7e0e4] text-[#a7898d] shadow-xl flex items-center justify-center text-lg transition border border-[#f0e6e7]">
+                <i class="fa-solid fa-cat"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== BOOKING SERVICE MODAL ==================== -->
+    <div id="booking-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] max-w-sm w-full p-6 relative shadow-2xl border border-[#f7eff0] space-y-4 text-xs">
+            <div class="flex justify-between items-center border-b border-[#f7eff0] pb-3">
+                <h3 class="font-bold text-gray-800 text-sm"><i class="fa-solid fa-calendar-plus text-[#a7898d] mr-1.5"></i> เลือกบริการจองคิว</h3>
+                <button onclick="closeBookingModal()" class="w-7 h-7 rounded-full bg-[#fdfafb] border border-[#f0e6e7] flex items-center justify-center text-gray-500 hover:bg-[#f5e8ea] transition"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <button onclick="openSignBookingDetails()" class="p-3.5 bg-[#fdfafb] hover:bg-[#f5e8ea] border border-[#f0e6e7] rounded-2xl flex flex-col items-center justify-center font-bold text-gray-700 transition shadow-2xs space-y-1">
+                    <i class="fa-solid fa-image text-[#a7898d] text-base mb-0.5"></i>
+                    <span>ทำป้าย</span>
+                </button>
+                <button onclick="selectService('Commission')" class="p-3.5 bg-[#fdfafb] hover:bg-[#f5e8ea] border border-[#f0e6e7] rounded-2xl flex flex-col items-center justify-center font-bold text-gray-700 transition shadow-2xs space-y-1">
+                    <i class="fa-solid fa-paintbrush text-[#a7898d] text-base mb-0.5"></i>
+                    <span>Commission</span>
+                </button>
+                <button onclick="selectService('เว็บไซต์')" class="p-3.5 bg-[#fdfafb] hover:bg-[#f5e8ea] border border-[#f0e6e7] rounded-2xl flex flex-col items-center justify-center font-bold text-gray-700 transition shadow-2xs space-y-1">
+                    <i class="fa-solid fa-globe text-[#a7898d] text-base mb-0.5"></i>
+                    <span>เว็บไซต์</span>
+                </button>
+                <button onclick="selectService('ทำดิส')" class="p-3.5 bg-[#fdfafb] hover:bg-[#f5e8ea] border border-[#f0e6e7] rounded-2xl flex flex-col items-center justify-center font-bold text-gray-700 transition shadow-2xs space-y-1">
+                    <i class="fa-solid fa-circle-user text-[#a7898d] text-base mb-0.5"></i>
+                    <span>ทำดิส</span>
+                </button>
+                <button onclick="selectService('แต่งฟอร์ม')" class="col-span-2 p-3.5 bg-[#fdfafb] hover:bg-[#f5e8ea] border border-[#f0e6e7] rounded-2xl flex flex-col items-center justify-center font-bold text-gray-700 transition shadow-2xs space-y-1">
+                    <i class="fa-solid fa-file-pen text-[#a7898d] text-base mb-0.5"></i>
+                    <span>แต่งฟอร์ม</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SIGN BOOKING DETAILS MODAL ==================== -->
+    <div id="sign-booking-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] max-w-sm w-full p-5 relative shadow-2xl border border-[#f7eff0] space-y-4 text-xs max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-1">
+                <div class="flex items-center space-x-2 text-gray-800 font-bold text-sm">
+                    <i class="fa-regular fa-image text-gray-500 text-base"></i>
+                    <span>รายละเอียดการจอง: ทำป้าย</span>
+                </div>
+                <button onclick="closeSignBookingDetails()" class="w-7 h-7 rounded-full bg-[#fdfafb] border border-[#f0e6e7] flex items-center justify-center text-gray-500 hover:bg-[#f5e8ea] transition"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="space-y-2">
+                <label class="font-bold text-gray-700">ตัวอย่างผลงาน</label>
+                <div class="flex space-x-3 overflow-x-auto pb-1 scrollbar-none">
+                    <div class="w-24 h-24 rounded-[20px] overflow-hidden shrink-0 border border-[#f0e6e7] shadow-2xs"><img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover"></div>
+                    <div class="w-24 h-24 rounded-[20px] overflow-hidden shrink-0 border border-[#f0e6e7] shadow-2xs"><img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover"></div>
+                    <div class="w-24 h-24 rounded-[20px] overflow-hidden shrink-0 border border-[#f0e6e7] shadow-2xs"><img src="https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover"></div>
+                </div>
+                <button class="w-full py-2.5 bg-[#a7898d] hover:bg-[#927377] text-white rounded-full font-bold text-xs shadow-2xs transition mt-1">ตัวอย่างเพิ่มเติม</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="font-bold text-gray-700 mb-1 block">ประเภทป้าย</label>
+                    <select id="sign-type" class="w-full px-3.5 py-2.5 bg-[#fdfafb] border border-[#f0e6e7] rounded-2xl text-[11px] text-gray-600 focus:outline-none appearance-none">
+                        <option>ป้ายประกาศร้าน</option>
+                        <option>ป้ายรีวิว</option>
+                        <option>ป้ายโปรโมชั่น</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="font-bold text-gray-700 mb-1 block">แนวป้าย</label>
+                    <select id="sign-style" class="w-full px-3.5 py-2.5 bg-[#fdfafb] border border-[#f0e6e7] rounded-2xl text-[11px] text-gray-600 focus:outline-none appearance-none">
+                        <option>แนวเจ้าหญิง (พาสเทล)</option>
+                        <option>แนวสดใส (น่ารัก)</option>
+                        <option>แนวเท่ มินิมอล</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <a href="https://example.com" target="_blank" class="w-full py-2.5 bg-[#fdfafb] hover:bg-[#f5e8ea] border border-[#f0e6e7] rounded-2xl font-bold text-gray-600 text-xs shadow-2xs transition flex items-center justify-center gap-1.5 block text-center">
+                    <span>เลือกบล็อก / ตูน</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-[#a7898d]"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 items-start">
+                <div>
+                    <label class="font-bold text-gray-700 mb-1 block">ใส่บล็อก / ตูน ที่เลือก</label>
+                    <label class="w-full py-2.5 px-3 bg-[#fdfafb] hover:bg-[#f5e8ea] border border-[#f0e6e7] rounded-2xl font-bold text-gray-600 text-[11px] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer text-center">
+                        <i class="fa-solid fa-image text-[#a7898d]"></i>
+                        <span id="uploaded-block-count">กดเพิ่มรูป (0)</span>
+                        <input type="file" id="block-images-input" multiple accept="image/*" class="hidden" onchange="handleBlockImagesUpload(this)">
+                    </label>
+                </div>
+                <div>
+                    <label class="font-bold text-gray-700 mb-1 block">จำนวนป้าย</label>
+                    <div class="flex items-center justify-between px-3 py-1.5 bg-[#fdfafb] border border-[#f0e6e7] rounded-2xl">
+                        <button onclick="changeSignQty(-1)" class="w-6 h-6 flex items-center justify-center text-gray-500 font-bold hover:bg-gray-100 rounded-full">-</button>
+                        <span id="sign-qty-display" class="font-bold text-gray-800 text-xs">1</span>
+                        <button onclick="changeSignQty(1)" class="w-6 h-6 flex items-center justify-center text-gray-500 font-bold hover:bg-gray-100 rounded-full">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="block-images-preview" class="flex space-x-2 overflow-x-auto pb-1 hidden"></div>
+
+            <div>
+                <label class="font-bold text-gray-700 mb-1 block">รายละเอียดที่จะใส่ในป้าย</label>
+                <input type="text" id="sign-details" placeholder="ระบุข้อความหรือรายละเอียด" class="w-full px-3.5 py-2.5 bg-[#fdfafb] border border-[#f0e6e7] rounded-2xl text-[11px] text-gray-600 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="font-bold text-gray-700 mb-1 block">เพิ่มเติม</label>
+                <input type="text" id="sign-extra" placeholder="ระบุเพิ่มเติม (ถ้ามี)" class="w-full px-3.5 py-2.5 bg-[#fdfafb] border border-[#f0e6e7] rounded-2xl text-[11px] text-gray-600 focus:outline-none">
+            </div>
+
+            <div class="flex justify-between items-center pt-2 px-1">
+                <span class="font-bold text-gray-700 text-sm">รวมยอด</span>
+                <div class="flex items-center space-x-1">
+                    <span id="sign-total-price" class="font-extrabold text-[#a7898d] text-base">89</span>
+                    <span class="font-extrabold text-[#a7898d] text-sm">฿</span>
+                </div>
+            </div>
+
+            <button onclick="proceedToPayment()" class="w-full py-3.5 bg-[#a7898d] hover:bg-[#927377] text-white rounded-full font-bold text-sm shadow-md transition">ถัดไป</button>
+        </div>
+    </div>
+
+    <!-- ==================== EXACT MATCH PAYMENT MODAL ==================== -->
+    <div id="payment-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] max-w-sm w-full p-6 relative shadow-2xl border border-[#f7eff0] space-y-4 text-xs max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-1">
+                <div class="flex items-center space-x-2 text-gray-800 font-bold text-sm">
+                    <i class="fa-regular fa-image text-gray-500 text-base"></i>
+                    <span>รายละเอียดการจอง: ทำป้าย</span>
+                </div>
+                <button onclick="closePaymentModal()" class="w-7 h-7 rounded-full bg-[#fdfafb] border border-[#f0e6e7] flex items-center justify-center text-gray-500 hover:bg-[#f5e8ea] transition"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div>
+                <label class="font-bold text-gray-700 mb-1 block">ชื่อที่ใช้จอง</label>
+                <input type="text" id="pay-name" placeholder="ระบุชื่อของคุณ" class="w-full px-3.5 py-2.5 bg-[#fdfafb] border border-[#f0e6e7] rounded-2xl text-[11px] text-gray-600 focus:outline-none">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="font-bold text-gray-700 mb-1 block">email</label>
+                    <input type="email" id="pay-email" placeholder="example@email.com" class="w-full px-3.5 py-2.5 bg-[#fdfafb] border border-[#f0e6e7] rounded-2xl text-[11px] text-gray-600 focus:outline-none">
+                </div>
+                <div>
+                    <label class="font-bold text-gray-700 mb-1 block">id / link line</label>
+                    <input type="text" id="pay-line" placeholder="@lineid" class="w-full px-3.5 py-2.5 bg-[#fdfafb] border border-[#f0e6e7] rounded-2xl text-[11px] text-gray-600 focus:outline-none">
+                </div>
+            </div>
+
+            <div class="bg-[#fdfafb] border border-[#f0e6e7] p-3.5 rounded-2xl space-y-2">
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-gray-700">ยอดรวม :</span>
+                    <span id="pay-total-display" class="font-extrabold text-[#a7898d] text-sm">000 บาท</span>
+                </div>
+                <div class="text-[11px] font-bold text-gray-600">
+                    Kbank : Thipkamon D.
+                </div>
+            </div>
+
+            <div>
+                <label class="font-bold text-gray-700 mb-1 block">โน้ตสลิป</label>
+                <input type="text" id="pay-note" placeholder="โน้ตสลิป (เช่น ค่าทำป้าย 89 บาท)" class="w-full px-3.5 py-2.5 bg-[#fdfafb] border border-[#f0e6e7] rounded-2xl text-[11px] text-gray-600 focus:outline-none">
+            </div>
+
+            <div class="flex flex-col items-center justify-center space-y-1">
+                <div id="qr-code-box" class="w-32 h-32 rounded-[20px] bg-[#fdfafb] border border-[#f0e6e7] overflow-hidden flex items-center justify-center shadow-2xs relative">
+                    <img id="qr-code-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ThipkamonKBANK" class="w-full h-full object-cover">
+                </div>
+                <span class="text-[9px] text-gray-400">สแกนเพื่อชำระเงิน</span>
+            </div>
+
+            <div>
+                <label class="font-bold text-gray-700 mb-1 block">แนบสลิปโอนเงิน</label>
+                <input type="file" id="slip-file-input" accept="image/*" class="w-full px-3.5 py-2 bg-[#fdfafb] border border-[#f0e6e7] rounded-2xl text-[11px] text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-[#fceef1] file:text-[#a7898d]">
+            </div>
+
+            <button onclick="submitBookingAndFinish()" class="w-full py-3.5 bg-[#a7898d] hover:bg-[#927377] text-white rounded-full font-bold text-sm shadow-md transition">Sent</button>
+        </div>
+    </div>
+
+    <!-- ==================== CART MODAL ==================== -->
+    <div id="cart-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] max-w-sm w-full p-5 relative shadow-2xl border border-[#f7eff0] space-y-4 max-h-[80vh] overflow-y-auto text-xs">
+            <div class="flex justify-between items-center border-b border-[#f7eff0] pb-2">
+                <h3 class="font-bold text-gray-800 text-sm"><i class="fa-solid fa-basket-shopping text-[#a7898d]"></i> ตะกร้าสินค้า</h3>
+                <button onclick="closeCartModal()" class="w-6 h-6 rounded-full bg-[#fdfafb] border border-[#f0e6e7] flex items-center justify-center text-gray-500"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="cart-items-container" class="space-y-2"></div>
+            <div class="border-t border-[#f7eff0] pt-3 flex justify-between items-center font-bold text-sm">
+                <span>ยอดรวม:</span>
+                <span id="cart-total-price" class="text-[#a7898d]">฿0</span>
+            </div>
+            <button onclick="checkoutCart()" class="w-full py-2.5 bg-[#a7898d] text-white rounded-full font-bold shadow-sm">ชำระเงิน</button>
+        </div>
+    </div>
+
+    <!-- ==================== CAT PAW FILTER MODAL ==================== -->
+    <div id="cat-filter-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] max-w-xs w-full p-5 relative shadow-2xl border border-[#f7eff0] space-y-4 text-xs">
+            <div class="flex justify-between items-center border-b border-[#f7eff0] pb-2">
+                <h3 class="font-bold text-gray-800 text-sm"><i class="fa-solid fa-paw text-[#a7898d]"></i> ตัวกรองสินค้า</h3>
+                <button onclick="closeCatFilterModal()" class="w-6 h-6 rounded-full bg-[#fdfafb] border border-[#f0e6e7] flex items-center justify-center text-gray-500"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="space-y-2">
+                <p class="font-bold text-gray-700">ประเภท</p>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="setFilterType('โปรโมชั่น')" id="type-btn-โปรโมชั่น" class="py-2.5 bg-[#fdfafb] text-[#a7898d] rounded-full font-bold border border-[#f0e6e7] shadow-2xs">โปรโมชั่น</button>
+                    <button onclick="setFilterType('สิทธิ์ขาด')" id="type-btn-สิทธิ์ขาด" class="py-2.5 bg-[#fdfafb] text-gray-500 rounded-full border border-[#f7eff0]">สิทธิ์ขาด</button>
+                    <button onclick="setFilterType('เฉพาะ')" id="type-btn-เฉพาะ" class="py-2.5 bg-[#fdfafb] text-gray-500 rounded-full border border-[#f7eff0]">เฉพาะ</button>
+                </div>
+            </div>
+            <button onclick="applyCatFilter()" class="w-full py-2.5 bg-[#a7898d] text-white rounded-full font-bold shadow-sm">ยืนยัน</button>
+        </div>
+    </div>
+
+    <!-- ==================== EDIT QUEUE POPUP MODAL (ADMIN) ==================== -->
+    <div id="edit-queue-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] max-w-sm w-full p-5 relative shadow-2xl border border-[#f2e4e6] space-y-3 text-xs max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-[#f7eff0] pb-2.5">
+                <div class="flex items-center space-x-2 text-sm font-bold text-[#8c6b70]">
+                    <i class="fa-solid fa-pen-to-square text-[#a7898d]"></i>
+                    <span>แก้ไขข้อมูลคิว (<span id="edit-queue-seq-label">Q1</span>)</span>
+                </div>
+                <button type="button" onclick="closeEditQueueModal()" class="w-7 h-7 rounded-full bg-[#fdfafb] border border-[#f2e4e6] flex items-center justify-center text-[#a7898d] hover:bg-[#fceef1] transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">ชื่อลูกค้า</label>
+                <input type="text" id="edit-queue-name" placeholder="ชื่อลูกค้า"
+                       class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">ประเภทงาน</label>
+                <input type="text" id="edit-queue-job-type" placeholder="ประเภทงาน"
+                       class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">ช่องทาง</label>
+                <input type="text" id="edit-queue-channel" placeholder="ช่องทาง"
+                       class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">รายละเอียดเพิ่มเติม (ถ้ามี)...</label>
+                <textarea id="edit-queue-note" rows="2" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)..."
+                          class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d] resize-none"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">สถานะคิว</label>
+                <select id="edit-queue-status" class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+                    <option value="ยังไม่ได้เริ่ม">ยังไม่ได้เริ่ม</option>
+                    <option value="กำลังทำ">กำลังทำ</option>
+                    <option value="เสร็จแล้ว">เสร็จแล้ว</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5 pt-2">
+                <button type="button" onclick="closeEditQueueModal()" class="py-2.5 bg-[#fdfafb] hover:bg-[#f7eff0] text-[#9c7d82] border border-[#f2e4e6] rounded-full font-bold text-xs transition">ยกเลิก</button>
+                <button type="button" onclick="saveEditedQueueFromModal()" class="py-2.5 bg-[#a7898d] hover:bg-[#927377] text-white rounded-full font-bold text-xs shadow-2xs transition">บันทึกการแก้ไข</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== EDIT PRODUCT POPUP MODAL (ADMIN) ==================== -->
+    <div id="edit-product-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] max-w-sm w-full p-5 relative shadow-2xl border border-[#f2e4e6] space-y-3 text-xs max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-[#f7eff0] pb-2.5">
+                <div class="flex items-center space-x-2 text-sm font-bold text-[#8c6b70]">
+                    <i class="fa-solid fa-pen-to-square text-[#a7898d]"></i>
+                    <span>แก้ไขข้อมูลสินค้า</span>
+                </div>
+                <button type="button" onclick="closeEditProductModal()" class="w-7 h-7 rounded-full bg-[#fdfafb] border border-[#f2e4e6] flex items-center justify-center text-[#a7898d] hover:bg-[#fceef1] transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">ชื่อกลุ่ม</label>
+                <input type="text" id="edit-prod-name" class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">ราคา (฿)</label>
+                <input type="number" id="edit-prod-price" class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">รายละเอียด</label>
+                <textarea id="edit-prod-desc" rows="3" oninput="updateEditProdDescCount()" class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d] resize-none"></textarea>
+                <div class="text-right text-[10px] text-[#c0aab1] mt-1">
+                    <span id="edit-prod-desc-count">0</span> ตัวอักษร (ไม่จำกัด)
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">หมวดหมู่</label>
+                <select id="edit-prod-category" class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]"></select>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-[#8c6b70]">อัปโหลดรูปภาพใหม่ หรือวางลิงก์</label>
+                <div class="flex items-center space-x-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl px-3 py-2">
+                    <label class="px-3.5 py-1.5 bg-[#fceef1] hover:bg-[#f6dce2] text-[#a7898d] rounded-full text-[11px] font-bold cursor-pointer shrink-0 transition">
+                        เลือกไฟล์
+                        <input type="file" id="edit-prod-file" accept="image/*" onchange="handleEditProductImageFile(this)" class="hidden">
+                    </label>
+                    <span id="edit-prod-file-label" class="text-[11px] text-[#c0aab1] truncate">คงรูปเดิมไว้</span>
+                </div>
+                <input type="text" id="edit-prod-img-url" placeholder="https://..." class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">ลิงก์ตัวอย่างงาน</label>
+                <input type="text" id="edit-prod-sample-url" placeholder="https://..." class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#8c6b70] mb-1">ป้ายพิเศษ (Tag)</label>
+                <input type="text" id="edit-prod-tag" placeholder="เช่น ฮิต, มาใหม่" class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+            </div>
+
+            <label class="flex items-center space-x-2 pt-1 cursor-pointer select-none">
+                <input type="checkbox" id="edit-prod-featured" class="w-4 h-4 accent-[#a7898d] rounded">
+                <span class="text-xs font-semibold text-[#8c6b70]">แสดงเป็น "สินค้าแนะนำ"</span>
+            </label>
+
+            <div class="grid grid-cols-2 gap-2.5 pt-2">
+                <button type="button" onclick="closeEditProductModal()" class="py-2.5 bg-[#fdfafb] hover:bg-[#f7eff0] text-[#9c7d82] border border-[#f2e4e6] rounded-full font-bold text-xs transition">ยกเลิก</button>
+                <button type="button" onclick="saveEditedProductFromModal()" class="py-2.5 bg-[#a7898d] hover:bg-[#927377] text-white rounded-full font-bold text-xs shadow-2xs transition">บันทึกการแก้ไข</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ADMIN FULL PAGE BACKOFFICE ==================== -->
+    <div id="admin-full-page" class="hidden min-h-screen bg-[#fffcfc] pb-20">
+        <header class="bg-white/95 backdrop-blur-md border-b border-[#f2e4e6] sticky top-0 z-40 px-4 py-3.5 flex justify-between items-center shadow-2xs">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-full bg-[#fceef1] text-[#a7898d] flex items-center justify-center font-bold border border-[#f2e4e6]"><i class="fa-solid fa-crown text-sm"></i></div>
+                <div>
+                    <h1 class="font-extrabold text-[#a7898d] text-sm">ระบบหลังบ้าน (Admin Dashboard)</h1>
+                </div>
+            </div>
+            <button onclick="closeAdminFullPage()" class="px-4 py-2 bg-[#fdfafb] hover:bg-[#fceef1] text-[#a7898d] border border-[#f2e4e6] rounded-full text-xs font-bold transition">กลับหน้าหลัก</button>
+        </header>
+
+        <div class="max-w-xl mx-auto px-4 pt-4">
+            <div class="flex space-x-2 overflow-x-auto pb-2 scrollbar-none text-xs">
+                <button onclick="switchAdminSubTab('shop')" id="adm-tab-shop" class="adm-tab px-4 py-2 rounded-full font-medium bg-white text-[#9c7d82] border border-[#f2e4e6] shrink-0">ร้าน/ธีม</button>
+                <button onclick="switchAdminSubTab('products')" id="adm-tab-products" class="adm-tab px-4 py-2 rounded-full font-medium bg-white text-[#9c7d82] border border-[#f2e4e6] shrink-0">สินค้า</button>
+                <button onclick="switchAdminSubTab('queue')" id="adm-tab-queue" class="adm-tab px-4 py-2 rounded-full font-medium bg-white text-[#9c7d82] border border-[#f2e4e6] shrink-0">คิว</button>
+                <button onclick="switchAdminSubTab('stamp')" id="adm-tab-stamp" class="adm-tab px-4 py-2 rounded-full font-bold bg-[#a7898d] text-white shrink-0 shadow-2xs">สะสมแต้ม</button>
+                <button onclick="switchAdminSubTab('qr')" id="adm-tab-qr" class="adm-tab px-4 py-2 rounded-full font-medium bg-white text-[#9c7d82] border border-[#f2e4e6] shrink-0">QR Code</button>
+            </div>
+        </div>
+
+        <main class="max-w-xl mx-auto p-4 space-y-4">
+            <!-- ADMIN SHOP TAB -->
+            <div id="adm-content-shop" class="adm-content space-y-4 text-xs bg-white p-5 rounded-[28px] shadow-2xs border border-[#f2e4e6] hidden">
+                <h3 class="font-bold text-sm text-[#8c6b70]"><i class="fa-solid fa-store text-[#a7898d] mr-2"></i>ตั้งค่าร้าน & รูปทามาก็อตจิ</h3>
+                <div>
+                    <label class="font-bold text-[#8c6b70]">ชื่อร้าน</label>
+                    <input type="text" id="adm-shop-name-input" class="w-full mt-1 px-3.5 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-600 focus:outline-none" value="ชื่อร้าน">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div>
+                        <label class="font-bold text-[#8c6b70] block mb-1">อัปโหลดรูปตัวเครื่องทามาก็อตจิ (PNG)</label>
+                        <input type="file" id="adm-tama-body-input" accept="image/png,image/*" onchange="previewTamaAsset('body', this)" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#fceef1] file:text-[#a7898d]">
+                    </div>
+                    <div>
+                        <label class="font-bold text-[#8c6b70] block mb-1">อัปโหลดรูปปุ่มกด 3 ปุ่ม (PNG)</label>
+                        <input type="file" id="adm-tama-btn-input" accept="image/png,image/*" onchange="previewTamaAsset('buttons', this)" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#fceef1] file:text-[#a7898d]">
+                    </div>
+                </div>
+                <button onclick="saveShopThemeSettings()" class="w-full py-3 bg-[#a7898d] hover:bg-[#927377] text-white rounded-full font-bold text-sm shadow-2xs transition">บันทึก</button>
+            </div>
+
+            <!-- ADMIN PRODUCTS TAB -->
+            <div id="adm-content-products" class="adm-content space-y-4 text-xs hidden">
+                <div class="bg-white rounded-[28px] p-5 border border-[#f2e4e6] shadow-2xs space-y-3.5">
+                    <div class="flex items-center space-x-2 text-sm font-bold text-[#8c6b70] border-b border-[#f7eff0] pb-3">
+                        <i class="fa-solid fa-circle-plus text-[#a7898d]"></i>
+                        <span>เพิ่มสินค้าเข้าร้าน</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-[#8c6b70] mb-1">ชื่อกลุ่ม</label>
+                        <input type="text" id="adm-prod-name" placeholder="เช่น เวควกวด หรือ ชื่อกลุ่ม"
+                               class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-[#8c6b70] mb-1">ราคา (฿)</label>
+                        <input type="number" id="adm-prod-price" placeholder="0"
+                               class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-[#8c6b70] mb-1">รายละเอียด</label>
+                        <textarea id="adm-prod-desc" rows="3" oninput="updateProdDescCount()" placeholder="พิมพ์รายละเอียดสินค้า..."
+                                  class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d] resize-none"></textarea>
+                        <div class="text-right text-[10px] text-[#c0aab1] mt-1">
+                            <span id="adm-prod-desc-count">0</span> ตัวอักษร (ไม่จำกัด)
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-[#8c6b70] mb-1">หมวดหมู่</label>
+                        <select id="adm-prod-category" class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]"></select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-[#8c6b70]">อัปโหลดรูปภาพ</label>
+                        <div class="flex items-center space-x-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl px-3 py-2">
+                            <label class="px-3.5 py-1.5 bg-[#fceef1] hover:bg-[#f6dce2] text-[#a7898d] rounded-full text-[11px] font-bold cursor-pointer shrink-0 transition">
+                                เลือกไฟล์
+                                <input type="file" id="adm-prod-file" accept="image/*" onchange="handleAdminProductImageFile(this)" class="hidden">
+                            </label>
+                            <span id="adm-prod-file-label" class="text-[11px] text-[#c0aab1] truncate">ไม่ได้เลือกไฟล์</span>
+                        </div>
+                        <input type="text" id="adm-prod-img-url" placeholder="หรือวางลิงก์รูป https://..."
+                               class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-[#8c6b70] mb-1">ลิงก์ตัวอย่างงาน</label>
+                        <input type="text" id="adm-prod-sample-url" placeholder="https://..."
+                               class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-[#8c6b70] mb-1">ป้ายพิเศษ (Tag)</label>
+                        <input type="text" id="adm-prod-tag" placeholder="เช่น ฮิต, มาใหม่"
+                               class="w-full px-4 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d]">
+                    </div>
+
+                    <label class="flex items-center space-x-2 pt-1 cursor-pointer select-none">
+                        <input type="checkbox" id="adm-prod-featured" checked class="w-4 h-4 accent-[#a7898d] rounded">
+                        <span class="text-xs font-semibold text-[#8c6b70]">แสดงเป็น "สินค้าแนะนำ"</span>
+                    </label>
+
+                    <button type="button" onclick="saveCloudProduct()"
+                            class="w-full py-3 bg-[#a7898d] hover:bg-[#927377] active:scale-[0.99] text-white rounded-full font-bold text-xs shadow-sm transition">
+                        อัปโหลดสินค้าเข้าคลาวด์ ☁
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-[28px] p-5 border border-[#f2e4e6] shadow-2xs space-y-3">
+                    <div class="flex items-center space-x-2 text-sm font-bold text-[#8c6b70] border-b border-[#f7eff0] pb-2.5">
+                        <i class="fa-solid fa-list text-[#a7898d]"></i>
+                        <span>จัดการหมวดหมู่</span>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="adm-cat-name-input" placeholder="ชื่อ (เช่น กางเกง)"
+                               class="flex-1 min-w-0 px-3.5 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none">
+                        <input type="text" id="adm-cat-emoji-input" placeholder="ไอคอน/ตัวอักษร"
+                               class="w-24 px-3 py-2.5 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-center text-gray-700 focus:outline-none">
+                        <button type="button" onclick="addAdminCategory()"
+                                class="px-4 py-2.5 bg-[#a7898d] hover:bg-[#927377] text-white rounded-2xl font-bold text-xs shrink-0 transition">
+                            เพิ่ม
+                        </button>
+                    </div>
+
+                    <div id="admin-category-pills" class="flex flex-wrap gap-2 pt-1"></div>
+                </div>
+
+                <div class="bg-white rounded-[28px] p-5 border border-[#f2e4e6] shadow-2xs space-y-3">
+                    <div class="text-sm font-bold text-[#8c6b70]">
+                        คลังสินค้าคลาวด์ (<span id="adm-cloud-count">0</span>)
+                    </div>
+
+                    <div class="relative flex items-center bg-[#fdfafb] border border-[#f2e4e6] rounded-full px-4 py-2.5">
+                        <i class="fa-solid fa-magnifying-glass text-[#c0aab1] text-xs mr-2.5"></i>
+                        <input type="text" id="adm-cloud-search" oninput="renderAdminCloudProducts()" placeholder="ค้นหาชื่อสินค้าที่ต้องการ..."
+                               class="w-full text-xs text-gray-700 focus:outline-none bg-transparent placeholder-[#c0aab1]">
+                    </div>
+
+                    <div id="admin-products-cloud-list" class="space-y-2.5 pt-1"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN QUEUE TAB -->
+            <div id="adm-content-queue" class="adm-content space-y-4 text-xs hidden">
+                <div class="bg-white rounded-[30px] p-5 border border-[#f2e4e6] shadow-2xs space-y-3.5">
+                    <div>
+                        <input type="text" id="adm-queue-customer-name" placeholder="ชื่อลูกค้า"
+                               class="w-full px-4 py-3 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d] placeholder-[#b9a0a5]">
+                    </div>
+
+                    <div>
+                        <input type="text" id="adm-queue-job-type" placeholder="ประเภทงาน"
+                               class="w-full px-4 py-3 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d] placeholder-[#b9a0a5]">
+                    </div>
+
+                    <div>
+                        <input type="text" id="adm-queue-channel" placeholder="ช่องทาง"
+                               class="w-full px-4 py-3 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d] placeholder-[#b9a0a5]">
+                    </div>
+
+                    <div>
+                        <textarea id="adm-queue-note" rows="3" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)..."
+                                  class="w-full px-4 py-3 bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none focus:border-[#a7898d] placeholder-[#b9a0a5] resize-none"></textarea>
+                    </div>
+
+                    <button type="button" onclick="saveAdminQueueJob()"
+                            class="w-full py-3.5 bg-[#a7898d] hover:bg-[#927377] active:scale-[0.99] text-white rounded-2xl font-bold text-sm shadow-sm transition">
+                        บันทึกคิวงาน
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-[28px] p-5 border border-[#f2e4e6] shadow-2xs space-y-3">
+                    <div class="font-bold text-sm text-[#8c6b70]">รายการคิวทั้งหมด (<span id="adm-queue-total-count">0</span>)</div>
+
+                    <div class="relative flex items-center bg-[#fdfafb] border border-[#f2e4e6] rounded-full px-4 py-2.5">
+                        <i class="fa-solid fa-magnifying-glass text-[#c0aab1] text-xs mr-2.5"></i>
+                        <input type="text" id="adm-queue-search-input" oninput="renderAdminQueueList()" placeholder="ค้นหาคิวงาน ชื่อลูกค้า หรือประเภทงาน..."
+                               class="w-full text-xs text-gray-700 focus:outline-none bg-transparent placeholder-[#c0aab1]">
+                    </div>
+
+                    <div id="admin-queue-list" class="space-y-2.5 pt-1"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN STAMP TAB -->
+            <div id="adm-content-stamp" class="adm-content space-y-4 text-xs bg-white p-5 rounded-[28px] shadow-2xs border border-[#f2e4e6]">
+                <h3 class="font-bold text-sm text-[#8c6b70]"><i class="fa-solid fa-stamp text-[#a7898d] mr-2"></i>ตั้งค่ารูปแสตมป์ & แต้มสะสมลูกค้า</h3>
+
+                <div class="bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl p-4 space-y-3">
+                    <label class="font-bold text-[#8c6b70] block">อัปโหลดรูปภาพสำหรับดวงแสตมป์</label>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-14 h-14 rounded-full bg-white border border-dashed border-[#d4b8bd] flex items-center justify-center overflow-hidden shrink-0">
+                            <img id="adm-stamp-preview-img" src="" alt="Stamp preview" class="w-full h-full object-cover hidden">
+                            <span id="adm-stamp-placeholder-icon" class="text-[#b5979c] text-base"><i class="fa-solid fa-heart"></i></span>
+                        </div>
+                        <input type="file" id="adm-stamp-file-input" accept="image/*" onchange="handleAdminStampImageUpload(this)"
+                               class="flex-1 text-xs text-gray-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#fceef1] file:text-[#a7898d]">
+                    </div>
+                </div>
+
+                <div class="bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl p-4 space-y-3">
+                    <label class="font-bold text-[#8c6b70] block">เพิ่มหรือแก้ไขแต้มสะสมของลูกค้า (สูงสุด 10 ดวง)</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <input type="text" id="adm-stamp-customer-name" placeholder="ชื่อลูกค้า เช่น mimi"
+                               class="px-3.5 py-2.5 bg-white border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none">
+                        <input type="number" id="adm-stamp-count-input" min="0" max="10" value="0" placeholder="จำนวนดวง (0-10)"
+                               class="px-3.5 py-2.5 bg-white border border-[#f2e4e6] rounded-2xl text-xs text-gray-700 focus:outline-none">
+                        <button type="button" onclick="saveCustomerStampFromAdmin()"
+                                class="py-2.5 px-4 bg-[#a7898d] hover:bg-[#927377] text-white rounded-2xl font-bold text-xs shadow-2xs transition">
+                            บันทึกแต้มลูกค้า
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="font-bold text-[#8c6b70]">รายชื่อบัตรสะสมแต้มทั้งหมด</div>
+                    <div id="admin-stamp-customers-list" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN QR TAB -->
+            <div id="adm-content-qr" class="adm-content space-y-4 text-xs bg-white p-5 rounded-[28px] shadow-2xs border border-[#f2e4e6] hidden">
+                <h3 class="font-bold text-sm text-[#8c6b70]"><i class="fa-solid fa-qrcode text-[#a7898d] mr-2"></i>อัปโหลด QR Code ชำระเงิน</h3>
+                <div class="space-y-2">
+                    <label class="font-bold text-[#8c6b70]">เลือกรูป QR Code ใหม่</label>
+                    <input type="file" id="admin-qr-file-input" accept="image/*" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#fceef1] file:text-[#a7898d]">
+                </div>
+                <button onclick="saveAdminQRCode()" class="w-full py-3 bg-[#a7898d] text-white rounded-full font-bold text-sm shadow-sm">บันทึก QR Code</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== ADMIN LOGIN MODAL ==================== -->
+    <div id="admin-login-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-[32px] max-w-xs w-full p-6 relative shadow-2xl border border-[#f7eff0] space-y-4 text-xs">
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 bg-[#fceef1] text-[#a7898d] rounded-full flex items-center justify-center mx-auto text-lg border border-[#f0e6e7]"><i class="fa-solid fa-chess-rook"></i></div>
+                <h3 class="font-bold text-gray-800 text-base">Admin Login</h3>
+            </div>
+            <input type="password" id="admin-pass-input" value="admin1234" class="w-full px-3.5 py-2.5 bg-[#fdfafb] border border-[#f7eff0] rounded-2xl text-center text-xs text-gray-600 focus:outline-none" placeholder="รหัสผ่าน">
+            <button onclick="verifyAdminLogin()" class="w-full py-2.5 bg-[#a7898d] text-white rounded-full font-bold shadow-sm">Login</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        let currentTab = 'home';
+        let currentUser = null;
+        let activeCategoryFilter = 'All';
+        let currentQueueFilter = 'ทั้งหมด';
+        let currentBookingService = '';
+        let signQty = 1;
+        const pricePerSign = 89;
+        let uploadedBlockImages = [];
+        let globalQRCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ThipkamonKBANK";
+
+        let selectedReviewRating = 4;
+        let uploadedReviewImage = "";
+
+        let customStampImageUrl = "";
+        let activeStampName = "mimi";
+
+        let editingProductId = null;
+        let editingQueueId = null;
+
+        let appState = {
+            shopName: "ชื่อร้าน",
+            categories: [
+                { id: 'All', name: 'All' },
+                { id: 'momonga', name: 'momonga' },
+                { id: 'mimiw', name: 'mimiw' }
+            ],
+            products: [
+                { id: 1, name: "ชื่อกลุ่ม", price: 50, desc: "", sampleUrl: "", tag: "", category: 'All', featured: true, img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=500" },
+                { id: 2, name: "ชื่อกลุ่ม", price: 50, desc: "", sampleUrl: "", tag: "", category: 'All', featured: true, img: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=500&q=500" }
+            ],
+            queues: [
+                { id: 101, name: "k'sobell", jobType: "ปกกลุ่มแนวเจ้าหญิง", service: "ปกกลุ่มแนวเจ้าหญิง", channel: "LINE", note: "", date: "11/09/69", status: "เสร็จแล้ว", seq: 1 },
+                { id: 102, name: "ไม่ทราบ", jobType: "Sign", service: "Sign", channel: "LINE", note: "", date: "15/09/69", status: "กำลังทำ", seq: 2 }
+            ],
+            reviews: [
+                { id: 1, author: "เทส", time: "เมื่อสักครู่นี้", rating: 4, comment: "เทส", img: "" },
+                { id: 2, author: "เทส", time: "เมื่อสักครู่นี้", rating: 5, comment: "", img: "" }
+            ],
+            stampCards: [
+                { name: "mimi", stamps: 0 }
+            ],
+            cart: []
+        };
+
+        // ==================== ADMIN QUEUE FORM, SEARCH & EDIT FUNCTIONS ====================
+        function saveAdminQueueJob() {
+            const name = document.getElementById('adm-queue-customer-name').value.trim();
+            const jobType = document.getElementById('adm-queue-job-type').value.trim();
+            const channel = document.getElementById('adm-queue-channel').value.trim() || "LINE";
+            const note = document.getElementById('adm-queue-note').value.trim();
+
+            if (!name || !jobType) {
+                alert("กรุณากรอก ชื่อลูกค้า และ ประเภทงาน ก่อนบันทึกคิวงานค่ะ");
+                return;
+            }
+
+            const nextSeq = appState.queues.length > 0
+                ? Math.max(...appState.queues.map(q => q.seq || 0)) + 1
+                : 1;
+
+            appState.queues.push({
+                id: Date.now(),
+                name: name,
+                jobType: jobType,
+                service: note ? `${jobType} (${note})` : jobType,
+                channel: channel,
+                note: note,
+                date: "11/09/69",
+                status: "ยังไม่ได้เริ่ม",
+                seq: nextSeq
+            });
+
+            document.getElementById('adm-queue-customer-name').value = "";
+            document.getElementById('adm-queue-job-type').value = "";
+            document.getElementById('adm-queue-channel').value = "";
+            document.getElementById('adm-queue-note').value = "";
+
+            renderAdminQueueList();
+            renderQueues();
+            alert("บันทึกคิวงานเรียบร้อยแล้วค่ะ!");
+        }
+
+        function openEditQueueModal(queueId) {
+            const q = appState.queues.find(item => item.id === queueId);
+            if (!q) return;
+
+            editingQueueId = q.id;
+            const baseJobType = q.jobType || (q.service ? q.service.replace(/\s*\([^)]*\)\s*$/, '') : '');
+            let extractedNote = q.note || '';
+            if (!extractedNote && q.service) {
+                const match = q.service.match(/\(([^)]+)\)\s*$/);
+                if (match) extractedNote = match[1];
+            }
+
+            document.getElementById('edit-queue-seq-label').innerText = `Q${q.seq || ''}`;
+            document.getElementById('edit-queue-name').value = q.name || "";
+            document.getElementById('edit-queue-job-type').value = baseJobType;
+            document.getElementById('edit-queue-channel').value = q.channel || "LINE";
+            document.getElementById('edit-queue-note').value = extractedNote;
+            document.getElementById('edit-queue-status').value = q.status || "ยังไม่ได้เริ่ม";
+
+            document.getElementById('edit-queue-modal').classList.remove('hidden');
+        }
+
+        function closeEditQueueModal() {
+            editingQueueId = null;
+            document.getElementById('edit-queue-modal').classList.add('hidden');
+        }
+
+        function saveEditedQueueFromModal() {
+            if (editingQueueId === null) return;
+
+            const name = document.getElementById('edit-queue-name').value.trim();
+            const jobType = document.getElementById('edit-queue-job-type').value.trim();
+            const channel = document.getElementById('edit-queue-channel').value.trim() || "LINE";
+            const note = document.getElementById('edit-queue-note').value.trim();
+            const status = document.getElementById('edit-queue-status').value || "ยังไม่ได้เริ่ม";
+
+            if (!name || !jobType) {
+                alert("กรุณากรอก ชื่อลูกค้า และ ประเภทงาน ก่อนบันทึกการแก้ไขค่ะ");
+                return;
+            }
+
+            const idx = appState.queues.findIndex(item => item.id === editingQueueId);
+            if (idx >= 0) {
+                appState.queues[idx] = {
+                    ...appState.queues[idx],
+                    name: name,
+                    jobType: jobType,
+                    service: note ? `${jobType} (${note})` : jobType,
+                    channel: channel,
+                    note: note,
+                    status: status
+                };
+            }
+
+            closeEditQueueModal();
+            renderAdminQueueList();
+            renderQueues();
+            alert("บันทึกการแก้ไขคิวงานเรียบร้อยแล้วค่ะ!");
+        }
+
+        function updateAdminQueueStatus(queueId, newStatus) {
+            const target = appState.queues.find(q => q.id === queueId);
+            if (!target) return;
+            target.status = newStatus;
+            renderAdminQueueList();
+            renderQueues();
+        }
+
+        function deleteAdminQueue(queueId) {
+            if (!confirm("ต้องการลบคิวงานนี้ใช่ไหมคะ?")) return;
+            appState.queues = appState.queues.filter(q => q.id !== queueId);
+            if (editingQueueId === queueId) closeEditQueueModal();
+            renderAdminQueueList();
+            renderQueues();
+        }
+
+        function renderAdminQueueList() {
+            const listEl = document.getElementById('admin-queue-list');
+            const countEl = document.getElementById('adm-queue-total-count');
+            const searchInput = document.getElementById('adm-queue-search-input');
+            if (!listEl) return;
+
+            if (countEl) countEl.innerText = appState.queues.length;
+
+            const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
+            const filtered = appState.queues.filter(q => {
+                if (!query) return true;
+                const qSeq = `q${q.seq || ''}`.toLowerCase();
+                return (
+                    (q.name && q.name.toLowerCase().includes(query)) ||
+                    (q.service && q.service.toLowerCase().includes(query)) ||
+                    (q.channel && q.channel.toLowerCase().includes(query)) ||
+                    (q.note && q.note.toLowerCase().includes(query)) ||
+                    qSeq.includes(query)
+                );
+            });
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<div class="text-center text-[#c0aab1] py-4">${query ? 'ไม่พบคิวงานที่ค้นหา' : 'ยังไม่มีรายการคิวงาน'}</div>`;
+                return;
+            }
+
+            listEl.innerHTML = filtered.map(q => `
+                <div class="bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl p-3.5 space-y-2">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="min-w-0">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-0.5 rounded-full bg-white border border-[#e3cdd1] text-[10px] font-extrabold text-[#a7898d]">Q${q.seq || ''}</span>
+                                <span class="font-bold text-xs text-[#7d6267] truncate">${q.name}</span>
+                            </div>
+                            <div class="text-xs font-semibold text-[#8c6b70] mt-1">${q.service}</div>
+                            <div class="text-[10px] text-[#b5979c] mt-0.5">
+                                ช่องทาง: ${q.channel || 'LINE'}
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-1.5 shrink-0">
+                            <button type="button" onclick="openEditQueueModal(${q.id})" class="w-7 h-7 rounded-full bg-white border border-[#f2e4e6] text-[#a7898d] hover:bg-[#fceef1] flex items-center justify-center transition" title="แก้ไขคิว">
+                                <i class="fa-solid fa-pen text-[10px]"></i>
+                            </button>
+                            <button type="button" onclick="deleteAdminQueue(${q.id})" class="w-7 h-7 rounded-full bg-white border border-[#f2e4e6] text-[#c87d8a] hover:bg-[#fceef1] flex items-center justify-center transition" title="ลบคิว">
+                                <i class="fa-solid fa-trash text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-1.5 pt-1">
+                        ${['ยังไม่ได้เริ่ม', 'กำลังทำ', 'เสร็จแล้ว'].map(st => {
+                            const active = q.status === st;
+                            const cls = active
+                                ? 'bg-[#a7898d] text-white font-bold shadow-2xs'
+                                : 'bg-white text-[#9c7d82] border border-[#f2e4e6]';
+                            return `<button type="button" onclick="updateAdminQueueStatus(${q.id}, '${st}')" class="flex-1 py-1.5 rounded-full text-[10px] transition ${cls}">${st}</button>`;
+                        }).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== ADMIN PRODUCT & CATEGORY FUNCTIONS ====================
+        function updateProdDescCount() {
+            const descEl = document.getElementById('adm-prod-desc');
+            const countEl = document.getElementById('adm-prod-desc-count');
+            if (descEl && countEl) {
+                countEl.innerText = descEl.value.length;
+            }
+        }
+
+        function updateEditProdDescCount() {
+            const descEl = document.getElementById('edit-prod-desc');
+            const countEl = document.getElementById('edit-prod-desc-count');
+            if (descEl && countEl) {
+                countEl.innerText = descEl.value.length;
+            }
+        }
+
+        function handleAdminProductImageFile(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const url = URL.createObjectURL(file);
+                document.getElementById('adm-prod-file-label').innerText = file.name;
+                document.getElementById('adm-prod-img-url').value = url;
+            }
+        }
+
+        function handleEditProductImageFile(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const url = URL.createObjectURL(file);
+                document.getElementById('edit-prod-file-label').innerText = file.name;
+                document.getElementById('edit-prod-img-url').value = url;
+            }
+        }
+
+        function populateAdminCategorySelect() {
+            const optionsHtml = appState.categories.map(c =>
+                `<option value="${c.id}">${c.name}</option>`
+            ).join('');
+
+            const selectEl = document.getElementById('adm-prod-category');
+            if (selectEl) {
+                const currentVal = selectEl.value;
+                selectEl.innerHTML = optionsHtml;
+                if (currentVal && appState.categories.some(c => c.id === currentVal)) {
+                    selectEl.value = currentVal;
+                }
+            }
+
+            const editSelectEl = document.getElementById('edit-prod-category');
+            if (editSelectEl) {
+                const currentEditVal = editSelectEl.value;
+                editSelectEl.innerHTML = optionsHtml;
+                if (currentEditVal && appState.categories.some(c => c.id === currentEditVal)) {
+                    editSelectEl.value = currentEditVal;
+                }
+            }
+        }
+
+        function addAdminCategory() {
+            const nameInput = document.getElementById('adm-cat-name-input');
+            const emojiInput = document.getElementById('adm-cat-emoji-input');
+            if (!nameInput) return;
+
+            const rawName = nameInput.value.trim();
+            const emoji = emojiInput ? emojiInput.value.trim() : "";
+            if (!rawName) {
+                alert("กรุณากรอกชื่อหมวดหมู่ก่อนค่ะ");
+                return;
+            }
+
+            const displayName = emoji ? `${emoji} ${rawName}` : rawName;
+            const id = rawName.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now().toString().slice(-4);
+            appState.categories.push({ id: id, name: displayName });
+
+            nameInput.value = "";
+            if (emojiInput) emojiInput.value = "";
+
+            renderAdminCategoryPills();
+            populateAdminCategorySelect();
+            renderCategoriesTabs();
+        }
+
+        function removeAdminCategory(catId) {
+            if (catId === 'All') {
+                alert("ไม่สามารถลบหมวดหมู่ All ได้ค่ะ");
+                return;
+            }
+            appState.categories = appState.categories.filter(c => c.id !== catId);
+            if (activeCategoryFilter === catId) activeCategoryFilter = 'All';
+            renderAdminCategoryPills();
+            populateAdminCategorySelect();
+            renderCategoriesTabs();
+        }
+
+        function renderAdminCategoryPills() {
+            const pillsEl = document.getElementById('admin-category-pills');
+            if (!pillsEl) return;
+
+            pillsEl.innerHTML = appState.categories.map(c => `
+                <div class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-[#fdfafb] border border-[#f2e4e6] text-xs font-semibold text-[#8c6b70]">
+                    <span>${c.name}</span>
+                    ${c.id !== 'All' ? `<button type="button" onclick="removeAdminCategory('${c.id}')" class="text-[#b5979c] hover:text-[#8c6b70] ml-1 font-bold">×</button>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function saveCloudProduct() {
+            const name = document.getElementById('adm-prod-name').value.trim();
+            const price = parseFloat(document.getElementById('adm-prod-price').value) || 0;
+            const desc = document.getElementById('adm-prod-desc').value;
+            const category = document.getElementById('adm-prod-category').value || 'All';
+            const imgUrl = document.getElementById('adm-prod-img-url').value.trim() || "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=500";
+            const sampleUrl = document.getElementById('adm-prod-sample-url').value.trim();
+            const tag = document.getElementById('adm-prod-tag').value.trim();
+            const featured = document.getElementById('adm-prod-featured').checked;
+
+            if (!name) {
+                alert("กรุณากรอกชื่อกลุ่ม/ชื่อสินค้าก่อนค่ะ");
+                return;
+            }
+
+            appState.products.unshift({
+                id: Date.now(),
+                name, price, desc, category, img: imgUrl, sampleUrl, tag, featured
+            });
+
+            resetAdminProductForm();
+            renderAdminCloudProducts();
+            renderProducts();
+            alert("อัปโหลดสินค้าเข้าคลาวด์เรียบร้อยแล้วค่ะ!");
+        }
+
+        function resetAdminProductForm() {
+            document.getElementById('adm-prod-name').value = "";
+            document.getElementById('adm-prod-price').value = "";
+            document.getElementById('adm-prod-desc').value = "";
+            document.getElementById('adm-prod-file').value = "";
+            document.getElementById('adm-prod-file-label').innerText = "ไม่ได้เลือกไฟล์";
+            document.getElementById('adm-prod-img-url').value = "";
+            document.getElementById('adm-prod-sample-url').value = "";
+            document.getElementById('adm-prod-tag').value = "";
+            document.getElementById('adm-prod-featured').checked = true;
+            updateProdDescCount();
+        }
+
+        function openEditProductModal(prodId) {
+            const prod = appState.products.find(p => p.id === prodId);
+            if (!prod) return;
+
+            editingProductId = prod.id;
+            populateAdminCategorySelect();
+
+            document.getElementById('edit-prod-name').value = prod.name || "";
+            document.getElementById('edit-prod-price').value = prod.price || 0;
+            document.getElementById('edit-prod-desc').value = prod.desc || "";
+            document.getElementById('edit-prod-category').value = prod.category || "All";
+            document.getElementById('edit-prod-file').value = "";
+            document.getElementById('edit-prod-file-label').innerText = "คงรูปเดิมไว้";
+            document.getElementById('edit-prod-img-url').value = prod.img || "";
+            document.getElementById('edit-prod-sample-url').value = prod.sampleUrl || "";
+            document.getElementById('edit-prod-tag').value = prod.tag || "";
+            document.getElementById('edit-prod-featured').checked = !!prod.featured;
+            updateEditProdDescCount();
+
+            document.getElementById('edit-product-modal').classList.remove('hidden');
+        }
+
+        function closeEditProductModal() {
+            editingProductId = null;
+            document.getElementById('edit-product-modal').classList.add('hidden');
+        }
+
+        function saveEditedProductFromModal() {
+            if (editingProductId === null) return;
+            const name = document.getElementById('edit-prod-name').value.trim();
+            if (!name) {
+                alert("กรุณากรอกชื่อกลุ่ม/ชื่อสินค้าก่อนค่ะ");
+                return;
+            }
+
+            const idx = appState.products.findIndex(p => p.id === editingProductId);
+            if (idx >= 0) {
+                appState.products[idx] = {
+                    ...appState.products[idx],
+                    name: name,
+                    price: parseFloat(document.getElementById('edit-prod-price').value) || 0,
+                    desc: document.getElementById('edit-prod-desc').value,
+                    category: document.getElementById('edit-prod-category').value || "All",
+                    img: document.getElementById('edit-prod-img-url').value.trim() || appState.products[idx].img,
+                    sampleUrl: document.getElementById('edit-prod-sample-url').value.trim(),
+                    tag: document.getElementById('edit-prod-tag').value.trim(),
+                    featured: document.getElementById('edit-prod-featured').checked
+                };
+            }
+
+            closeEditProductModal();
+            renderAdminCloudProducts();
+            renderProducts();
+            alert("บันทึกการแก้ไขสินค้าเรียบร้อยแล้วค่ะ!");
+        }
+
+        function deleteAdminProduct(prodId) {
+            if (!confirm("ต้องการลบสินค้านี้ออกจากคลังสินค้าคลาวด์ใช่ไหมคะ?")) return;
+            appState.products = appState.products.filter(p => p.id !== prodId);
+            if (editingProductId === prodId) closeEditProductModal();
+            renderAdminCloudProducts();
+            renderProducts();
+        }
+
+        function renderAdminCloudProducts() {
+            const listEl = document.getElementById('admin-products-cloud-list');
+            const countEl = document.getElementById('adm-cloud-count');
+            const searchInput = document.getElementById('adm-cloud-search');
+            if (!listEl) return;
+
+            if (countEl) countEl.innerText = appState.products.length;
+            const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
+            const filtered = appState.products.filter(p => p.name.toLowerCase().includes(query));
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<div class="text-center text-[#c0aab1] py-6">ไม่พบสินค้าในคลัง</div>`;
+                return;
+            }
+
+            listEl.innerHTML = filtered.map(p => {
+                const recBadge = p.featured
+                    ? `<span class="px-2.5 py-0.5 rounded-full bg-[#fceef1] text-[#a7898d] text-[10px] font-bold border border-[#f2e4e6]">แนะนำ</span>`
+                    : "";
+
+                return `
+                    <div class="flex items-center justify-between bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl p-3">
+                        <div class="flex items-center space-x-3 min-w-0">
+                            <img src="${p.img}" alt="${p.name}" class="w-11 h-11 rounded-xl object-cover border border-[#f2e4e6] shrink-0 bg-white">
+                            <div class="min-w-0">
+                                <div class="font-bold text-[#7d6267] text-xs truncate">${p.name}</div>
+                                <div class="text-[11px] font-semibold text-[#a7898d] truncate">฿${p.price}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 shrink-0 ml-2">
+                            ${recBadge}
+                            <button type="button" onclick="openEditProductModal(${p.id})" class="w-7 h-7 rounded-full bg-white border border-[#f2e4e6] text-[#a7898d] hover:bg-[#fceef1] flex items-center justify-center transition" title="แก้ไข">
+                                <i class="fa-solid fa-pen text-[10px]"></i>
+                            </button>
+                            <button type="button" onclick="deleteAdminProduct(${p.id})" class="w-7 h-7 rounded-full bg-white border border-[#f2e4e6] text-[#c87d8a] hover:bg-[#fceef1] flex items-center justify-center transition" title="ลบ">
+                                <i class="fa-solid fa-trash text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==================== STAMP SYSTEM FUNCTIONS ====================
+        function renderStampCard(nameQuery) {
+            const gridEl = document.getElementById('stamp-grid-container');
+            const labelEl = document.getElementById('stamp-progress-label');
+            const badgeEl = document.getElementById('stamp-card-owner-badge');
+            if (!gridEl) return;
+
+            const normalized = (nameQuery || "").trim();
+            const found = normalized
+                ? appState.stampCards.find(c => c.name.toLowerCase() === normalized.toLowerCase())
+                : null;
+            const stampCount = found ? Math.min(10, Math.max(0, parseInt(found.stamps) || 0)) : 0;
+
+            if (labelEl) labelEl.innerText = `${stampCount} / 10 stamps`;
+            if (badgeEl) {
+                badgeEl.innerText = found ? `บัตรของ: ${found.name}` : `-`;
+            }
+
+            let html = "";
+            for (let i = 1; i <= 10; i++) {
+                const isStamped = i <= stampCount;
+                if (isStamped) {
+                    const innerContent = customStampImageUrl
+                        ? `<img src="${customStampImageUrl}" alt="Stamp ${i}" class="w-full h-full object-cover rounded-full">`
+                        : `<i class="fa-solid fa-heart text-white text-sm"></i>`;
+
+                    const bgStyle = customStampImageUrl
+                        ? `bg-white border-2 border-[#a7898d] shadow-2xs`
+                        : `bg-[#a7898d] border-2 border-[#a7898d] shadow-2xs`;
+
+                    html += `
+                        <div class="aspect-square rounded-full ${bgStyle} flex items-center justify-center overflow-hidden transition-transform duration-150 hover:scale-105" title="แสตมป์ดวงที่ ${i}">
+                            ${innerContent}
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="aspect-square rounded-full bg-[#fdf6f7] border border-dashed border-[#dcc4c8] flex items-center justify-center text-[#c9adb2] text-[10px]" title="ช่องว่างที่ ${i}">
+                            ·
+                        </div>
+                    `;
+                }
+            }
+            gridEl.innerHTML = html;
+        }
+
+        function searchStampCard() {
+            const inputEl = document.getElementById('stamp-search-input');
+            const statusEl = document.getElementById('stamp-search-status');
+            if (!inputEl) return;
+
+            const query = inputEl.value.trim();
+            if (!query) {
+                const fallbackName = appState.stampCards[0] ? appState.stampCards[0].name : "";
+                activeStampName = fallbackName;
+                renderStampCard(activeStampName);
+                if (statusEl) statusEl.innerText = "";
+                return;
+            }
+
+            activeStampName = query;
+            renderStampCard(query);
+
+            const found = appState.stampCards.find(c => c.name.toLowerCase() === query.toLowerCase());
+            if (statusEl) {
+                if (found) {
+                    statusEl.innerText = `พบบัตรของ "${found.name}" มีสะสมแล้ว ${found.stamps} / 10 ดวง`;
+                } else {
+                    statusEl.innerText = `ไม่พบชื่อ "${query}" ในระบบสะสมแต้ม (แสดง 0 / 10 stamps)`;
+                }
+            }
+        }
+
+        function handleAdminStampImageUpload(input) {
+            if (input.files && input.files[0]) {
+                const url = URL.createObjectURL(input.files[0]);
+                customStampImageUrl = url;
+                const previewImg = document.getElementById('adm-stamp-preview-img');
+                const placeholderIcon = document.getElementById('adm-stamp-placeholder-icon');
+                if (previewImg) {
+                    previewImg.src = url;
+                    previewImg.classList.remove('hidden');
+                }
+                if (placeholderIcon) placeholderIcon.classList.add('hidden');
+                renderStampCard(activeStampName);
+            }
+        }
+
+        function saveCustomerStampFromAdmin() {
+            const nameInput = document.getElementById('adm-stamp-customer-name');
+            const countInput = document.getElementById('adm-stamp-count-input');
+            if (!nameInput || !countInput) return;
+
+            const name = nameInput.value.trim();
+            const count = Math.min(10, Math.max(0, parseInt(countInput.value) || 0));
+
+            if (!name) {
+                alert("กรุณากรอกชื่อลูกค้าก่อนค่ะ");
+                return;
+            }
+
+            const existingIdx = appState.stampCards.findIndex(c => c.name.toLowerCase() === name.toLowerCase());
+            if (existingIdx >= 0) {
+                appState.stampCards[existingIdx].stamps = count;
+            } else {
+                appState.stampCards.push({ name: name, stamps: count });
+            }
+
+            activeStampName = name;
+            renderStampCard(activeStampName);
+            renderAdminStampList();
+            alert(`บันทึกแต้มของ "${name}" เป็น ${count} ดวงเรียบร้อยแล้วค่ะ`);
+        }
+
+        function deleteCustomerStamp(index) {
+            const target = appState.stampCards[index];
+            if (!target) return;
+            if (!confirm(`ต้องการลบรายชื่อ "${target.name}" ออกจากบัตรสะสมแต้มใช่ไหมคะ?`)) return;
+
+            const deletedName = target.name;
+            appState.stampCards.splice(index, 1);
+
+            if (activeStampName.toLowerCase() === deletedName.toLowerCase()) {
+                activeStampName = appState.stampCards[0] ? appState.stampCards[0].name : "";
+            }
+
+            renderStampCard(activeStampName);
+            renderAdminStampList();
+        }
+
+        function renderAdminStampList() {
+            const listEl = document.getElementById('admin-stamp-customers-list');
+            if (!listEl) return;
+
+            if (appState.stampCards.length === 0) {
+                listEl.innerHTML = `<div class="bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl px-3.5 py-4 text-center text-[#c0aab1]">ยังไม่มีรายชื่อบัตรสะสมแต้ม</div>`;
+                return;
+            }
+
+            listEl.innerHTML = appState.stampCards.map((c, idx) => `
+                <div class="flex items-center justify-between bg-[#fdfafb] border border-[#f2e4e6] rounded-2xl px-3.5 py-2.5">
+                    <div class="min-w-0">
+                        <span class="font-bold text-gray-800">${c.name}</span>
+                        <span class="text-[#a7898d] font-bold ml-2">${c.stamps} / 10 stamps</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5 shrink-0">
+                        <button type="button" onclick="adjustCustomerStamp(${idx}, -1)" class="w-7 h-7 rounded-full bg-white border border-[#f2e4e6] text-[#a7898d] font-bold hover:bg-[#fceef1]" title="ลดแต้ม">-</button>
+                        <button type="button" onclick="adjustCustomerStamp(${idx}, 1)" class="w-7 h-7 rounded-full bg-white border border-[#f2e4e6] text-[#a7898d] font-bold hover:bg-[#fceef1]" title="เพิ่มแต้ม">+</button>
+                        <button type="button" onclick="deleteCustomerStamp(${idx})" class="w-7 h-7 rounded-full bg-white border border-[#f2e4e6] text-[#c87d8a] hover:bg-[#fceef1] flex items-center justify-center transition" title="ลบรายชื่อ">
+                            <i class="fa-solid fa-trash text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function adjustCustomerStamp(index, delta) {
+            const card = appState.stampCards[index];
+            if (!card) return;
+            card.stamps = Math.min(10, Math.max(0, card.stamps + delta));
+            activeStampName = card.name;
+            renderStampCard(activeStampName);
+            renderAdminStampList();
+        }
+
+        // ==================== REVIEW SYSTEM ====================
+        function setReviewRating(starCount) {
+            selectedReviewRating = starCount;
+            const buttons = document.querySelectorAll('#review-star-picker .star-picker-btn');
+            buttons.forEach(btn => {
+                const val = parseInt(btn.getAttribute('data-star'));
+                if (val <= starCount) {
+                    btn.classList.remove('text-[#e6d8da]');
+                    btn.classList.add('text-[#e8b84b]');
+                } else {
+                    btn.classList.remove('text-[#e8b84b]');
+                    btn.classList.add('text-[#e6d8da]');
+                }
+            });
+        }
+
+        function handleReviewImageUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                uploadedReviewImage = URL.createObjectURL(file);
+                document.getElementById('review-img-preview').src = uploadedReviewImage;
+                document.getElementById('review-img-name').innerText = file.name;
+                document.getElementById('review-img-preview-wrap').classList.remove('hidden');
+                document.getElementById('review-img-preview-wrap').classList.add('flex');
+            }
+        }
+
+        function clearReviewImage() {
+            uploadedReviewImage = "";
+            document.getElementById('review-img-input').value = "";
+            document.getElementById('review-img-preview-wrap').classList.add('hidden');
+            document.getElementById('review-img-preview-wrap').classList.remove('flex');
+        }
+
+        function submitReview() {
+            const authorInput = document.getElementById('review-author-input');
+            const commentInput = document.getElementById('review-comment-input');
+            const author = authorInput.value.trim() || "ผู้ใช้งาน";
+            const comment = commentInput.value.trim();
+
+            if (!comment && !uploadedReviewImage) {
+                alert("กรุณาพิมพ์รีวิวหรือแนบรูปภาพก่อนกดส่งค่ะ");
+                return;
+            }
+
+            appState.reviews.unshift({
+                id: Date.now(),
+                author: author,
+                time: "เมื่อสักครู่นี้",
+                rating: selectedReviewRating,
+                comment: comment,
+                img: uploadedReviewImage
+            });
+
+            authorInput.value = "";
+            commentInput.value = "";
+            clearReviewImage();
+            setReviewRating(4);
+            renderReviews();
+        }
+
+        function renderReviews() {
+            const listEl = document.getElementById('reviews-list-container');
+            const countEl = document.getElementById('review-total-count');
+            const avgEl = document.getElementById('review-avg-rating');
+            if (!listEl) return;
+
+            const total = appState.reviews.length;
+            const avg = total > 0
+                ? (appState.reviews.reduce((sum, r) => sum + r.rating, 0) / total).toFixed(1)
+                : "0.0";
+
+            if (countEl) countEl.innerText = total;
+            if (avgEl) avgEl.innerText = avg;
+
+            if (total === 0) {
+                listEl.innerHTML = `<div class="bg-white rounded-[22px] p-6 text-center text-xs text-[#c0aab1] border border-[#f2e4e6]">ยังไม่มีความคิดเห็น</div>`;
+                return;
+            }
+
+            listEl.innerHTML = appState.reviews.map(r => {
+                const firstChar = r.author.trim().charAt(0) || "ร";
+                let starsHtml = "";
+                for (let i = 1; i <= 5; i++) {
+                    const colorClass = i <= r.rating ? "text-[#e8b84b]" : "text-[#e6d8da]";
+                    starsHtml += `<span class="${colorClass} text-xs">★</span>`;
+                }
+
+                const imgHtml = r.img
+                    ? `<div class="mt-2.5"><img src="${r.img}" alt="Review photo" class="w-28 h-28 rounded-2xl object-cover border border-[#f2e4e6]"></div>`
+                    : "";
+
+                const commentHtml = r.comment
+                    ? `<p class="text-xs font-medium text-[#7d6267] mt-2.5 px-1">${r.comment}</p>`
+                    : "";
+
+                return `
+                    <div class="bg-white rounded-[22px] p-3.5 border border-[#f2e4e6] shadow-2xs">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <div class="w-9 h-9 rounded-full bg-[#f5e4e7] text-[#a7898d] font-bold text-xs flex items-center justify-center shrink-0">
+                                    ${firstChar}
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-[#7d6267] leading-snug">${r.author}</div>
+                                    <div class="text-[10px] text-[#c2aab0] leading-tight">${r.time}</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-0.5">
+                                ${starsHtml}
+                            </div>
+                        </div>
+                        ${commentHtml}
+                        ${imgHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function pressTamaButton(pos) {
+            const btnWrap = document.getElementById(`tama-btn-${pos}-wrap`);
+            const screenIcon = document.getElementById('tama-screen-icon');
+            const screenTitle = document.getElementById('tama-screen-title');
+            const screenSub = document.getElementById('tama-screen-sub');
+
+            btnWrap.classList.add('tama-btn-pressed');
+            setTimeout(() => btnWrap.classList.remove('tama-btn-pressed'), 160);
+
+            if (pos === 'left') {
+                screenIcon.innerHTML = '<i class="fa-solid fa-bag-shopping"></i>';
+                screenTitle.innerText = 'ดูสินค้าทั้งหมด';
+                screenSub.innerText = 'กำลังพาไปหน้าร้าน...';
+                setTimeout(() => switchTab('products'), 220);
+            } else if (pos === 'center') {
+                screenIcon.innerHTML = '<i class="fa-solid fa-calendar-heart"></i>';
+                screenTitle.innerText = 'จองคิวงาน ♡';
+                screenSub.innerText = 'เลือกบริการที่ต้องการ';
+                setTimeout(() => openBookingModal(), 180);
+            } else if (pos === 'right') {
+                screenIcon.innerHTML = '<i class="fa-solid fa-list-check"></i>';
+                screenTitle.innerText = 'เช็คคิวงาน';
+                screenSub.innerText = `ทั้งหมด ${appState.queues.length} คิว`;
+                setTimeout(() => switchTab('queue'), 220);
+            }
+        }
+
+        function handleTamaScreenClick() {
+            openBookingModal();
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-[#a7898d]');
+                btn.classList.add('text-gray-400');
+            });
+            document.getElementById(`nav-btn-${tabId}`).classList.remove('text-gray-400');
+            document.getElementById(`nav-btn-${tabId}`).classList.add('text-[#a7898d]');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if(tabId === 'home') {
+                document.getElementById('tama-screen-icon').innerHTML = '<i class="fa-solid fa-heart"></i>';
+                document.getElementById('tama-screen-title').innerText = `${appState.shopName} ♡`;
+                document.getElementById('tama-screen-sub').innerText = 'แตะหน้าจอเพื่อจองคิว';
+            }
+            if(tabId === 'products') renderProducts();
+            if(tabId === 'queue') renderQueues();
+            if(tabId === 'detail') renderReviews();
+            if(tabId === 'member') renderStampCard(activeStampName);
+        }
+
+        function initApp() {
+            document.getElementById('shop-title-header').innerText = appState.shopName;
+            const screenTitle = document.getElementById('tama-screen-title');
+            if(screenTitle) screenTitle.innerText = `${appState.shopName} ♡`;
+            renderCategoriesTabs();
+            updateCartBadge();
+            renderReviews();
+            renderStampCard(activeStampName);
+            renderAdminStampList();
+            populateAdminCategorySelect();
+            renderAdminCategoryPills();
+            renderAdminCloudProducts();
+            renderAdminQueueList();
+        }
+
+        function openBookingModal() { document.getElementById('booking-modal').classList.remove('hidden'); }
+        function closeBookingModal() { document.getElementById('booking-modal').classList.add('hidden'); }
+
+        function openSignBookingDetails() {
+            closeBookingModal();
+            signQty = 1;
+            uploadedBlockImages = [];
+            document.getElementById('sign-qty-display').innerText = signQty;
+            document.getElementById('sign-total-price').innerText = signQty * pricePerSign;
+            document.getElementById('uploaded-block-count').innerText = "กดเพิ่มรูป (0)";
+            document.getElementById('block-images-preview').classList.add('hidden');
+            document.getElementById('sign-booking-modal').classList.remove('hidden');
+        }
+        function closeSignBookingDetails() { document.getElementById('sign-booking-modal').classList.add('hidden'); }
+
+        function changeSignQty(amount) {
+            signQty += amount;
+            if(signQty < 1) signQty = 1;
+            document.getElementById('sign-qty-display').innerText = signQty;
+            document.getElementById('sign-total-price').innerText = signQty * pricePerSign;
+        }
+
+        function handleBlockImagesUpload(input) {
+            if (input.files && input.files.length > 0) {
+                for (let i = 0; i < input.files.length; i++) {
+                    uploadedBlockImages.push(URL.createObjectURL(input.files[i]));
+                }
+                document.getElementById('uploaded-block-count').innerText = `เลือกแล้ว (${uploadedBlockImages.length})`;
+                
+                const previewContainer = document.getElementById('block-images-preview');
+                previewContainer.classList.remove('hidden');
+                previewContainer.innerHTML = uploadedBlockImages.map((src, idx) => `
+                    <div class="w-16 h-16 rounded-[14px] overflow-hidden shrink-0 border border-[#f0e6e7] relative shadow-2xs">
+                        <img src="${src}" class="w-full h-full object-cover">
+                    </div>
+                `).join('');
+            }
+        }
+
+        function proceedToPayment() {
+            currentBookingService = 'ทำป้าย';
+            const total = signQty * pricePerSign;
+            document.getElementById('pay-total-display').innerText = `${total} บาท`;
+            document.getElementById('qr-code-img').src = globalQRCodeUrl;
+            closeSignBookingDetails();
+            document.getElementById('payment-modal').classList.remove('hidden');
+        }
+
+        function closePaymentModal() { document.getElementById('payment-modal').classList.add('hidden'); }
+
+        function submitBookingAndFinish() {
+            const name = document.getElementById('pay-name').value.trim();
+            const email = document.getElementById('pay-email').value.trim();
+            const line = document.getElementById('pay-line').value.trim();
+            const slipInput = document.getElementById('slip-file-input');
+
+            if (!name || !email || !line) {
+                alert("กรุณากรอก ชื่อ, email และ id / link line ให้ครบถ้วนค่ะ");
+                return;
+            }
+
+            if (slipInput.files.length === 0) {
+                alert("กรุณาแนบสลิปโอนเงินก่อนกดยืนยันค่ะ");
+                return;
+            }
+
+            const newSeq = appState.queues.length + 1;
+            const jobType = `${currentBookingService} (${document.getElementById('sign-style').value})`;
+            appState.queues.push({
+                id: Date.now(),
+                name: name,
+                jobType: jobType,
+                service: jobType,
+                channel: "LINE",
+                note: "",
+                date: "11/09/69",
+                status: "ยังไม่ได้เริ่ม",
+                seq: newSeq
+            });
+
+            closePaymentModal();
+            alert("ส่งสลิปและจองคิวสำเร็จ! ระบบกำลังพาไปหน้าเช็คคิว");
+            switchTab('queue');
+        }
+
+        function selectService(serviceName) {
+            closeBookingModal();
+            currentBookingService = serviceName;
+            document.getElementById('pay-total-display').innerText = `89 บาท`;
+            document.getElementById('qr-code-img').src = globalQRCodeUrl;
+            document.getElementById('payment-modal').classList.remove('hidden');
+        }
+
+        function toggleSocialMenu() { document.getElementById('social-menu-popup').classList.toggle('hidden'); }
+
+        function renderCategoriesTabs() {
+            const container = document.getElementById('categories-tabs-container');
+            if(!container) return;
+            container.innerHTML = appState.categories.map(c => `
+                <button onclick="setCategory('${c.id}')" class="px-5 py-2 rounded-full text-xs font-medium ${activeCategoryFilter === c.id ? 'bg-[#a7898d] text-white font-bold shadow-xs' : 'bg-white text-gray-500 border border-[#f7eff0]'} shrink-0 transition">${c.name}</button>
+            `).join('');
+        }
+        function setCategory(catId) { activeCategoryFilter = catId; renderCategoriesTabs(); renderProducts(); }
+        function openCatFilterModal() { document.getElementById('cat-filter-modal').classList.remove('hidden'); }
+        function closeCatFilterModal() { document.getElementById('cat-filter-modal').classList.add('hidden'); }
+
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            if(!grid) return;
+            const searchVal = document.getElementById('product-search-input').value.toLowerCase();
+            const filtered = appState.products.filter(p => {
+                const matchCat = activeCategoryFilter === 'All' || p.category === activeCategoryFilter;
+                const matchSearch = p.name.toLowerCase().includes(searchVal);
+                return matchCat && matchSearch;
+            });
+            
+            document.getElementById('product-count-label').innerText = `${filtered.length} items`;
+
+            grid.innerHTML = filtered.map(p => {
+                const badgeText = p.tag || (p.featured ? 'แนะนำ' : '');
+                const badgeHtml = badgeText
+                    ? `<div class="absolute top-6 left-6 px-3 py-0.5 bg-white/90 backdrop-blur-xs text-[#a7898d] text-[10px] font-extrabold rounded-full z-10 border border-[#f0e6e7] shadow-2xs">${badgeText}</div>`
+                    : '';
+
+                return `
+                    <div class="bg-white rounded-[32px] p-4 border border-[#f0e6e7] shadow-2xs flex flex-col justify-between space-y-3 relative">
+                        ${badgeHtml}
+                        <div class="aspect-square w-full rounded-[24px] bg-[#fdfafb] overflow-hidden border border-[#f7eff0]">
+                            <img src="${p.img}" class="w-full h-full object-cover">
+                        </div>
+                        
+                        <div class="flex justify-between items-center px-1">
+                            <span class="font-bold text-xs text-gray-800 truncate pr-1">${p.name}</span>
+                            <span class="font-extrabold text-[#a7898d] text-xs shrink-0">${p.price} ฿</span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 pt-0.5">
+                            <button onclick="alert('${(p.desc || 'ดูรายละเอียดเพิ่มเติม').replace(/'/g, "\\'")}')" class="py-2.5 bg-white text-[#a7898d] border border-[#f0e6e7] rounded-full text-[11px] font-bold shadow-2xs hover:bg-[#fdfafb] transition text-center">Ex</button>
+                            <button onclick="addToCart(${p.id})" class="py-2.5 bg-[#a7898d] hover:bg-[#927377] text-white rounded-full text-[11px] font-bold shadow-2xs transition text-center">add to cart</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addToCart(productId) {
+            const p = appState.products.find(x => x.id === productId);
+            if(p) { appState.cart.push(p); updateCartBadge(); }
+        }
+        function updateCartBadge() { document.getElementById('cart-badge').innerText = appState.cart.length; }
+        function openCartModal() {
+            const container = document.getElementById('cart-items-container');
+            let total = 0;
+            container.innerHTML = appState.cart.map((item, idx) => {
+                total += item.price;
+                return `<div class="flex justify-between items-center bg-[#fdfafb] p-2.5 rounded-2xl border border-[#f7eff0]"><span>${item.name}</span><span class="text-[#a7898d] font-bold">฿${item.price}</span></div>`;
+            }).join('') || '<p class="text-center text-gray-400">ว่างเปล่า</p>';
+            document.getElementById('cart-total-price').innerText = `฿${total.toLocaleString()}`;
+            document.getElementById('cart-modal').classList.remove('hidden');
+        }
+        function closeCartModal() { document.getElementById('cart-modal').classList.add('hidden'); }
+        function checkoutCart() { alert("สั่งซื้อสำเร็จ!"); appState.cart = []; updateCartBadge(); closeCartModal(); }
+
+        function setQueueFilter(filter) {
+            currentQueueFilter = filter;
+            ['ทั้งหมด', 'ยังไม่ได้เริ่ม', 'กำลังทำ', 'เสร็จแล้ว'].forEach(f => {
+                const btn = document.getElementById(`q-filter-${f}`);
+                if(btn) {
+                    if(f === filter) {
+                        btn.className = "flex-1 px-3 py-2.5 rounded-full text-[10px] font-extrabold text-[#a7898d] bg-white shadow-xs transition";
+                    } else {
+                        btn.className = "flex-1 px-3 py-2.5 rounded-full text-[10px] font-medium text-[#c0aab1] bg-transparent transition";
+                    }
+                }
+            });
+            renderQueues();
+        }
+        
+        function renderQueues() {
+            const container = document.getElementById('queue-list-container');
+            const searchVal = document.getElementById('queue-search-input').value.toLowerCase();
+
+            const filtered = appState.queues.filter(q => {
+                const matchFilter = currentQueueFilter === 'ทั้งหมด' || q.status === currentQueueFilter;
+                const matchSearch = q.name.toLowerCase().includes(searchVal) || q.service.toLowerCase().includes(searchVal);
+                return matchFilter && matchSearch;
+            });
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 py-8 text-xs">ไม่พบรายการคิว</p>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(q => {
+                let isDone = q.status === 'เสร็จแล้ว';
+                
+                let cardBorder = 'border-[#a7898d] shadow-sm';
+                let circleBorder = 'border-[#a7898d]';
+                let circleText = 'text-[#a7898d]';
+                
+                let nameText = 'text-[#a7898d]';
+                let serviceText = 'text-[#8c6b70]';
+
+                let statusBadge = '';
+                if(isDone) {
+                    statusBadge = `<div class="px-5 py-2 bg-[#fdfafb] border border-[#f0e6e7] rounded-full text-[11px] font-bold text-[#a7898d] shadow-2xs">เสร็จแล้ว</div>`;
+                } else if(q.status === 'กำลังทำ') {
+                    statusBadge = `<div class="px-5 py-2 bg-[#fdfafb] border border-[#f0e6e7] rounded-full text-[11px] font-extrabold text-[#a7898d] shadow-2xs">กำลังทำ</div>`;
+                } else {
+                    statusBadge = `<div class="px-5 py-2 bg-[#fdfafb] border border-[#f0e6e7] rounded-full text-[11px] font-bold text-gray-400 shadow-2xs">ยังไม่ได้เริ่ม</div>`;
+                }
+
+                const channelTag = (q.channel || 'LINE').toUpperCase();
+
+                return `
+                    <div class="bg-white rounded-[24px] p-4.5 border-[1.5px] ${cardBorder} relative mt-6 transition-all">
+                        <div class="absolute -top-3.5 left-5 w-8 h-8 rounded-full bg-white border-[1.5px] ${circleBorder} flex items-center justify-center text-[10px] font-extrabold ${circleText} z-10 shadow-2xs">
+                            Q${q.seq || 2}
+                        </div>
+
+                        <div class="px-2 flex justify-between items-center">
+                            <div class="space-y-1">
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-extrabold text-sm ${nameText}">${q.name}</span>
+                                    <span class="px-2.5 py-0.5 bg-white border ${circleBorder} rounded-full text-[9px] font-extrabold ${nameText} tracking-wider">${channelTag}</span>
+                                </div>
+                                <p class="text-xs font-extrabold ${serviceText}">${q.service}</p>
+                            </div>
+                            <div>
+                                ${statusBadge}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAdminLoginModal() { document.getElementById('admin-login-modal').classList.remove('hidden'); }
+        function verifyAdminLogin() {
+            if(document.getElementById('admin-pass-input').value === "admin1234") {
+                document.getElementById('admin-login-modal').classList.add('hidden');
+                document.getElementById('main-shop-container').classList.add('hidden');
+                document.getElementById('admin-full-page').classList.remove('hidden');
+                renderAdminStampList();
+                populateAdminCategorySelect();
+                renderAdminCategoryPills();
+                renderAdminCloudProducts();
+                renderAdminQueueList();
+            } else { alert("รหัสผ่านไม่ถูกต้อง"); }
+        }
+        function closeAdminFullPage() {
+            document.getElementById('admin-full-page').classList.add('hidden');
+            document.getElementById('main-shop-container').classList.remove('hidden');
+            initApp();
+        }
+
+        function switchAdminSubTab(subTabId) {
+            document.querySelectorAll('.adm-tab').forEach(btn => {
+                btn.className = "adm-tab px-4 py-2 rounded-full font-medium bg-white text-[#9c7d82] border border-[#f2e4e6] shrink-0";
+            });
+            document.getElementById(`adm-tab-${subTabId}`).className = "adm-tab px-4 py-2 rounded-full font-bold bg-[#a7898d] text-white shrink-0 shadow-2xs";
+
+            document.querySelectorAll('.adm-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`adm-content-${subTabId}`).classList.remove('hidden');
+            if (subTabId === 'stamp') renderAdminStampList();
+            if (subTabId === 'queue') renderAdminQueueList();
+            if (subTabId === 'products') {
+                populateAdminCategorySelect();
+                renderAdminCategoryPills();
+                renderAdminCloudProducts();
+            }
+        }
+
+        function previewTamaAsset(type, input) {
+            if (input.files && input.files[0]) {
+                const url = URL.createObjectURL(input.files[0]);
+                if (type === 'body') {
+                    const bodyImg = document.getElementById('tama-body-img');
+                    bodyImg.src = url;
+                    bodyImg.style.opacity = '1';
+                } else if (type === 'buttons') {
+                    ['1', '2', '3'].forEach(idx => {
+                        document.getElementById(`tama-btn-img-${idx}`).src = url;
+                    });
+                }
+            }
+        }
+
+        function saveShopThemeSettings() {
+            const newName = document.getElementById('adm-shop-name-input').value.trim();
+            if (newName) appState.shopName = newName;
+            alert("บันทึกการตั้งค่าเรียบร้อยแล้วค่ะ!");
+        }
+
+        function saveAdminQRCode() {
+            const qrFileInput = document.getElementById('admin-qr-file-input');
+            if(qrFileInput.files && qrFileInput.files[0]) {
+                globalQRCodeUrl = URL.createObjectURL(qrFileInput.files[0]);
+                alert("อัปโหลด QR Code สำเร็จ!");
+            } else {
+                alert("กรุณาเลือกรูป QR Code ครับ");
+            }
+        }
+
+        window.onload = function() {
+            initApp();
+            renderQueues();
+        };
+    </script>
+</body>
+</html>
